@@ -1,0 +1,83 @@
+{
+  "index.Rmd": {
+    "index.html": "ce7091f1"
+  },
+  "preface.Rmd": {
+    "preface.html": "f6868305"
+  },
+  "introduction.Rmd": {
+    "introduction.html": "c6e045dd"
+  },
+  "whole-game.Rmd": {
+    "whole-game.html": "568f7314"
+  },
+  "setup.Rmd": {
+    "setup.html": "bb465f93"
+  },
+  "structure.Rmd": {
+    "structure.html": "de56c9f3"
+  },
+  "workflow101.Rmd": {
+    "workflow101.html": "aee672ce"
+  },
+  "package-within.Rmd": {
+    "package-within.html": "b52e1c1c"
+  },
+  "code.Rmd": {
+    "code.html": "cacdc09d"
+  },
+  "data.Rmd": {
+    "data.html": "dfb88d61"
+  },
+  "misc.Rmd": {
+    "misc.html": "03e459bb"
+  },
+  "description.Rmd": {
+    "description.html": "91418175"
+  },
+  "dependencies-mindset-background.Rmd": {
+    "dependencies-mindset-background.html": "94c8c808"
+  },
+  "dependencies-in-practice.Rmd": {
+    "dependencies-in-practice.html": "46a67b21"
+  },
+  "license.Rmd": {
+    "license.html": "b6e6d6d4"
+  },
+  "testing-basics.Rmd": {
+    "testing-basics.html": "70cf5c82"
+  },
+  "testing-design.Rmd": {
+    "testing-design.html": "10b44dbf"
+  },
+  "testing-advanced.Rmd": {
+    "testing-advanced.html": "41ac31ab"
+  },
+  "man.Rmd": {
+    "man.html": "9243b928"
+  },
+  "vignettes.Rmd": {
+    "vignettes.html": "34e4f639"
+  },
+  "other-markdown.Rmd": {
+    "other-markdown.html": "ebfbb908"
+  },
+  "website.Rmd": {
+    "website.html": "2220b76c"
+  },
+  "software-development-practices.Rmd": {
+    "software-development-practices.html": "776e578f"
+  },
+  "lifecycle.Rmd": {
+    "lifecycle.html": "a5a57b06"
+  },
+  "release.Rmd": {
+    "release.html": "5be7889f"
+  },
+  "references.qmd": {
+    "references.html": "da5855d4"
+  },
+  "R-CMD-check.Rmd": {
+    "R-CMD-check.html": "43b0a5e6"
+  }
+}

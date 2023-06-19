@@ -1,0 +1,14 @@
+{
+  "hash": "f5a28c3606c89f168566375814525114",
+  "result": {
+    "markdown": "# Welcome! {.unnumbered}\n\nWelcome to R packages by [Hadley Wickham](http://hadley.nz) and [Jennifer Bryan](http://jennybryan.org/).\nPackages are the fundamental units of reproducible R code.\nThey include reusable R functions, the documentation that describes how to use them, and sample data.\nIn this book you'll learn how to turn your code into packages that others can easily download and use.\nWriting a package can seem overwhelming at first.\nSo start with the basics and improve it over time.\nIt doesn't matter if your first version isn't perfect as long as the next version is better.\n\nThis is the online version of the 2nd edition of the book.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

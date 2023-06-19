@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="description" content="Learn how to create a package, the fundamental unit of shareable, reusable, and reproducible R code.">
+<title>R Packages (2e) - Preface</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./introduction.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script><script defer="" data-domain="r-pkgs.org" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Preface</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R Packages (2e)</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/hadley/r-pkgs/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome!</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface.html" class="sidebar-item-text sidebar-link active">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Getting started</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./whole-game.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Whole Game</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">System setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./structure.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Package structure and state</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow101.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fundamental development workflows</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./package-within.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The package within</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Package components</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R code</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Other components</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Package metadata</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./description.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><code>DESCRIPTION</code></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dependencies-mindset-background.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dependencies: Mindset and Background</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dependencies-in-practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Dependencies: In Practice</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./license.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Licensing</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Testing</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Testing basics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing-design.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Designing your test suite</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing-advanced.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Advanced testing techniques</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Documentation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./man.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Function documentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vignettes.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Vignettes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./other-markdown.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Other markdown files</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./website.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Website</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Maintenance and distribution</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./software-development-practices.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Software development practices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lifecycle.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lifecycle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./release.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Releasing to CRAN</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R-CMD-check.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title"><code>R CMD check</code></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#acknowledgments" id="toc-acknowledgments" class="nav-link active" data-scroll-target="#acknowledgments">Acknowledgments</a></li>
+  <li><a href="#conventions" id="toc-conventions" class="nav-link" data-scroll-target="#conventions">Conventions</a></li>
+  <li><a href="#colophon" id="toc-colophon" class="nav-link" data-scroll-target="#colophon">Colophon</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/hadley/r-pkgs/edit/main/preface.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/hadley/r-pkgs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title"><span id="sec-preface" class="quarto-section-identifier d-none d-lg-block">Preface</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><div class="cell">
+
+</div>
+<p>Welcome to the 2nd edition of R Packages! If you’re familiar with the 1st edition, this preface describes the major changes so that you can focus your reading on the new areas.</p>
+<p>There are several main goals for this edition:</p>
+<ul>
+<li><p>Update to reflect changes in the devtools package, specifically, its <a href="https://www.tidyverse.org/articles/2018/10/devtools-2-0-0/#conscious-uncoupling">“conscious uncoupling”</a> into a set of smaller, more focused packages.</p></li>
+<li><p>Expand coverage of workflow and process, alongside the presentation of all the important moving parts that make up an R package.</p></li>
+<li><p>Cover entirely new topics, such as package websites and GitHub Actions.</p></li>
+</ul>
+<p>All content has been completely revised and updated. Many chapters are new or re-organized and a couple have been removed:</p>
+<ul>
+<li><p>New <a href="whole-game.html"><span>Chapter&nbsp;1</span></a>, “The Whole Game”, previews the entire package development process.</p></li>
+<li><p>New <a href="setup.html"><span>Chapter&nbsp;2</span></a>, “System setup”, has been carved out of the previous Introduction and gained more detail.</p></li>
+<li><p>The chapter formerly known as “Package structure” has been expanded and split into two chapters, one covering package structure and state (<a href="structure.html"><span>Chapter&nbsp;3</span></a>) and another on workflows and tooling (<a href="workflow101.html"><span>Chapter&nbsp;4</span></a>).</p></li>
+<li><p>New <a href="package-within.html"><span>Chapter&nbsp;5</span></a>, “The package within”, demonstrates how to extract reusable logic out of data analysis scripts and into a package.</p></li>
+<li><p>The sections “Organising your functions” and “Code style”, from <a href="code.html"><span>Chapter&nbsp;6</span></a>, “R code”, have been removed, in favor of an online style guide, <a href="https://style.tidyverse.org/" class="uri">https://style.tidyverse.org/</a>. The style guide is paired with the new styler package <span class="citation" data-cites="styler">(<a href="references.html#ref-styler" role="doc-biblioref">Müller and Walthert 2018</a>)</span> which can automatically apply many of the rules.</p></li>
+<li><p>The coverage of testing has expanded into three chapters: <a href="testing-basics.html"><span>Chapter&nbsp;13</span></a> for testing basics, <a href="testing-design.html"><span>Chapter&nbsp;14</span></a> for test suite design, and <a href="testing-advanced.html"><span>Chapter&nbsp;15</span></a> for various advanced topics.</p></li>
+<li><p>Material around the <code>NAMESPACE</code> file and dependency relationships has been re-organized into two chapters: <a href="dependencies-mindset-background.html"><span>Chapter&nbsp;10</span></a> provides technical context for thinking about dependencies and <a href="dependencies-in-practice.html"><span>Chapter&nbsp;11</span></a> gives practice instructions for using different types of dependencies in different settings.</p></li>
+<li><p>New <a href="license.html"><span>Chapter&nbsp;12</span></a>, “Licensing”, expands earlier content on licensing into its own chapter.</p></li>
+<li><p>The chapter on C/C++ has been removed. It didn’t have quite enough information to be useful, and since the first edition of the book, other resources have arisen that are better learning resources.</p></li>
+<li><p>The “Other components” chapter has been removed.</p></li>
+<li><p>The chapter on Git/GitHub has been reframed around the more general topic of software development practices (<a href="software-development-practices.html"><span>Chapter&nbsp;20</span></a>). This no longer includes step-by-step instructions for basic tasks. The use of Git/GitHub has exploded since the first edition, accompanied by an explosion of learning resources, both general and specific to R (e.g.&nbsp;the website <a href="https://happygitwithr.com/index.html">Happy Git and GitHub for the useR</a>). Git/GitHub still feature prominently throughout the book, most especially in <a href="software-development-practices.html"><span>Chapter&nbsp;20</span></a>.</p></li>
+<li><p>The very short <code>inst</code> chapter has been combined into <a href="misc.html"><span>Chapter&nbsp;8</span></a>, with all the other directories that can be important in specific contexts, but that aren’t mission critical to all packages.</p></li>
+</ul>
+<section id="acknowledgments" class="level2"><h2 class="anchored" data-anchor-id="acknowledgments">Acknowledgments</h2>
+<p>Since the first edition of R Packages was published, the packages supporting the workflows described here have undergone extensive development. The original trio of devtools, roxygen2, and testthat has expanded to include the packages created by the “conscious uncoupling” of devtools, as described in <a href="setup.html#sec-setup-usage"><span>Section&nbsp;2.2</span></a>. Most of these packages originate with Hadley Wickham (HW), because of their devtools roots. There are many other significant contributors, many of whom now serve as maintainers:</p>
+<ul>
+<li>devtools: HW, <a href="https://github.com/wch">Winston Chang</a>, <a href="https://github.com/jimhester">Jim Hester</a> (maintainer, &gt;= v1.13.5), <a href="https://github.com/jennybc">Jennifer Bryan</a> (maintainer &gt;= v2.4.3)</li>
+<li>usethis: HW, <a href="https://github.com/jennybc">Jennifer Bryan</a> (maintainer &gt;= v1.5.0), Malcolm Barrett</li>
+<li>roxygen2: HW (maintainer), <a href="https://github.com/klutometis">Peter Danenburg</a>, <a href="https://github.com/mjaeugster">Manuel Eugster</a>
+</li>
+<li>testthat: HW (maintainer)</li>
+<li>desc: <a href="https://github.com/gaborcsardi">Gábor Csárdi</a> (maintainer), <a href="https://github.com/krlmlr">Kirill Müller</a>, <a href="https://github.com/jimhester">Jim Hester</a>
+</li>
+<li>pkgbuild: HW, <a href="https://github.com/jimhester">Jim Hester</a>, <a href="https://github.com/gaborcsardi">Gábor Csárdi</a> (maintainer &gt;= v1.2.1)</li>
+<li>pkgload: HW, <a href="https://github.com/jimhester">Jim Hester</a>, <a href="https://github.com/wch">Winston Chang</a>, <a href="https://github.com/lionel-">Lionel Henry</a> (maintainer &gt;= v1.2.4)</li>
+<li>rcmdcheck: <a href="https://github.com/gaborcsardi">Gábor Csárdi</a> (maintainer)</li>
+<li>remotes: HW, <a href="https://github.com/jimhester">Jim Hester</a>, <a href="https://github.com/gaborcsardi">Gábor Csárdi</a> (maintainer), <a href="https://github.com/wch">Winston Chang</a>, <a href="https://github.com/mtmorgan">Martin Morgan</a>, <a href="https://github.com/dtenenba">Dan Tenenbaum</a>
+</li>
+<li>revdepcheck: HW, <a href="https://github.com/gaborcsardi">Gábor Csárdi</a> (maintainer)</li>
+<li>sessioninfo: HW, <a href="https://github.com/gaborcsardi">Gábor Csárdi</a> (maintainer), <a href="https://github.com/wch">Winston Chang</a>, <a href="https://github.com/rmflight">Robert Flight</a>, <a href="https://github.com/krlmlr">Kirill Müller</a>, <a href="https://github.com/jimhester">Jim Hester</a>
+</li>
+</ul>
+<p>This book was <a href="https://github.com/hadley/r-pkgs/">written and revised in the open</a> and it is truly a community effort: many people read drafts, fix typos, suggest improvements, and contribute content. Without those contributors, the book wouldn’t be nearly as good as it is, and we are deeply grateful for their help. We are indebted to our colleagues at Posit, especially the tidyverse team, for being perpetually game to discuss package development practices. The book has been greatly improved by the suggestions from our fantastic team of technical reviewers: Malcolm Barrett, Laura DeCicco, Zhian Kamvar, Tom Mock and Maëlle Salmon.</p>
+<pre><code>#&gt; Warning: package 'tidyverse' was built under R version 4.2.3
+#&gt; Warning: package 'ggplot2' was built under R version 4.2.3
+#&gt; Warning: package 'tibble' was built under R version 4.2.3
+#&gt; Warning: package 'tidyr' was built under R version 4.2.3
+#&gt; Warning: package 'readr' was built under R version 4.2.3
+#&gt; Warning: package 'purrr' was built under R version 4.2.3
+#&gt; Warning: package 'dplyr' was built under R version 4.2.3
+#&gt; Warning: package 'stringr' was built under R version 4.2.2
+#&gt; Warning: package 'forcats' was built under R version 4.2.3
+#&gt; Warning: package 'lubridate' was built under R version 4.2.3
+#&gt; ── Attaching core tidyverse packages ──────────── tidyverse 2.0.0 ──
+#&gt; ✔ dplyr     1.1.2     ✔ readr     2.1.4
+#&gt; ✔ forcats   1.0.0     ✔ stringr   1.5.0
+#&gt; ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+#&gt; ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+#&gt; ✔ purrr     1.0.1     
+#&gt; ── Conflicts ────────────────────────────── tidyverse_conflicts() ──
+#&gt; ✖ dplyr::filter() masks stats::filter()
+#&gt; ✖ dplyr::lag()    masks stats::lag()
+#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+#&gt; Rows: 410 Columns: 3
+#&gt; ── Column specification ────────────────────────────────────────────
+#&gt; Delimiter: ","
+#&gt; chr (3): user, name, maybe_name
+#&gt; 
+#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.
+#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Thanks to all contributors the the first and second editions (in alphabetical order by GitHub username):</p>
+<p><a href="https://github.com/aaelony">@aaelony</a>, <a href="https://github.com/aaronwolen">@aaronwolen</a> (Aaron Wolen), <a href="https://github.com/ablejec">@ablejec</a> (Andrej Blejec), <a href="https://github.com/adamcduncan">@adamcduncan</a> (Adam Duncan), <a href="https://github.com/adessy">@adessy</a>, <a href="https://github.com/adrtod">@adrtod</a> (Adrien Todeschini), <a href="https://github.com/aghaynes">@aghaynes</a> (Alan Haynes), <a href="https://github.com/agrueneberg">@agrueneberg</a> (Alexander Grueneberg), <a href="https://github.com/alejandrohagan">@alejandrohagan</a> (Alejandro Hagan), <a href="https://github.com/alesantuz">@alesantuz</a> (Ale Santuz), <a href="https://github.com/alexandrehsd">@alexandrehsd</a> (Alexandre Henrique), <a href="https://github.com/alexholcombe">@alexholcombe</a> (Alex O. Holcombe), <a href="https://github.com/alexpghayes">@alexpghayes</a> (alex hayes), <a href="https://github.com/alforj">@alforj</a> (Justin Alford), <a href="https://github.com/almartin82">@almartin82</a> (Andrew Martin), <a href="https://github.com/aluxh">@aluxh</a> (Alex Ho), <a href="https://github.com/AmelZulji">@AmelZulji</a>, <a href="https://github.com/andreaphsz">@andreaphsz</a> (Andrea Cantieni), <a href="https://github.com/andrewdolman">@andrewdolman</a> (Andrew Dolman), <a href="https://github.com/andrewpbray">@andrewpbray</a> (Andrew Bray), <a href="https://github.com/AndrewsOR">@AndrewsOR</a> (John Andrews), <a href="https://github.com/andycraig">@andycraig</a> (Andrew Craig), <a href="https://github.com/angela-li">@angela-li</a> (Angela Li), <a href="https://github.com/anjalisilva">@anjalisilva</a> (Anjali Silva), <a href="https://github.com/apomatix">@apomatix</a> (Brad Friedman), <a href="https://github.com/apreshill">@apreshill</a> (Alison Presmanes Hill), <a href="https://github.com/arashHaratian">@arashHaratian</a> (Arash), <a href="https://github.com/arilamstein">@arilamstein</a> (Ari Lamstein), <a href="https://github.com/arneschillert">@arneschillert</a> (Arne Schillert), <a href="https://github.com/arni-magnusson">@arni-magnusson</a> (Arni Magnusson), <a href="https://github.com/asadow">@asadow</a> (Adam Sadowski), <a href="https://github.com/ateucher">@ateucher</a> (Andy Teucher), <a href="https://github.com/avisser">@avisser</a> (Andy Visser), <a href="https://github.com/ayormark">@ayormark</a> (Adam Yormark), <a href="https://github.com/azzaea">@azzaea</a> (Azza Ahmed), <a href="https://github.com/batpigandme">@batpigandme</a> (Mara Averick), <a href="https://github.com/bclipp">@bclipp</a> (Brian L), <a href="https://github.com/beevabeeva">@beevabeeva</a>, <a href="https://github.com/behrman">@behrman</a> (Bill Behrman), <a href="https://github.com/benmarwick">@benmarwick</a> (Ben Marwick), <a href="https://github.com/BernhardKonrad">@BernhardKonrad</a> (Bernhard Konrad), <a href="https://github.com/bgreenwell">@bgreenwell</a> (Brandon Greenwell), <a href="https://github.com/Bisaloo">@Bisaloo</a> (Hugo Gruson), <a href="https://github.com/bklamer">@bklamer</a> (Brett Klamer), <a href="https://github.com/bm5tev3">@bm5tev3</a>, <a href="https://github.com/bms63">@bms63</a> (Ben Straub), <a href="https://github.com/bpbond">@bpbond</a> (Ben Bond-Lamberty), <a href="https://github.com/bquast">@bquast</a> (Bastiaan Quast), <a href="https://github.com/Br-Johnson">@Br-Johnson</a> (Brett Johnson), <a href="https://github.com/brews">@brews</a> (Brewster Malevich), <a href="https://github.com/brianrice2">@brianrice2</a> (Brian Rice), <a href="https://github.com/brry">@brry</a> (Berry Boessenkool), <a href="https://github.com/btruel">@btruel</a>, <a href="https://github.com/calligross">@calligross</a> (Calli), <a href="https://github.com/carldotac">@carldotac</a> (Carl Lieberman), <a href="https://github.com/carloscinelli">@carloscinelli</a> (Carlos Cinelli), <a href="https://github.com/CDCookJr">@CDCookJr</a>, <a href="https://github.com/cderv">@cderv</a> (Christophe Dervieux), <a href="https://github.com/chambm">@chambm</a> (Matt Chambers), <a href="https://github.com/charliejhadley">@charliejhadley</a> (Charlie Joey Hadley), <a href="https://github.com/chezou">@chezou</a> (Aki Ariga), <a href="https://github.com/chsafouane">@chsafouane</a> (Safouane Chergui), <a href="https://github.com/clente">@clente</a> (Caio Lente), <a href="https://github.com/cmarmstrong">@cmarmstrong</a>, <a href="https://github.com/cooknl">@cooknl</a> (CAPN), <a href="https://github.com/CorradoLanera">@CorradoLanera</a> (Corrado Lanera), <a href="https://github.com/craigcitro">@craigcitro</a> (Craig Citro), <a href="https://github.com/crtahlin">@crtahlin</a> (Crt Ahlin), <a href="https://github.com/daattali">@daattali</a> (Dean Attali), <a href="https://github.com/danhalligan">@danhalligan</a> (Dan Halligan), <a href="https://github.com/daroczig">@daroczig</a> (Gergely Daróczi), <a href="https://github.com/datarttu">@datarttu</a> (Arttu Kosonen), <a href="https://github.com/davidkane9">@davidkane9</a> (David Kane), <a href="https://github.com/DavisVaughan">@DavisVaughan</a> (Davis Vaughan), <a href="https://github.com/deanbodenham">@deanbodenham</a>, <a href="https://github.com/dfalbel">@dfalbel</a> (Daniel Falbel), <a href="https://github.com/dgrtwo">@dgrtwo</a> (David Robinson), <a href="https://github.com/dholstius">@dholstius</a> (David Holstius), <a href="https://github.com/DickStartz">@DickStartz</a>, <a href="https://github.com/dkgaraujo">@dkgaraujo</a> (Douglas K. G. Araujo), <a href="https://github.com/dlukes">@dlukes</a> (David Lukes), <a href="https://github.com/DOH-PXC5303">@DOH-PXC5303</a> (Philip Crain), <a href="https://github.com/dongzhuoer">@dongzhuoer</a> (Zhuoer Dong), <a href="https://github.com/DougManuel">@DougManuel</a> (Doug Manuel), <a href="https://github.com/dpprdan">@dpprdan</a> (Daniel Possenriede), <a href="https://github.com/dracodoc">@dracodoc</a> (dracodoc), <a href="https://github.com/drag05">@drag05</a> (Dragos Bandur), <a href="https://github.com/drvinceknight">@drvinceknight</a> (Vince Knight), <a href="https://github.com/dryzliang">@dryzliang</a>, <a href="https://github.com/dyavorsky">@dyavorsky</a> (Dan Yavorsky), <a href="https://github.com/e-pet">@e-pet</a>, <a href="https://github.com/earino">@earino</a> (E. Ariño de la Rubia), <a href="https://github.com/echelleburns">@echelleburns</a>, <a href="https://github.com/eeholmes">@eeholmes</a> (Eli Holmes), <a href="https://github.com/eipi10">@eipi10</a> (Joel Schwartz), <a href="https://github.com/ekbrown">@ekbrown</a> (Earl Brown), <a href="https://github.com/EllaKaye">@EllaKaye</a> (Ella Kaye), <a href="https://github.com/EmilHvitfeldt">@EmilHvitfeldt</a> (Emil Hvitfeldt), <a href="https://github.com/eogoodwin">@eogoodwin</a>, <a href="https://github.com/erictleung">@erictleung</a> (Eric Leung), <a href="https://github.com/erikerhardt">@erikerhardt</a> (Erik Erhardt), <a href="https://github.com/espinielli">@espinielli</a> (Enrico Spinielli), <a href="https://github.com/ewan">@ewan</a> (Ewan Dunbar), <a href="https://github.com/fbertran">@fbertran</a> (Frederic Bertrand), <a href="https://github.com/federicomarini">@federicomarini</a> (Federico Marini), <a href="https://github.com/fenguoerbian">@fenguoerbian</a> (Chao Cheng), <a href="https://github.com/fkohrt">@fkohrt</a> (Florian Kohrt), <a href="https://github.com/florisvdh">@florisvdh</a> (Floris Vanderhaeghe), <a href="https://github.com/floswald">@floswald</a> (Florian Oswald), <a href="https://github.com/franrodalg">@franrodalg</a> (Francisco Rodríguez-Algarra), <a href="https://github.com/franticspider">@franticspider</a> (Simon Hickinbotham), <a href="https://github.com/frycast">@frycast</a> (Daniel Vidali Fryer), <a href="https://github.com/fsavje">@fsavje</a> (Fredrik Sävje), <a href="https://github.com/gajusmiknaitis">@gajusmiknaitis</a>, <a href="https://github.com/gcpoole">@gcpoole</a> (Geoffrey Poole), <a href="https://github.com/geanders">@geanders</a> (Brooke Anderson), <a href="https://github.com/georoen">@georoen</a> (Jee Roen), <a href="https://github.com/GerardTromp">@GerardTromp</a> (Gerard Tromp), <a href="https://github.com/GillesSanMartin">@GillesSanMartin</a> (Gilles San Martin), <a href="https://github.com/gmaubach">@gmaubach</a> (Georg Maubach), <a href="https://github.com/gonzalezgouveia">@gonzalezgouveia</a> (Rafael Gonzalez Gouveia), <a href="https://github.com/gregmacfarlane">@gregmacfarlane</a> (Greg Macfarlane), <a href="https://github.com/gregrs-uk">@gregrs-uk</a> (Greg), <a href="https://github.com/grst">@grst</a> (Gregor Sturm), <a href="https://github.com/gsrohde">@gsrohde</a> (Scott Rohde), <a href="https://github.com/guru809">@guru809</a>, <a href="https://github.com/gustavdelius">@gustavdelius</a> (Gustav W Delius), <a href="https://github.com/haibin">@haibin</a> (Liu Haibin), <a href="https://github.com/hanneoberman">@hanneoberman</a> (Hanne Oberman), <a href="https://github.com/harrismcgehee">@harrismcgehee</a> (Harris McGehee), <a href="https://github.com/havenl">@havenl</a> (Haven Liu), <a href="https://github.com/hcyvan">@hcyvan</a> (程一航), <a href="https://github.com/hdraisma">@hdraisma</a> (Harmen), <a href="https://github.com/hedderik">@hedderik</a> (Hedderik van Rijn), <a href="https://github.com/heists">@heists</a> ((ꐦ°᷄д°)ა), <a href="https://github.com/helske">@helske</a> (Jouni Helske), <a href="https://github.com/henningte">@henningte</a> (Henning Teickner), <a href="https://github.com/HenrikBengtsson">@HenrikBengtsson</a> (Henrik Bengtsson), <a href="https://github.com/heogden">@heogden</a> (Helen Ogden), <a href="https://github.com/hfrick">@hfrick</a> (Hannah Frick), <a href="https://github.com/Holzhauer">@Holzhauer</a> (Sascha Holzhauer), <a href="https://github.com/howardbaek">@howardbaek</a> (Howard Baek), <a href="https://github.com/howbuildingsfail">@howbuildingsfail</a> (How Buildings Fail), <a href="https://github.com/hq9000">@hq9000</a> (Sergey Grechin), <a href="https://github.com/hrbrmstr">@hrbrmstr</a> (boB Rudis), <a href="https://github.com/iangow">@iangow</a> (Ian Gow), <a href="https://github.com/iargent">@iargent</a>, <a href="https://github.com/idmn">@idmn</a> (Iaroslav Domin), <a href="https://github.com/ijlyttle">@ijlyttle</a> (Ian Lyttle), <a href="https://github.com/imchoyoung">@imchoyoung</a> (Choyoung Im), <a href="https://github.com/InfiniteCuriosity">@InfiniteCuriosity</a> (Russ Conte), <a href="https://github.com/ionut-stefanb">@ionut-stefanb</a> (Ionut Stefan-Birdea), <a href="https://github.com/Ironholds">@Ironholds</a> (Os Keyes), <a href="https://github.com/ismayc">@ismayc</a> (Chester Ismay), <a href="https://github.com/isomorphisms">@isomorphisms</a> (i), <a href="https://github.com/jackwasey">@jackwasey</a> (Jack Wasey), <a href="https://github.com/jacobbien">@jacobbien</a> (Jacob Bien), <a href="https://github.com/jadeynryan">@jadeynryan</a> (Jadey Ryan), <a href="https://github.com/jameelalsalam">@jameelalsalam</a> (Jameel Alsalam), <a href="https://github.com/jameslairdsmith">@jameslairdsmith</a> (James Laird-Smith), <a href="https://github.com/janzzon">@janzzon</a> (Stefan Jansson), <a href="https://github.com/JayCeBB">@JayCeBB</a>, <a href="https://github.com/jcainey">@jcainey</a> (Joe Cainey), <a href="https://github.com/jdblischak">@jdblischak</a> (John Blischak), <a href="https://github.com/jedwards24">@jedwards24</a> (James Edwards), <a href="https://github.com/jemus42">@jemus42</a> (Lukas Burk), <a href="https://github.com/jenniferthompson">@jenniferthompson</a> (Jennifer Thompson), <a href="https://github.com/jeremycg">@jeremycg</a> (Jeremy Gray), <a href="https://github.com/jgarthur">@jgarthur</a> (Joey Arthur), <a href="https://github.com/jimhester">@jimhester</a> (Jim Hester), <a href="https://github.com/jimr1603">@jimr1603</a> (James Riley), <a href="https://github.com/jjesusfilho">@jjesusfilho</a> (José de Jesus Filho), <a href="https://github.com/jkeirstead">@jkeirstead</a> (James Keirstead), <a href="https://github.com/jmarca">@jmarca</a> (James Marca), <a href="https://github.com/jmarshallnz">@jmarshallnz</a> (Jonathan Marshall), <a href="https://github.com/joethorley">@joethorley</a> (Joe Thorley), <a href="https://github.com/johnbaums">@johnbaums</a> (John), <a href="https://github.com/jolars">@jolars</a> (Johan Larsson), <a href="https://github.com/jonthegeek">@jonthegeek</a> (Jon Harmon), <a href="https://github.com/jowalski">@jowalski</a> (John Kowalski), <a href="https://github.com/jpinelo">@jpinelo</a> (Joao Pinelo Silva), <a href="https://github.com/jrdnbradford">@jrdnbradford</a> (Jordan), <a href="https://github.com/jthomasmock">@jthomasmock</a> (Tom Mock), <a href="https://github.com/julian-urbano">@julian-urbano</a> (Julián Urbano), <a href="https://github.com/jwpestrak">@jwpestrak</a>, <a href="https://github.com/jzadra">@jzadra</a> (Jonathan Zadra), <a href="https://github.com/jzhaoo">@jzhaoo</a> (Joanna Zhao), <a href="https://github.com/kaetschap">@kaetschap</a> (Sonja), <a href="https://github.com/karthik">@karthik</a> (Karthik Ram), <a href="https://github.com/KasperThystrup">@KasperThystrup</a> (Kasper Thystrup Karstensen), <a href="https://github.com/KatherineCox">@KatherineCox</a>, <a href="https://github.com/katrinleinweber">@katrinleinweber</a> (Katrin Leinweber), <a href="https://github.com/kbroman">@kbroman</a> (Karl Broman), <a href="https://github.com/kekecib">@kekecib</a> (Ibrahim Kekec), <a href="https://github.com/KellenBrosnahan">@KellenBrosnahan</a>, <a href="https://github.com/kendonB">@kendonB</a> (Kendon Bell), <a href="https://github.com/kevinushey">@kevinushey</a> (Kevin Ushey), <a href="https://github.com/kikapp">@kikapp</a> (Kristopher Kapphahn), <a href="https://github.com/KirkDSL">@KirkDSL</a>, <a href="https://github.com/KJByron">@KJByron</a> (Karen J. Byron), <a href="https://github.com/klmr">@klmr</a> (Konrad Rudolph), <a href="https://github.com/KoderKow">@KoderKow</a> (Kyle Harris), <a href="https://github.com/kokbent">@kokbent</a> (Ben Toh), <a href="https://github.com/kongdd">@kongdd</a> (Dongdong Kong), <a href="https://github.com/krlmlr">@krlmlr</a> (Kirill Müller), <a href="https://github.com/kwenzig">@kwenzig</a> (Knut Wenzig), <a href="https://github.com/kwstat">@kwstat</a> (Kevin Wright), <a href="https://github.com/kylelundstedt">@kylelundstedt</a> (Kyle G. Lundstedt), <a href="https://github.com/lancelote">@lancelote</a> (Pavel Karateev), <a href="https://github.com/lbergelson">@lbergelson</a> (Louis Bergelson), <a href="https://github.com/LechMadeyski">@LechMadeyski</a> (Lech Madeyski), <a href="https://github.com/Lenostatos">@Lenostatos</a> (Leon), <a href="https://github.com/lindbrook">@lindbrook</a>, <a href="https://github.com/lionel-">@lionel-</a> (Lionel Henry), <a href="https://github.com/LluisRamon">@LluisRamon</a> (Lluís Ramon), <a href="https://github.com/lorenzwalthert">@lorenzwalthert</a> (Lorenz Walthert), <a href="https://github.com/lwjohnst86">@lwjohnst86</a> (Luke W Johnston), <a href="https://github.com/maelle">@maelle</a> (Maëlle Salmon), <a href="https://github.com/maiermarco">@maiermarco</a>, <a href="https://github.com/maislind">@maislind</a> (David M), <a href="https://github.com/majr-red">@majr-red</a> (Matthew Roberts), <a href="https://github.com/malcolmbarrett">@malcolmbarrett</a> (Malcolm Barrett), <a href="https://github.com/malexan">@malexan</a> (Alexander Matrunich), <a href="https://github.com/manuelreif">@manuelreif</a> (Manuel Reif), <a href="https://github.com/MarceloRTonon">@MarceloRTonon</a> (Marcelo Tonon), <a href="https://github.com/mariacuellar">@mariacuellar</a> (Maria Cuellar), <a href="https://github.com/markdly">@markdly</a> (Mark Dulhunty), <a href="https://github.com/Marlin-Na">@Marlin-Na</a> (Marlin), <a href="https://github.com/martin-mfg">@martin-mfg</a>, <a href="https://github.com/matanhakim">@matanhakim</a> (Matan Hakim), <a href="https://github.com/matdoering">@matdoering</a>, <a href="https://github.com/matinang">@matinang</a> (Matina Angelopoulou), <a href="https://github.com/mattflor">@mattflor</a> (Matthias Flor), <a href="https://github.com/maurolepore">@maurolepore</a> (Mauro Lepore), <a href="https://github.com/maxheld83">@maxheld83</a> (Max Held), <a href="https://github.com/mayankvanani">@mayankvanani</a> (Mayank Vanani), <a href="https://github.com/mbjones">@mbjones</a> (Matt Jones), <a href="https://github.com/mccarthy-m-g">@mccarthy-m-g</a> (Michael McCarthy), <a href="https://github.com/mdequeljoe">@mdequeljoe</a> (Matthew de Queljoe), <a href="https://github.com/mdsumner">@mdsumner</a> (Michael Sumner), <a href="https://github.com/michaelboerman">@michaelboerman</a> (Michael Boerman), <a href="https://github.com/MichaelChirico">@MichaelChirico</a> (Michael Chirico), <a href="https://github.com/michaelmikebuckley">@michaelmikebuckley</a> (Michael Buckley), <a href="https://github.com/michaelweylandt">@michaelweylandt</a> (Michael Weylandt), <a href="https://github.com/miguelmorin">@miguelmorin</a>, <a href="https://github.com/MikeJohnPage">@MikeJohnPage</a>, <a href="https://github.com/mikelnrd">@mikelnrd</a> (Michael Leonard), <a href="https://github.com/mikelove">@mikelove</a> (Mike Love), <a href="https://github.com/mikemc">@mikemc</a> (Michael McLaren), <a href="https://github.com/MilesMcBain">@MilesMcBain</a> (Miles McBain), <a href="https://github.com/mjkanji">@mjkanji</a> (Muhammad Jarir Kanji), <a href="https://github.com/mkuehn10">@mkuehn10</a> (Michael Kuehn), <a href="https://github.com/mllg">@mllg</a> (Michel Lang), <a href="https://github.com/mohamed-180">@mohamed-180</a> (Mohamed El-Desokey), <a href="https://github.com/moodymudskipper">@moodymudskipper</a> (Antoine Fabri), <a href="https://github.com/Moohan">@Moohan</a> (James McMahon), <a href="https://github.com/MrAE">@MrAE</a> (Jesse Leigh Patsolic), <a href="https://github.com/mrcaseb">@mrcaseb</a>, <a href="https://github.com/ms609">@ms609</a> (Martin R. Smith), <a href="https://github.com/mskyttner">@mskyttner</a> (Markus Skyttner), <a href="https://github.com/MWilson92">@MWilson92</a> (Matthew Wilson), <a href="https://github.com/myoung3">@myoung3</a>, <a href="https://github.com/nachti">@nachti</a> (Gerhard Nachtmann), <a href="https://github.com/nanxstats">@nanxstats</a> (Nan Xiao), <a href="https://github.com/nareal">@nareal</a> (Nelson Areal), <a href="https://github.com/nattalides">@nattalides</a>, <a href="https://github.com/ncarchedi">@ncarchedi</a> (Nick Carchedi), <a href="https://github.com/ndphillips">@ndphillips</a> (Nathaniel Phillips), <a href="https://github.com/nick-youngblut">@nick-youngblut</a> (Nick Youngblut), <a href="https://github.com/njtierney">@njtierney</a> (Nicholas Tierney), <a href="https://github.com/nsheff">@nsheff</a> (Nathan Sheffield), <a href="https://github.com/osorensen">@osorensen</a> (Øystein Sørensen), <a href="https://github.com/PabRod">@PabRod</a> (Pablo Rodríguez-Sánchez), <a href="https://github.com/paternogbc">@paternogbc</a> (Gustavo Brant Paterno), <a href="https://github.com/paulrougieux">@paulrougieux</a> (Paul Rougieux), <a href="https://github.com/pdwaggoner">@pdwaggoner</a> (Philip Waggoner), <a href="https://github.com/pearsonca">@pearsonca</a> (Carl A. B. Pearson), <a href="https://github.com/perryjer1">@perryjer1</a> (Jeremiah), <a href="https://github.com/petermeissner">@petermeissner</a> (Peter Meissner), <a href="https://github.com/petersonR">@petersonR</a> (Ryan Peterson), <a href="https://github.com/petzi53">@petzi53</a> (Peter Baumgartner), <a href="https://github.com/PhilipPallmann">@PhilipPallmann</a> (Philip Pallmann), <a href="https://github.com/philliplab">@philliplab</a> (Phillip Labuschagne), <a href="https://github.com/phonixor">@phonixor</a> (Gerrit-Jan Schutten), <a href="https://github.com/pkimes">@pkimes</a> (Patrick Kimes), <a href="https://github.com/pnovoa">@pnovoa</a> (Pavel Novoa), <a href="https://github.com/ppanko">@ppanko</a> (Pavel Panko), <a href="https://github.com/pritesh-shrivastava">@pritesh-shrivastava</a> (Pritesh Shrivastava), <a href="https://github.com/PrzeChoj">@PrzeChoj</a> (PrzeChoj), <a href="https://github.com/PursuitOfDataScience">@PursuitOfDataScience</a> (Y. Yu), <a href="https://github.com/pwaeckerle">@pwaeckerle</a>, <a href="https://github.com/raerickson">@raerickson</a> (Richard Erickson), <a href="https://github.com/ramiromagno">@ramiromagno</a> (Ramiro Magno), <a href="https://github.com/ras44">@ras44</a>, <a href="https://github.com/rbirkelbach">@rbirkelbach</a> (Robert Birkelbach), <a href="https://github.com/rcorty">@rcorty</a> (Robert W. Corty), <a href="https://github.com/rdiaz02">@rdiaz02</a> (Ramon Diaz-Uriarte), <a href="https://github.com/realAkhmed">@realAkhmed</a> (Akhmed Umyarov), <a href="https://github.com/reikookamoto">@reikookamoto</a> (Reiko Okamoto), <a href="https://github.com/renkun-ken">@renkun-ken</a> (Kun Ren), <a href="https://github.com/retowyss">@retowyss</a> (Reto Wyss), <a href="https://github.com/revodavid">@revodavid</a> (David Smith), <a href="https://github.com/rgknight">@rgknight</a> (Ryan Knight), <a href="https://github.com/rhgof">@rhgof</a> (Richard), <a href="https://github.com/rmar073">@rmar073</a>, <a href="https://github.com/rmflight">@rmflight</a> (Robert M Flight), <a href="https://github.com/rmsharp">@rmsharp</a> (R. Mark Sharp), <a href="https://github.com/rnuske">@rnuske</a> (Robert Nuske), <a href="https://github.com/robertzk">@robertzk</a> (Robert Krzyzanowski), <a href="https://github.com/Robinlovelace">@Robinlovelace</a> (Robin Lovelace), <a href="https://github.com/robiRagan">@robiRagan</a> (Robi Ragan), <a href="https://github.com/Robsteranium">@Robsteranium</a> (Robin Gower), <a href="https://github.com/romanzenka">@romanzenka</a> (Roman Zenka), <a href="https://github.com/royfrancis">@royfrancis</a> (Roy Francis), <a href="https://github.com/rpruim">@rpruim</a> (Randall Pruim), <a href="https://github.com/rrunner">@rrunner</a>, <a href="https://github.com/rsangole">@rsangole</a> (Rahul), <a href="https://github.com/ryanatanner">@ryanatanner</a> (Ryan), <a href="https://github.com/salim-b">@salim-b</a> (Salim B), <a href="https://github.com/SamEdwardes">@SamEdwardes</a> (Sam Edwardes), <a href="https://github.com/SangdonLim">@SangdonLim</a> (Sangdon Lim), <a href="https://github.com/sathishsrinivasank">@sathishsrinivasank</a> (Sathish), <a href="https://github.com/sbgraves237">@sbgraves237</a>, <a href="https://github.com/schifferl">@schifferl</a> (Lucas Schiffer), <a href="https://github.com/scw">@scw</a> (Shaun Walbridge), <a href="https://github.com/sdarodrigues">@sdarodrigues</a> (Sabrina Rodrigues), <a href="https://github.com/sebffischer">@sebffischer</a> (Sebastian Fischer), <a href="https://github.com/serghiou">@serghiou</a> (Stylianos Serghiou), <a href="https://github.com/setoyama60jp">@setoyama60jp</a>, <a href="https://github.com/sfirke">@sfirke</a> (Sam Firke), <a href="https://github.com/shannonpileggi">@shannonpileggi</a> (Shannon Pileggi), <a href="https://github.com/Shelmith-Kariuki">@Shelmith-Kariuki</a> (Shel), <a href="https://github.com/SheridanLGrant">@SheridanLGrant</a> (Sheridan Grant), <a href="https://github.com/shntnu">@shntnu</a> (Shantanu Singh), <a href="https://github.com/sibusiso16">@sibusiso16</a> (S’busiso Mkhondwane), <a href="https://github.com/simdadim">@simdadim</a> (Simen Buodd), <a href="https://github.com/SimonPBiggs">@SimonPBiggs</a> (SPB), <a href="https://github.com/simonthelwall">@simonthelwall</a> (Simon Thelwall), <a href="https://github.com/SimonYansenZhao">@SimonYansenZhao</a> (Simon He Zhao), <a href="https://github.com/singmann">@singmann</a> (Henrik Singmann), <a href="https://github.com/Skenvy">@Skenvy</a> (Nathan Levett), <a href="https://github.com/Smudgerville">@Smudgerville</a> (Richard M. Smith), <a href="https://github.com/sn248">@sn248</a> (Satyaprakash Nayak), <a href="https://github.com/sowla">@sowla</a> (Praer (Suthira) Owlarn), <a href="https://github.com/srushe">@srushe</a> (Stephen Rushe), <a href="https://github.com/statnmap">@statnmap</a> (Sébastien Rochette), <a href="https://github.com/steenharsted">@steenharsted</a> (Steen Harsted), <a href="https://github.com/stefaneng">@stefaneng</a> (Stefan Eng), <a href="https://github.com/stefanherzog">@stefanherzog</a> (Stefan Herzog), <a href="https://github.com/stephen-frank">@stephen-frank</a> (Stephen Frank), <a href="https://github.com/stephenll">@stephenll</a> (Stephen Lienhard), <a href="https://github.com/stephenturner">@stephenturner</a> (Stephen Turner), <a href="https://github.com/stevenprimeaux">@stevenprimeaux</a> (Steven Primeaux), <a href="https://github.com/stevensbr">@stevensbr</a>, <a href="https://github.com/stewid">@stewid</a> (Stefan Widgren), <a href="https://github.com/sunbeomk">@sunbeomk</a> (Sunbeom Kwon), <a href="https://github.com/superdesolator">@superdesolator</a> (Po Su), <a href="https://github.com/syclik">@syclik</a> (Daniel Lee), <a href="https://github.com/symbolrush">@symbolrush</a> (Adrian Stämpfli-Schmid), <a href="https://github.com/taekyunk">@taekyunk</a> (Taekyun Kim), <a href="https://github.com/talgalili">@talgalili</a> (Tal Galili), <a href="https://github.com/tanho63">@tanho63</a> (Tan Ho), <a href="https://github.com/tbrugz">@tbrugz</a> (Telmo Brugnara), <a href="https://github.com/thisisnic">@thisisnic</a> (Nic Crane), <a href="https://github.com/TimHesterberg">@TimHesterberg</a> (Tim Hesterberg), <a href="https://github.com/titaniumtroop">@titaniumtroop</a> (Nathan), <a href="https://github.com/tjebo">@tjebo</a>, <a href="https://github.com/tklebel">@tklebel</a> (Thomas Klebel), <a href="https://github.com/tmstauss">@tmstauss</a> (Tanner Stauss), <a href="https://github.com/tonybreyal">@tonybreyal</a> (Tony Breyal), <a href="https://github.com/tonyfischetti">@tonyfischetti</a> (Tony Fischetti), <a href="https://github.com/TonyLadson">@TonyLadson</a> (Tony Ladson), <a href="https://github.com/trickytank">@trickytank</a> (Rick Tankard), <a href="https://github.com/TroyVan">@TroyVan</a>, <a href="https://github.com/uribo">@uribo</a> (Shinya Uryu), <a href="https://github.com/urmils">@urmils</a>, <a href="https://github.com/valeonte">@valeonte</a>, <a href="https://github.com/vgonzenbach">@vgonzenbach</a> (Virgilio Gonzenbach), <a href="https://github.com/vladpetyuk">@vladpetyuk</a> (Vlad Petyuk), <a href="https://github.com/vnijs">@vnijs</a> (Vincent Nijs), <a href="https://github.com/vspinu">@vspinu</a> (Vitalie Spinu), <a href="https://github.com/wcarlsen">@wcarlsen</a> (Willi Carlsen), <a href="https://github.com/wch">@wch</a> (Winston Chang), <a href="https://github.com/wenjie2wang">@wenjie2wang</a> (Wenjie Wang), <a href="https://github.com/werkstattcodes">@werkstattcodes</a>, <a href="https://github.com/wiaidp">@wiaidp</a>, <a href="https://github.com/wibeasley">@wibeasley</a> (Will Beasley), <a href="https://github.com/wilkinson">@wilkinson</a> (Sean Wilkinson), <a href="https://github.com/williamlief">@williamlief</a> (Lief Esbenshade), <a href="https://github.com/winterschlaefer">@winterschlaefer</a> (Christof Winter), <a href="https://github.com/wlamnz">@wlamnz</a> (William Lam), <a href="https://github.com/wrathematics">@wrathematics</a> (Drew Schmidt), <a href="https://github.com/XiangyunHuang">@XiangyunHuang</a> (Xiangyun Huang), <a href="https://github.com/xiaochi-liu">@xiaochi-liu</a> (Xiaochi), <a href="https://github.com/XiaoqiLu">@XiaoqiLu</a> (Xiaoqi Lu), <a href="https://github.com/xiaosongz">@xiaosongz</a> (Xiaosong Zhang), <a href="https://github.com/yihui">@yihui</a> (Yihui Xie), <a href="https://github.com/ynsec37">@ynsec37</a>, <a href="https://github.com/yonicd">@yonicd</a>, <a href="https://github.com/ysdgroot">@ysdgroot</a>, <a href="https://github.com/yui-knk">@yui-knk</a> (Yuichiro Kaneko), <a href="https://github.com/Zedseayou">@Zedseayou</a> (Calum You), <a href="https://github.com/zeehio">@zeehio</a> (Sergio Oller), <a href="https://github.com/zekiakyol">@zekiakyol</a> (Zeki Akyol), <a href="https://github.com/zenggyu">@zenggyu</a> (Guangyu Zeng), <a href="https://github.com/zhaoy">@zhaoy</a>, <a href="https://github.com/zhilongjia">@zhilongjia</a> (Zhilong), <a href="https://github.com/zhixunwang">@zhixunwang</a>, <a href="https://github.com/zkamvar">@zkamvar</a> (Zhian N. Kamvar), <a href="https://github.com/zouter">@zouter</a> (Wouter Saelens).</p>
+</section><section id="conventions" class="level2"><h2 class="anchored" data-anchor-id="conventions">Conventions</h2>
+<p>Throughout this book, we write <code>fun()</code> to refer to functions, <code>var</code> to refer to variables and function arguments, and <code>path/</code> for paths.</p>
+<p>Larger code blocks intermingle input and output. Output is commented so that if you have an electronic version of the book, e.g., <a href="https://r-pkgs.org" class="uri">https://r-pkgs.org</a>, you can easily copy and paste examples into R. Output comments look like <code>#&gt;</code> to distinguish them from regular comments.</p>
+</section><section id="colophon" class="level2"><h2 class="anchored" data-anchor-id="colophon">Colophon</h2>
+<p>This book was authored using <a href="https://quarto.org">Quarto</a> inside <a href="https://www.rstudio.com/products/rstudio/">RStudio</a>. The <a href="https://r-pkgs.org">website</a> is hosted with <a href="https://www.netlify.com">Netlify</a>, and automatically updated after every commit by GitHub actions. The complete source is available from <a href="https://github.com/hadley/r-pkgs">GitHub</a>.</p>
+<p>This version of the book was built with:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'devtools' was built under R version 4.2.3</span></span>
+<span><span class="co">#&gt; Loading required package: usethis</span></span>
+<span><span class="co">#&gt; Warning: package 'usethis' was built under R version 4.2.3</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://roxygen2.r-lib.org/">roxygen2</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'roxygen2' was built under R version 4.2.3</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://testthat.r-lib.org">testthat</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'testthat' was built under R version 4.2.3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'testthat'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:devtools':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     test_file</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     matches</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:purrr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     is_null</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:readr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     edition_get, local_edition</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tidyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     matches</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ─ Session info ───────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  setting  value</span></span>
+<span><span class="co">#&gt;  version  R version 4.2.0 (2022-04-22 ucrt)</span></span>
+<span><span class="co">#&gt;  os       Windows 10 x64 (build 22621)</span></span>
+<span><span class="co">#&gt;  system   x86_64, mingw32</span></span>
+<span><span class="co">#&gt;  ui       RTerm</span></span>
+<span><span class="co">#&gt;  language (EN)</span></span>
+<span><span class="co">#&gt;  collate  Chinese (Simplified)_China.utf8</span></span>
+<span><span class="co">#&gt;  ctype    Chinese (Simplified)_China.utf8</span></span>
+<span><span class="co">#&gt;  tz       Asia/Taipei</span></span>
+<span><span class="co">#&gt;  date     2023-06-19</span></span>
+<span><span class="co">#&gt;  pandoc   2.19.2 @ D:/1.study/RStudio/resources/app/bin/quarto/bin/tools/ (via rmarkdown)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ─ Packages ───────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt;  package     * version date (UTC) lib source</span></span>
+<span><span class="co">#&gt;  bit           4.0.5   2022-11-15 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  bit64         4.0.5   2020-08-30 [1] CRAN (R 4.2.1)</span></span>
+<span><span class="co">#&gt;  brio          1.1.3   2021-11-30 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  cachem        1.0.8   2023-05-01 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  callr         3.7.3   2022-11-02 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  cli           3.6.1   2023-03-23 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  colorspace    2.1-0   2023-01-23 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  crayon        1.5.2   2022-09-29 [1] CRAN (R 4.2.1)</span></span>
+<span><span class="co">#&gt;  devtools    * 2.4.5   2022-10-11 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  digest        0.6.29  2021-12-01 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  dplyr       * 1.1.2   2023-04-20 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  ellipsis      0.3.2   2021-04-29 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  evaluate      0.21    2023-05-05 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  fansi         1.0.4   2023-01-22 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  fastmap       1.1.1   2023-02-24 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  forcats     * 1.0.0   2023-01-29 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  fs            1.6.2   2023-04-25 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  generics      0.1.3   2022-07-05 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  ggplot2     * 3.4.2   2023-04-03 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  glue          1.6.2   2022-02-24 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  gtable        0.3.3   2023-03-21 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  hms           1.1.3   2023-03-21 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  htmltools     0.5.4   2022-12-07 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  htmlwidgets   1.6.2   2023-03-17 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  httpuv        1.6.11  2023-05-11 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  jsonlite      1.8.5   2023-06-05 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  knitr         1.43    2023-05-25 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  later         1.3.1   2023-05-02 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  lifecycle     1.0.3   2022-10-07 [1] CRAN (R 4.2.1)</span></span>
+<span><span class="co">#&gt;  lubridate   * 1.9.2   2023-02-10 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  magrittr      2.0.3   2022-03-30 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  memoise       2.0.1   2021-11-26 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  mime          0.12    2021-09-28 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  miniUI        0.1.1.1 2018-05-18 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  munsell       0.5.0   2018-06-12 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  pillar        1.9.0   2023-03-22 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  pkgbuild      1.4.0   2022-11-27 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  pkgload       1.3.2   2022-11-16 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  prettyunits   1.1.1   2020-01-24 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  processx      3.8.1   2023-04-18 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  profvis       0.3.8   2023-05-02 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  promises      1.2.0.1 2021-02-11 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  ps            1.7.5   2023-04-18 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  purrr       * 1.0.1   2023-01-10 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  R6            2.5.1   2021-08-19 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  Rcpp          1.0.10  2023-01-22 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  readr       * 2.1.4   2023-02-10 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  remotes       2.4.2   2021-11-30 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  rlang         1.1.1   2023-04-28 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  rmarkdown     2.22    2023-06-01 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  roxygen2    * 7.2.3   2022-12-08 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.1)</span></span>
+<span><span class="co">#&gt;  scales        1.2.1   2022-08-20 [1] CRAN (R 4.2.1)</span></span>
+<span><span class="co">#&gt;  sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  shiny         1.7.4   2022-12-15 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  stringi       1.7.12  2023-01-11 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  stringr     * 1.5.0   2022-12-02 [1] CRAN (R 4.2.2)</span></span>
+<span><span class="co">#&gt;  testthat    * 3.1.8   2023-05-04 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  tibble      * 3.2.1   2023-03-20 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  tidyr       * 1.3.0   2023-01-24 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  tidyselect    1.2.0   2022-10-10 [1] CRAN (R 4.2.1)</span></span>
+<span><span class="co">#&gt;  tidyverse   * 2.0.0   2023-02-22 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  timechange    0.2.0   2023-01-11 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  tzdb          0.4.0   2023-05-12 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  urlchecker    1.0.1   2021-11-30 [1] CRAN (R 4.2.1)</span></span>
+<span><span class="co">#&gt;  usethis     * 2.2.0   2023-06-06 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  utf8          1.2.3   2023-01-31 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  vctrs         0.6.2   2023-04-19 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  vroom         1.6.3   2023-04-28 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  withr         2.5.0   2022-03-03 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt;  xfun          0.39    2023-04-20 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  xml2          1.3.4   2023-04-27 [1] CRAN (R 4.2.3)</span></span>
+<span><span class="co">#&gt;  xtable        1.8-4   2019-04-21 [1] CRAN (R 4.2.0)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  [1] D:/1.study/R/R-4.2.0/library</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ──────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-styler" class="csl-entry" role="doc-biblioentry">
+Müller, Kirill, and Lorenz Walthert. 2018. <em>Styler: Non-Invasive Pretty Printing of <span>R</span> Code</em>. <a href="http://styler.r-lib.org">http://styler.r-lib.org</a>.
+</div>
+</div>
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome!</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./introduction.html" class="pagination-link">
+        <span class="nav-page-text">Introduction</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

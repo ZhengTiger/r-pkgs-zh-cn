@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="description" content="Learn how to create a package, the fundamental unit of shareable, reusable, and reproducible R code.">
+<title>R Packages (2e) - 17&nbsp; Vignettes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./other-markdown.html" rel="next">
+<link href="./man.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script><script defer="" data-domain="r-pkgs.org" src="https://plausible.io/js/plausible.js"></script>
+</head>
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Vignettes</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">R Packages (2e)</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/hadley/r-pkgs/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome!</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preface.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./introduction.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Getting started</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./whole-game.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Whole Game</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">System setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./structure.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Package structure and state</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./workflow101.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fundamental development workflows</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./package-within.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The package within</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Package components</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">R code</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./misc.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Other components</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Package metadata</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./description.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title"><code>DESCRIPTION</code></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dependencies-mindset-background.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dependencies: Mindset and Background</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dependencies-in-practice.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Dependencies: In Practice</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./license.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Licensing</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">Testing</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing-basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Testing basics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing-design.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Designing your test suite</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./testing-advanced.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Advanced testing techniques</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">Documentation</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./man.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Function documentation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./vignettes.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Vignettes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./other-markdown.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Other markdown files</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./website.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Website</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">Maintenance and distribution</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./software-development-practices.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Software development practices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lifecycle.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Lifecycle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./release.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Releasing to CRAN</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R-CMD-check.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title"><code>R CMD check</code></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#sec-vignettes-workflow-writing" id="toc-sec-vignettes-workflow-writing" class="nav-link active" data-scroll-target="#sec-vignettes-workflow-writing"><span class="toc-section-number">17.1</span>  Workflow for writing a vignette</a></li>
+  <li><a href="#metadata" id="toc-metadata" class="nav-link" data-scroll-target="#metadata"><span class="toc-section-number">17.2</span>  Metadata</a></li>
+  <li>
+<a href="#advice-on-writing-vignettes" id="toc-advice-on-writing-vignettes" class="nav-link" data-scroll-target="#advice-on-writing-vignettes"><span class="toc-section-number">17.3</span>  Advice on writing vignettes</a>
+  <ul class="collapse">
+<li><a href="#diagrams" id="toc-diagrams" class="nav-link" data-scroll-target="#diagrams"><span class="toc-section-number">17.3.1</span>  Diagrams</a></li>
+  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links"><span class="toc-section-number">17.3.2</span>  Links</a></li>
+  <li><a href="#filepaths" id="toc-filepaths" class="nav-link" data-scroll-target="#filepaths"><span class="toc-section-number">17.3.3</span>  Filepaths</a></li>
+  <li><a href="#how-many-vignettes" id="toc-how-many-vignettes" class="nav-link" data-scroll-target="#how-many-vignettes"><span class="toc-section-number">17.3.4</span>  How many vignettes?</a></li>
+  <li><a href="#scientific-publication" id="toc-scientific-publication" class="nav-link" data-scroll-target="#scientific-publication"><span class="toc-section-number">17.3.5</span>  Scientific publication</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#sec-vignettes-eval-option" id="toc-sec-vignettes-eval-option" class="nav-link" data-scroll-target="#sec-vignettes-eval-option"><span class="toc-section-number">17.4</span>  Special considerations for vignette code</a>
+  <ul class="collapse">
+<li><a href="#sec-vignettes-article" id="toc-sec-vignettes-article" class="nav-link" data-scroll-target="#sec-vignettes-article"><span class="toc-section-number">17.4.1</span>  Article instead of vignette</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#sec-vignettes-how-built-checked" id="toc-sec-vignettes-how-built-checked" class="nav-link" data-scroll-target="#sec-vignettes-how-built-checked"><span class="toc-section-number">17.5</span>  How vignettes are built and checked</a>
+  <ul class="collapse">
+<li><a href="#sec-vignettes-how-built" id="toc-sec-vignettes-how-built" class="nav-link" data-scroll-target="#sec-vignettes-how-built"><span class="toc-section-number">17.5.1</span>  <code>R CMD build</code> and vignettes</a></li>
+  <li><a href="#sec-vignettes-how-checked" id="toc-sec-vignettes-how-checked" class="nav-link" data-scroll-target="#sec-vignettes-how-checked"><span class="toc-section-number">17.5.2</span>  <code>R CMD check</code> and vignettes</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/hadley/r-pkgs/edit/main/vignettes.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/hadley/r-pkgs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title"><span id="sec-vignettes" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Vignettes</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><div class="cell">
+
+</div>
+<p>A vignette is a long-form guide to your package. Function documentation is great if you know the name of the function you need, but it’s useless otherwise. In contrast, a vignette can be framed around a target problem that your package is designed to solve. The vignette format is perfect for showing a workflow that solves that particular problem, start to finish. Vignettes afford you different opportunities than help topics: you have much more control over the integration of code and prose and it’s a better setting for showing how multiple functions work together.</p>
+<p>Many existing packages have vignettes and you can see all the vignettes associated with your installed packages with <code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes()</a></code>. To limit that to a particular package, you can specify the package’s name like so: <code>browseVignettes("tidyr")</code>. You can read a specific vignette with the <code><a href="https://rdrr.io/r/utils/vignette.html">vignette()</a></code> function, e.g.&nbsp;<code><a href="https://tidyr.tidyverse.org/articles/rectangle.html">vignette("rectangle", package = "tidyr")</a></code>. To see vignettes for a package that you haven’t installed, look at the “Vignettes” listing on its CRAN page, e.g.&nbsp;<a href="https://cran.r-project.org/web/packages/tidyr/index.html" class="uri">https://cran.r-project.org/web/packages/tidyr/index.html</a>.</p>
+<p>However, we much prefer to discover and read vignettes from a package’s website, which is the topic of <a href="#sec-website"><span class="quarto-unresolved-ref">sec-website</span></a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Compare the above to what it feels like to access tidyr’s vignettes from its website: <a href="https://tidyr.tidyverse.org/articles/index.html" class="uri">https://tidyr.tidyverse.org/articles/index.html</a>. Note that pkgdown uses the term “article”, which feels like the right vocabulary for package users. The technical distinction between a vignette (which ships with a package) and an article (which is only available on the website; see <a href="#sec-vignettes-article"><span class="quarto-unresolved-ref">sec-vignettes-article</span></a>) is something the package developer needs to think about. A pkgdown website presents all of the documentation of a package in a cohesive, interlinked way that makes it more navigable and useful. This chapter is ostensibly about vignettes, but the way we do things is heavily influenced by how those vignettes fit into a pkgdown website.</p>
+<p>In this book, we’re going to use R Markdown to write our vignettes<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, just as we did for function documentation in <a href="#sec-man-key-md-features"><span class="quarto-unresolved-ref">sec-man-key-md-features</span></a>. If you’re not already familiar with R Markdown you’ll need to learn the basics elsewhere; a good place to start is <a href="https://rmarkdown.rstudio.com/" class="uri">https://rmarkdown.rstudio.com/</a>.</p>
+<p>In general, we embrace a somewhat circumscribed vignette workflow, i.e.&nbsp;there are many things that base R allows for, that we simply don’t engage in. For example, we treat <code>inst/doc/</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> in the same way as <code>man/</code> and <code>NAMESPACE</code>, i.e.&nbsp;as something semi-opaque that is managed by automated tooling and that we don’t modify by hand. Base R’s vignette system allows for various complicated maneuvers that we just try to avoid. In vignettes, more than anywhere else, the answer to “But how do I do X?” is often “Don’t do X”.</p>
+<section id="sec-vignettes-workflow-writing" class="level2" data-number="17.1"><h2 data-number="17.1" class="anchored" data-anchor-id="sec-vignettes-workflow-writing">
+<span class="header-section-number">17.1</span> Workflow for writing a vignette</h2>
+<p>To create your first vignette, run:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_vignette.html">use_vignette</a></span><span class="op">(</span><span class="st">"my-vignette"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This does the following:</p>
+<ol type="1">
+<li><p>Creates a <code>vignettes/</code> directory.</p></li>
+<li><p>Adds the necessary dependencies to <code>DESCRIPTION</code>, i.e.&nbsp;adds knitr to the <code>VignetteBuilder</code> field and adds both knitr and rmarkdown to <code>Suggests</code>.</p></li>
+<li><p>Drafts a vignette, <code>vignettes/my-vignette.Rmd</code>.</p></li>
+<li><p>Adds some patterns to <code>.gitignore</code> to ensure that files created as a side effect of previewing your vignettes are kept out of source control (we’ll say more about this later).</p></li>
+</ol>
+<p>This draft document has the key elements of an R Markdown vignette and leaves you in a position to add your content. You also call <code>use_vignette()</code> to create your second and all subsequent vignettes; it will just skip any setup that’s already been done.</p>
+<p>Once you have the draft vignette, the workflow is straightforward:</p>
+<ol type="1">
+<li><p>Start adding prose and code chunks to the vignette. Use <code><a href="https://devtools.r-lib.org/reference/load_all.html">devtools::load_all()</a></code> as needed and use your usual interactive workflow for developing the code chunks.</p></li>
+<li>
+<p>Render the entire vignette periodically.</p>
+<p>This requires some intention, because unlike tests, by default, a vignette is rendered using the currently installed version of your package, not with the current source package, thanks to the initial call to <code><a href="https://rdrr.io/r/base/library.html">library(yourpackage)</a></code>.</p>
+<p>One option is to properly install your current source package with <code><a href="https://devtools.r-lib.org/reference/install.html">devtools::install()</a></code> or, in RStudio, Ctrl/Cmd + Shift + B. Then use your usual workflow for rendering an <code>.Rmd</code> file. For example, press Ctrl/Cmd + Shift + K or click <img src="images/knit.png" class="img-fluid" width="45">.</p>
+<p>Or you could properly install your package and request that vignettes be built, with <code>install(build_vignettes = TRUE)</code>, then use <code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes()</a></code>.</p>
+<p>Another option is to use <code>devtools::build_rmd("vignettes/my-vignette.Rmd")</code> to render the vignette. This builds your vignette against a (temporarily installed) development version of your package.</p>
+<p>It’s very easy to overlook this issue and be puzzled when your vignette preview doesn’t seem to reflect recent developments in the package. Double check that you’re building against the current version!</p>
+</li>
+<li><p>Rinse and repeat until the vignette looks the way you want.</p></li>
+</ol>
+<p>If you’re regularly checking your entire package (<a href="#sec-workflow101-r-cmd-check"><span class="quarto-unresolved-ref">sec-workflow101-r-cmd-check</span></a>), which we strongly recommend, this will help to keep your vignettes in good working order. In particular, this will alert you if a vignette makes use of a package that’s not a formal dependency. We will come back to these package-level workflow issues below in <a href="#sec-vignettes-how-built-checked"><span class="quarto-unresolved-ref">sec-vignettes-how-built-checked</span></a>.</p>
+</section><section id="metadata" class="level2" data-number="17.2"><h2 data-number="17.2" class="anchored" data-anchor-id="metadata">
+<span class="header-section-number">17.2</span> Metadata</h2>
+<p>The first few lines of the vignette contain important metadata. The default template contains the following information:</p>
+<pre><code>---
+title: "Vignette Title"
+output: rmarkdown::html_vignette
+vignette: &gt;
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---</code></pre>
+<p>This metadata is written in <a href="https://yaml.org/">YAML</a>, a format designed to be both human and computer readable. YAML frontmatter is a common feature of R Markdown files. The syntax is much like that of the <code>DESCRIPTION</code> file, where each line consists of a field name, a colon, then the value of the field. The one special YAML feature we’re using here is <code>&gt;</code>. It indicates that the following lines of text are plain text and shouldn’t use any special YAML features.</p>
+<p>The default vignette template uses these fields:</p>
+<ul>
+<li><p><code>title</code>: this is the title that appears in the vignette. If you change it, make sure to make the same change to <code>VignetteIndexEntry{}</code>. They should be the same, but unfortunately that’s not automatic.</p></li>
+<li><p><code>output</code>: this specifies the output format. There are many options that are useful for regular reports (including html, pdf, slideshows, etc.), but <code><a href="https://pkgs.rstudio.com/rmarkdown/reference/html_vignette.html">rmarkdown::html_vignette</a></code> has been specifically designed for this exact purpose. See <code><a href="https://pkgs.rstudio.com/rmarkdown/reference/html_vignette.html">?rmarkdown::html_vignette</a></code> for more details.</p></li>
+<li><p><code>vignette</code>: this is a block of special metadata needed by R. Here, you can see the legacy of LaTeX vignettes: the metadata looks like LaTeX comments. The only entry you might need to modify is the <code>\VignetteIndexEntry{}</code>. This is how the vignette appears in the vignette index and it should match the <code>title</code>. Leave the other two lines alone. They tell R to use <code>knitr</code> to process the file and that the file is encoded in UTF-8 (the only encoding you should ever use for a vignette).</p></li>
+</ul>
+<p>We generally don’t use these fields, but you will see them in other packages:</p>
+<ul>
+<li><p><code>author</code>: we don’t use this unless the vignette is written by someone not already credited as a package author.</p></li>
+<li><p><code>date</code>: we think this usually does more harm than good, since it’s not clear what the <code>date</code> is meant to convey. Is it the last time the vignette source was updated? In that case you’ll have to manage it manually and it’s easy to forget to update it. If you manage <code>date</code> programmatically with <code>Sys.date()</code>, the date reflects when the vignette was built, i.e.&nbsp;when the package bundle was created, which has nothing to do with when the vignette or package was last modified. We’ve decided it’s best to omit the <code>date</code>.</p></li>
+</ul>
+<p>The draft vignette also includes two R chunks. The first one configures our preferred way of displaying code output and looks like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>```{r, include = FALSE}</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>knitr::opts_chunk$set(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  collapse = TRUE,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  comment = "#&gt;"</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>```</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The second chunk just attaches the package the vignette belongs to.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>```{r setup}</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>library(yourpackage)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>```</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You might be tempted to (temporarily) replace this <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> call with <code>load_all()</code>, but we advise that you don’t. Instead, use the techniques given in <a href="#sec-vignettes-workflow-writing"><span class="quarto-unresolved-ref">sec-vignettes-workflow-writing</span></a> to exercise your vignette code with the current source package.</p>
+</section><section id="advice-on-writing-vignettes" class="level2" data-number="17.3"><h2 data-number="17.3" class="anchored" data-anchor-id="advice-on-writing-vignettes">
+<span class="header-section-number">17.3</span> Advice on writing vignettes</h2>
+<blockquote class="blockquote">
+<p>If you’re thinking without writing, you only think you’re thinking. — Leslie Lamport</p>
+</blockquote>
+<p>When writing a vignette, you’re teaching someone how to use your package. You need to put yourself in the reader’s shoes, and adopt a “beginner’s mind”. This can be difficult because it’s hard to forget all of the knowledge that you’ve already internalized. For this reason, we find in-person teaching to be a really useful way to get feedback. You’re immediately confronted with what you’ve forgotten that only you know.</p>
+<p>A useful side effect of this approach is that it helps you improve your code. It forces you to re-see the initial on-boarding process and to appreciate the parts that are hard. Our experience is that explaining how code works often reveals some problems that need fixing.</p>
+<p>In fact, a key part of the tidyverse package release process is writing a blog post: we now do that before submitting to CRAN, because of the number of times it’s revealed some subtle problem that requires a fix. It’s also fair to say that the tidyverse and its supporting packages would benefit from more “how-to” guides, so that’s an area where we are constantly trying to improve.</p>
+<p>Writing a vignette also makes a nice break from coding. Writing seems to use a different part of the brain from programming, so if you’re sick of programming, try writing for a bit.</p>
+<p>Here are some resources we’ve found helpful:</p>
+<ul>
+<li><p>Literally anything written by Kathy Sierra. She is not actively writing at the moment, but her content is mostly timeless and is full of advice about programming, teaching, and how to create valuable tools. See her original blog, <a href="https://headrush.typepad.com/">Creating passionate users</a>, or the site that came after, <a href="https://seriouspony.com/blog/">Serious Pony</a>.</p></li>
+<li><p>“Style: Lessons in Clarity and Grace” by Joseph M. Williams and Joseph Bizup. This book helps you understand the structure of writing so that you’ll be better able to recognise and fix bad writing.</p></li>
+</ul>
+<section id="diagrams" class="level3" data-number="17.3.1"><h3 data-number="17.3.1" class="anchored" data-anchor-id="diagrams">
+<span class="header-section-number">17.3.1</span> Diagrams</h3>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Submitting to CRAN
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You’ll need to watch the file size. If you include a lot of graphics, it’s easy to create a very large file. Be on the look out for a <code>NOTE</code> that complains about an overly large directory. You might need to take explicit measures, such as lowering the resolution, reducing the number of figures, or switching from a vignette to an article (<a href="#sec-vignettes-article"><span class="quarto-unresolved-ref">sec-vignettes-article</span></a>).</p>
+</div>
+</div>
+</section><section id="links" class="level3" data-number="17.3.2"><h3 data-number="17.3.2" class="anchored" data-anchor-id="links">
+<span class="header-section-number">17.3.2</span> Links</h3>
+<p>There is no official way to link to help topics from vignettes or <em>vice versa</em> or from one vignette to another.</p>
+<p>This is a concrete example of why we think pkgdown sites are a great way to present package documentation, because pkgdown makes it easy (literally zero effort, in many cases) to get these hyperlinked cross-references. This is documented in <code><a href="https://pkgdown.r-lib.org/articles/linking.html">vignette("linking", package = "pkgdown")</a></code>. If you’re reading this book online, the inline call to <code><a href="https://rdrr.io/r/utils/vignette.html">vignette()</a></code> in the previous sentence should be hyperlinked to the corresponding vignette in pkgdown<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, using the same toolchain that will create automatic links in your pkgdown websites! We discussed this syntax previously in <a href="#sec-man-key-md-features"><span class="quarto-unresolved-ref">sec-man-key-md-features</span></a>, in the context of function documentation.</p>
+<p>Automatic links are generated for functions in the host package, namespace-qualified functions in another package, vignettes, and more. Here are the two most important examples of automatically linked text:</p>
+<ul>
+<li><p><code>`some_function()`</code>: Autolinked to the documentation of <code>some_function()</code>, within the pkgdown site of its host package. Note the use of backticks and the trailing parentheses.</p></li>
+<li><p><code>`vignette("fascinating-topic")`</code>: Autolinked to the “fascinating-topic” article within the pkgdown site of its host package. Note the use of backticks.</p></li>
+</ul></section><section id="filepaths" class="level3" data-number="17.3.3"><h3 data-number="17.3.3" class="anchored" data-anchor-id="filepaths">
+<span class="header-section-number">17.3.3</span> Filepaths</h3>
+<p>Sometimes it is necessary to refer to another file from a vignette. The best way to do this depends on the application:</p>
+<ul>
+<li><p>A figure created by code evaluated in the vignette: By default, in the <code>.Rmd</code> workflow that we recommend, this takes care of itself. Such figures are automatically embedded into the <code>.html</code> using data URIs. You don’t need to do anything. Example: <code><a href="https://ggplot2.tidyverse.org/articles/extending-ggplot2.html">vignette("extending-ggplot2", package = "ggplot2")</a></code> generates a few figures in evaluated code chunks.</p></li>
+<li>
+<p>An external file that could be useful to users or elsewhere in the package (not just in vignettes): Put such a file in <code>inst/</code> (<a href="#sec-misc-inst"><span class="quarto-unresolved-ref">sec-misc-inst</span></a>), perhaps in <code>inst/extdata/</code> (<a href="#sec-data-extdata"><span class="quarto-unresolved-ref">sec-data-extdata</span></a>), and refer to it with <code><a href="https://rdrr.io/r/base/system.file.html">system.file()</a></code> or <code><a href="https://fs.r-lib.org/reference/path_package.html">fs::path_package()</a></code> (<a href="#sec-data-system-file"><span class="quarto-unresolved-ref">sec-data-system-file</span></a>). Example from <code><a href="https://r-spatial.github.io/sf/articles/sf2.html">vignette("sf2", package = "sf")</a></code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>````{r}</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>library(sf)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>fname &lt;- system.file("shape/nc.shp", package="sf")</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>fname</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>nc &lt;- st_read(fname)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</li>
+<li>
+<p>An external file whose utility is limited to your vignettes: put it alongside the vignette source files in <code>vignettes/</code> and refer to it with a filepath that is relative to <code>vignettes/</code>.</p>
+<p>Example: The source of <code><a href="https://tidyr.tidyverse.org/articles/tidy-data.html">vignette("tidy-data", package = "tidyr")</a></code> is found at <code>vignettes/tidy-data.Rmd</code> and it includes a chunk that reads a file located at <code>vignettes/weather.csv</code> like so:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>```{r}</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>weather &lt;- as_tibble(read.csv("weather.csv", stringsAsFactors = FALSE))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>weather</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</li>
+<li>
+<p>An external graphics file: put it in <code>vignettes/</code>, refer to it with a filepath that is relative to <code>vignettes/</code> and use <code><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">knitr::include_graphics()</a></code> inside a code chunk. Example from <code><a href="https://readxl.tidyverse.org/articles/sheet-geometry.html">vignette("sheet-geometry", package = "readxl")</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>```{r out.width = '70%', echo = FALSE}</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>knitr::include_graphics("img/geometry.png")</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</li>
+</ul></section><section id="how-many-vignettes" class="level3" data-number="17.3.4"><h3 data-number="17.3.4" class="anchored" data-anchor-id="how-many-vignettes">
+<span class="header-section-number">17.3.4</span> How many vignettes?</h3>
+<p>For simpler packages, one vignette is often sufficient. If your package is named “somepackage”, call this vignette <code>somepackage.Rmd</code>. This takes advantage of a pkgdown convention, where the vignette that’s named after the package gets an automatic “Get started” link in the top navigation bar.</p>
+<p>More complicated packages probably need more than one vignette. It can be helpful to think of vignettes like chapters of a book – they should be self-contained, but still link together into a cohesive whole.</p>
+</section><section id="scientific-publication" class="level3" data-number="17.3.5"><h3 data-number="17.3.5" class="anchored" data-anchor-id="scientific-publication">
+<span class="header-section-number">17.3.5</span> Scientific publication</h3>
+<p>Vignettes can also be useful if you want to explain the details of your package. For example, if you have implemented a complex statistical algorithm, you might want to describe all the details in a vignette so that users of your package can understand what’s going on under the hood, and be confident that you’ve implemented the algorithm correctly. In this case, you might also consider submitting your vignette to the <a href="http://jstatsoft.org/">Journal of Statistical Software</a> or <a href="http://journal.r-project.org/">The R Journal</a>. Both journals are electronic only and peer-reviewed. Comments from reviewers can be very helpful for improving your package and vignette.</p>
+<p>If you just want to provide something very lightweight so folks can easily cite your package, consider the <a href="https://joss.theoj.org">Journal of Open Source Software</a>. This journal has a particularly speedy submission and review process, and is where we published “<a href="https://joss.theoj.org/papers/10.21105/joss.01686"><em>Welcome to the Tidyverse</em></a>”, a paper we wrote so that folks could have a single paper to cite and all the tidyverse authors would get some academic credit.</p>
+</section></section><section id="sec-vignettes-eval-option" class="level2" data-number="17.4"><h2 data-number="17.4" class="anchored" data-anchor-id="sec-vignettes-eval-option">
+<span class="header-section-number">17.4</span> Special considerations for vignette code</h2>
+<p>A recurring theme is that the R code inside a package needs to be written differently from the code in your analysis scripts and reports. This is true for your functions (<a href="#sec-code-when-executed"><span class="quarto-unresolved-ref">sec-code-when-executed</span></a>), tests (<a href="#sec-testing-design-principles"><span class="quarto-unresolved-ref">sec-testing-design-principles</span></a>), and examples (<a href="#sec-man-examples"><span class="quarto-unresolved-ref">sec-man-examples</span></a>), and it’s also true for vignettes. In terms of what you can and cannot do, vignettes are fairly similar to examples, although some of the mechanics differ.</p>
+<p>Any package used in a vignette must be a formal dependency, i.e.&nbsp;it must be listed in <code>Imports</code> or <code>Suggests</code> in <code>DESCRIPTION</code>. Similar to our stance in tests (<a href="#sec-dependencies-in-suggests-in-tests"><span class="quarto-unresolved-ref">sec-dependencies-in-suggests-in-tests</span></a>), our policy is to write vignettes under the assumption that suggested packages will be installed in any context where the vignette is being built (<a href="#sec-dependencies-in-suggests-in-examples-and-vignettes"><span class="quarto-unresolved-ref">sec-dependencies-in-suggests-in-examples-and-vignettes</span></a>). We generally use suggested packages unconditionally in vignettes. But, as with tests, if a package is particularly hard to install, we might make an exception and take extra measures to guard its use.</p>
+<p>There are many other reasons why it might not be possible to evaluate all of the code in a vignette in certain contexts, such as on CRAN’s machines or in CI/CD. These include all the usual suspects: lack of authentication credentials, long-running code, or code that is vulnerable to intermittent failure.</p>
+<p>The main method for controlling evaluation in an <code>.Rmd</code> document is the <code>eval</code> code chunk option, which can be <code>TRUE</code> (the default) or <code>FALSE</code>. Importantly, the value of <code>eval</code> can be the result of evaluating an expression. Here are some relevant examples:</p>
+<ul>
+<li><code>eval = requireNamespace("somedependency")</code></li>
+<li><code>eval = !identical(Sys.getenv("SOME_THING_YOU_NEED"), "")</code></li>
+<li><code>eval = file.exists("credentials-you-need")</code></li>
+</ul>
+<p>The <code>eval</code> option can be set for an individual chunk, but in a vignette it’s likely that you’ll want to evaluate most or all of the chunks or practically none of them. In the latter case, you’ll want to use <code>knitr::opts_chunk$set(eval = FALSE)</code> in an early, hidden chunk to make <code>eval = FALSE</code> the default for the remainder of the vignette. You can still override with <code>eval = TRUE</code> in individual chunks.</p>
+<p>In vignettes, we use the <code>eval</code> option in a similar way as <code>@examplesIf</code> in examples (<a href="#sec-man-examples-dependencies-conditional-execution"><span class="quarto-unresolved-ref">sec-man-examples-dependencies-conditional-execution</span></a>). If the code can only be run under specific conditions, you must find a way to to check for those pre-conditions programmatically at runtime and use the result to set the <code>eval</code> option.</p>
+<p>Here are the first few chunks in a vignette from googlesheets4, which wraps the Google Sheets API. The vignette code can only be run if we are able to decrypt a token that allows us to authenticate with the API. That fact is recorded in <code>can_decrypt</code>, which is then set as the vignette-wide default for <code>eval</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>```{r setup, include = FALSE}</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>can_decrypt &lt;- gargle:::secret_can_decrypt("googlesheets4")</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>knitr::opts_chunk$set(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  collapse = TRUE,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  comment = "#&gt;",</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  error = TRUE,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  eval = can_decrypt</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>```{r eval = !can_decrypt, echo = FALSE, comment = NA}</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>message("No token available. Code chunks will not be evaluated.")</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>```{r index-auth, include = FALSE}</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>googlesheets4:::gs4_auth_docs()</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>```{r}</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>library(googlesheets4)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>```</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice the second chunk uses <code>eval = !can_decrypt</code>, which prints an explanatory message for anyone who builds the vignette without the necessary credentials.</p>
+<p>The example above shows a few more handy chunk options. Use <code>include = FALSE</code> for chunks that should be evaluated but not seen in the rendered vignette. The <code>echo</code> option controls whether code is printed, in addition to output. Finally, <code>error = TRUE</code> is what allows you to purposefully execute code that could throw an error. The error will appear in the vignette, just as it would for your user, but it won’t prevent the execution of the rest of your vignette’s code, nor will it cause <code>R CMD check</code> to fail. This is something that works much better in a vignette than in an example.</p>
+<p>Many other options are described at <a href="https://yihui.name/knitr/options" class="uri">https://yihui.name/knitr/options</a>.</p>
+<section id="sec-vignettes-article" class="level3" data-number="17.4.1"><h3 data-number="17.4.1" class="anchored" data-anchor-id="sec-vignettes-article">
+<span class="header-section-number">17.4.1</span> Article instead of vignette</h3>
+<p>There is one last technique, if you don’t want any of your code to execute on CRAN. Instead of a vignette, you can create an article, which is a term used by pkgdown for a vignette-like <code>.Rmd</code> document that is not shipped with the package, but that appears only in the website. An article will be less accessible than a vignette, for certain users, such as those with limited internet access, because it is not present in the local installation. But that might be an acceptable compromise, for example, for a package that wraps a web API.</p>
+<p>You can draft a new article with <code><a href="https://usethis.r-lib.org/reference/use_vignette.html">usethis::use_article()</a></code>, which ensures the article will be <code>.Rbuildignore</code>d. A great reason to use an article instead of a vignette is to show your package working in concert with other packages that you don’t want to depend on formally. Another compelling use case is when an article really demands lots of graphics. This is problematic for a vignette, because the large size of the package causes problems with <code>R CMD check</code> (and, therefore, CRAN) and is also burdensome for everyone who installs it, especially those with limited internet.</p>
+</section></section><section id="sec-vignettes-how-built-checked" class="level2" data-number="17.5"><h2 data-number="17.5" class="anchored" data-anchor-id="sec-vignettes-how-built-checked">
+<span class="header-section-number">17.5</span> How vignettes are built and checked</h2>
+<p>We close this chapter by returning to a few workflow issues we didn’t cover in <a href="#sec-vignettes-workflow-writing"><span class="quarto-unresolved-ref">sec-vignettes-workflow-writing</span></a>: How do the <code>.Rmd</code> files get turned into the vignettes consumed by users of an installed package? What does <code>R CMD check</code> do with vignettes? What are the implications for maintaining your vignettes?</p>
+<p>It can be helpful to appreciate the big difference between the workflow for function documentation and vignettes. The source of function documentation is stored in roxygen comments in <code>.R</code> files below <code>R/</code>. We use <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code> to generate <code>.Rd</code> files below <code>man/</code>. These <code>man/*.Rd</code> files are part of the source package. The official R machinery cares <em>only</em> about the <code>.Rd</code> files.</p>
+<p>Vignettes are very different because the <code>.Rmd</code> source is considered part of the source package and the official machinery (<code>R CMD build</code> and <code>check</code>) interacts with vignette source and built vignettes in many ways. The result is that the vignette workflow feels more constrained, since the official tooling basically treats vignettes somewhat like tests, instead of documentation.</p>
+<section id="sec-vignettes-how-built" class="level3" data-number="17.5.1"><h3 data-number="17.5.1" class="anchored" data-anchor-id="sec-vignettes-how-built">
+<span class="header-section-number">17.5.1</span> <code>R CMD build</code> and vignettes</h3>
+<p>First, it’s important to realize that the <code>vignettes/*.Rmd</code> source files exist only when a package is in source (<a href="#sec-source-package"><span class="quarto-unresolved-ref">sec-source-package</span></a>) or bundled form (<a href="#sec-bundled-package"><span class="quarto-unresolved-ref">sec-bundled-package</span></a>). Vignettes are rendered when a source package is converted to a bundle via <code>R CMD build</code> or a convenience wrapper such as <code><a href="https://devtools.r-lib.org/reference/build.html">devtools::build()</a></code>. The rendered products (<code>.html</code>) are placed in <code>inst/doc/</code>, along with their source (<code>.Rmd</code>) and extracted R code (<code>.R</code>; discussed in <a href="#sec-vignettes-how-checked"><span class="quarto-unresolved-ref">sec-vignettes-how-checked</span></a>). Finally, when a package binary is made (<a href="#sec-structure-binary"><span class="quarto-unresolved-ref">sec-structure-binary</span></a>), the <code>inst/doc/</code> directory is promoted to a top-level <code>doc/</code> directory, as happens with everything below <code>inst/</code>.</p>
+<!--
+The issue of keeping pre-built vignettes around in inst/doc/ is a long-running discussion.
+
+https://github.com/r-lib/devtools/issues/2394
+
+https://github.com/r-lib/pkgbuild/issues/58
+-->
+<p>The key takeaway from the above is that it is awkward to keep rendered vignettes in a source package and this has implications for the vignette development workflow. It is tempting to fight this (and many have tried), but based on years of experience and discussion, the devtools philosophy is to accept this reality.</p>
+<p>Assuming that you don’t try to keep built vignettes around persistently in your source package, here are our recommendations for various scenarios:</p>
+<ul>
+<li><p>Active, iterative work on your vignettes: Use your usual interactive <code>.Rmd</code> workflow (such as the <img src="images/knit.png" class="img-fluid" width="45"> button) or <code>devtools::build_rmd("vignettes/my-vignette.Rmd")</code> to render a vignette to <code>.html</code> in the <code>vignettes/</code> directory. Regard the <code>.html</code> as a disposable preview. (If you initiate vignettes with <code>use_vignette()</code>, this <code>.html</code> will already be gitignored.)</p></li>
+<li>
+<p>Make the current state of vignettes in a development version available to the world:</p>
+<ul>
+<li><p>Offer a pkgdown website, preferably with automated “build and deploy”, such as using GitHub Actions to deploy to GitHub Pages. Here are tidyr’s vignettes in the development version (note the “dev” in the URL): <a href="https://tidyr.tidyverse.org/dev/articles/index.html" class="uri">https://tidyr.tidyverse.org/dev/articles/index.html</a>.</p></li>
+<li><p>Be aware that anyone who installs directly from GitHub will need to explicitly request vignettes, e.g.&nbsp;with <code>devtools::install_github(dependencies = TRUE, build_vignettes = TRUE)</code>.</p></li>
+</ul>
+</li>
+<li>
+<p>Make the current state of vignettes in a development version available locally:</p>
+<ul>
+<li>Install your package locally and request that vignettes be built and installed, e.g.&nbsp;with <code>devtools::install(dependencies = TRUE, build_vignettes = TRUE)</code>.</li>
+</ul>
+</li>
+<li><p>Prepare built vignettes for a CRAN submission: Don’t try to do this by hand or in advance. Allow vignette (re-)building to happen as part of <code><a href="https://devtools.r-lib.org/reference/submit_cran.html">devtools::submit_cran()</a></code> or <code><a href="https://devtools.r-lib.org/reference/release.html">devtools::release()</a></code>, both of which build the package.</p></li>
+</ul>
+<!--
+https://github.com/r-lib/devtools/issues/2485
+--><p>If you really do want to build vignettes in the official manner on an <em>ad hoc</em> basis, <code><a href="https://devtools.r-lib.org/reference/build_vignettes.html">devtools::build_vignettes()</a></code> will do this. But we’ve seen this lead to developer frustration, because it leaves the package in a peculiar form that is a mishmash of a source package and an unpacked package bundle. This nonstandard situation can then lead to even more confusion. For example, it’s not clear how these not-actually-installed vignettes are meant to be accessed. Most developers should avoid using <code>build_vignettes()</code> and, instead, pick one of the approaches outlined above.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Pre-built vignettes (or other documentation)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We highly recommend treating <code>inst/doc/</code> as a strictly machine-writable directory for vignettes. We recommend that you do not take advantage of the fact that you can place arbitrary pre-built documentation in <code>inst/doc/</code>. This opinion permeates the devtools ecosystem which, by default, cleans out <code>inst/doc/</code> during various development tasks, to combat the problem of stale documentation.</p>
+<p>However, we acknowledge that there are exceptions to every rule. In some domains, it might be impractical to rebuild vignettes as often as our recommended workflow implies. Here are a few tips:</p>
+<ul>
+<li><p>You can prevent the cleaning of <code>inst/doc/</code> with <code>pkgbuild::build(clean_doc =)</code>. You can put <code>Config/build/clean-inst-doc: FALSE</code> in <code>DESCRIPTION</code> to prevent pkgbuild and rcmdcheck from cleaning <code>inst/doc/</code>.</p></li>
+<li><p>The rOpenSci tech note <a href="https://ropensci.org/blog/2019/12/08/precompute-vignettes/">How to precompute package vignettes or pkgdown articles</a> describes a clever, lightweight technique for keeping a manually-updated vignette in <code>vignettes/</code>.</p></li>
+<li><p>The <a href="https://henrikbengtsson.github.io/R.rsp/index.html">R.rsp</a> package offers explicit support for static vignettes.</p></li>
+</ul>
+</div>
+</div>
+</section><section id="sec-vignettes-how-checked" class="level3" data-number="17.5.2"><h3 data-number="17.5.2" class="anchored" data-anchor-id="sec-vignettes-how-checked">
+<span class="header-section-number">17.5.2</span> <code>R CMD check</code> and vignettes</h3>
+<p>We conclude with a discussion of how vignettes are treated by <code>R CMD check</code>. This official checker expects a package bundle created by <code>R CMD build</code>, as described above. In the devtools workflow, we usually rely on <code><a href="https://devtools.r-lib.org/reference/check.html">devtools::check()</a></code>, which automatically does this build step for us, before checking the package. <code>R CMD check</code> has various command line options and also consults many environment variables. We’re taking a maximalist approach here, i.e.&nbsp;we describe all the checks that <em>could</em> happen.</p>
+<p><code>R CMD check</code> does some static analysis of vignette code and scrutinizes the existence, size, and modification times of various vignette-related files. If your vignettes use packages that don’t appear in <code>DESCRIPTION</code>, that is caught here. If files that should exist don’t exist or <em>vice versa</em>, that is caught here. This should not happen if you use the standard vignette workflow outlined in this chapter and is usually the result of some experiment that you’ve done, intentionally or not.</p>
+<p>The vignette code is then extracted into a <code>.R</code> file, using the “tangle” feature of the relevant vignette engine (knitr, in our case), and run. The code originating from chunks marked as <code>eval = FALSE</code> will be commented out in this file and, therefore, is not executed. Then the vignettes are rebuilt from source, using the “weave” feature of the vignette engine (knitr, for us). This executes all the vignette code yet again, except for chunks marked <code>eval = FALSE</code>.</p>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Submitting to CRAN
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>CRAN’s incoming and ongoing checks use <code>R CMD check</code> which, as described above, exercises vignette code up to two times. Therefore, it is important to conditionally suppress the execution of code that is doomed to fail on CRAN.</p>
+<p>However, it’s important to note that the package bundle and binaries distributed by CRAN actually use the built vignettes included in your submission. Yes, CRAN will attempt to rebuild your vignettes regularly, but this is for quality control purposes. CRAN distributes the vignettes you built.</p>
+</div>
+</div>
+
+
+</section></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
+<ol>
+<li id="fn1"><p>This obviously depends on the quality of one’s internet connection, so we make an effort to recommend behaviours that are compatible with base R’s tooling around installed vignettes.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Sweave is the original system used for authoring vignettes (Sweave files usually have extension <code>.Rnw</code>). Similar to our advice about how to author function documentation (<a href="#sec-man"><span class="quarto-unresolved-ref">sec-man</span></a>), we think it makes more sense to use a markdown-based syntax for vignettes than a one-off, LaTeX-associated format. This choice also affects the form of rendered vignettes: Sweave vignettes render to PDF, whereas R Markdown vignettes render to HTML. We recommend converting Sweave vignettes to R Markdown.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The <code>inst/doc/</code> folder is where vignettes go once they’re built, when <code>R CMD build</code> makes the package bundle.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>And, for anyone else, executing this code in the R console will open the vignette, if the host package is installed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./man.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Function documentation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./other-markdown.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Other markdown files</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

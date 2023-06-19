@@ -1,0 +1,83 @@
+project:
+  type: book
+  output-dir: docs
+  resources:
+    - atlas.json
+    - images/cran-package-ggplot2-clean.png
+    - images/cran-checks-usethis-clean.png
+  post-render:
+    - post-render.ts
+
+bibliography: book.bib
+
+book:
+  title: "R Packages (2e)"
+  author: "Hadley Wickham and Jennifer Bryan"
+  description: |
+    Learn how to create a package, the fundamental unit of shareable, reusable, 
+    and reproducible R code.
+  cover-image: images/cover-2e-small.png
+
+  reader-mode: true
+  site-url: https://r-pkgs.org/
+  repo-url: https://github.com/hadley/r-pkgs/
+  repo-actions: [edit, issue]
+  
+  chapters:
+  - index.Rmd
+  - preface.Rmd
+  - introduction.Rmd
+  
+  - part: Getting started
+    chapters: 
+    - whole-game.Rmd
+    - setup.Rmd
+    - structure.Rmd
+    - workflow101.Rmd
+    - package-within.Rmd
+  
+  - part: Package components
+    chapters:
+    - code.Rmd
+    - data.Rmd
+    - misc.Rmd
+  
+  - part: Package metadata
+    chapters:
+    - description.Rmd
+    - dependencies-mindset-background.Rmd
+    - dependencies-in-practice.Rmd
+    - license.Rmd
+  
+  - part: Testing
+    chapters:
+    - testing-basics.Rmd
+    - testing-design.Rmd
+    - testing-advanced.Rmd
+    
+  - part: Documentation
+    chapters:
+    - man.Rmd
+    - vignettes.Rmd
+    - other-markdown.Rmd
+    - website.Rmd
+  
+  - part: Maintenance and distribution
+    chapters:
+    - software-development-practices.Rmd
+    - lifecycle.Rmd
+    - release.Rmd    
+
+  - references.qmd
+  
+  appendices:
+    - R-CMD-check.Rmd
+
+format:
+  html:
+    theme: [cosmo, custom.scss]
+    code-link: true
+    include-in-header: "plausible.html"
+  asciidoc: default
+  
+editor: visual
