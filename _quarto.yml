@@ -19,8 +19,8 @@ book:
   cover-image: images/cover-2e-small.png
 
   reader-mode: true
-  site-url: https://r-pkgs.org/
-  repo-url: https://github.com/hadley/r-pkgs/
+  site-url: https://zhenghu159.github.io/r-pkgs-zh-cn/
+  repo-url: https://github.com/zhenghu159/r-pkgs-zh-cn
   repo-actions: [edit, issue]
   
   chapters:
@@ -75,9 +75,10 @@ book:
 
 format:
   html:
+    mainfont: "Microsoft Yahei"
     theme: [cosmo, custom.scss]
     code-link: true
     include-in-header: "plausible.html"
   asciidoc: default
   
-editor: visual
+editor: source

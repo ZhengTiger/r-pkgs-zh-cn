@@ -1,1 +1,1 @@
-Sitemap: https://r-pkgs.org/sitemap.xml
+Sitemap: https://zhenghu159.github.io/r-pkgs-zh-cn/sitemap.xml

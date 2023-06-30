@@ -1,11 +1,7 @@
 # Welcome! {.unnumbered}
 
-Welcome to R packages by [Hadley Wickham](http://hadley.nz) and [Jennifer Bryan](http://jennybryan.org/).
-Packages are the fundamental units of reproducible R code.
-They include reusable R functions, the documentation that describes how to use them, and sample data.
-In this book you'll learn how to turn your code into packages that others can easily download and use.
-Writing a package can seem overwhelming at first.
-So start with the basics and improve it over time.
-It doesn't matter if your first version isn't perfect as long as the next version is better.
+欢迎使用 [Hadley Wickham](http://hadley.nz) 和 [Jennifer Bryan](http://jennybryan.org/) 编写的 R packages。Packages 是可重现的 R 代码的基本单元。它们包括可重用的 R functions、描述如何使用它们的 documentation 以及示例数据。在本书中，您将学习如何将代码转换成其他人可以轻松下载和使用的 packages。写一个 package 一开始似乎让人不知所措。因此，从基础开始，并随着时间的推移进行改进。如果您的第一个版本不完美，只要下一个版本更好就没关系。
 
-This is the online version of the 2nd edition of the book.
+这是本书第二版的在线版本。
+
+

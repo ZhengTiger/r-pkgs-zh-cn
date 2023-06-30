@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://r-pkgs.org/index.html</loc>
-    <lastmod>2023-06-19T12:02:20.202Z</lastmod>
+    <lastmod>2023-06-29T12:31:39.415Z</lastmod>
   </url>
   <url>
     <loc>https://r-pkgs.org/lifecycle.html</loc>
@@ -31,5 +31,17 @@
   <url>
     <loc>https://r-pkgs.org/introduction.html</loc>
     <lastmod>2023-06-19T11:58:32.156Z</lastmod>
+  </url>
+  <url>
+    <loc>https://zhenghu159.github.io/r-pkgs-zh-cn/index.html</loc>
+    <lastmod>2023-06-29T12:33:12.425Z</lastmod>
+  </url>
+  <url>
+    <loc>https://zhenghu159.github.io/r-pkgs-zh-cn/preface.html</loc>
+    <lastmod>2023-06-30T01:26:21.201Z</lastmod>
+  </url>
+  <url>
+    <loc>https://zhenghu159.github.io/r-pkgs-zh-cn/introduction.html</loc>
+    <lastmod>2023-06-30T02:15:00.317Z</lastmod>
   </url>
 </urlset>

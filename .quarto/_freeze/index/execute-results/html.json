@@ -1,8 +1,10 @@
 {
-  "hash": "f5a28c3606c89f168566375814525114",
+  "hash": "48dbe3835a96e49455de8bea13b8cfe9",
   "result": {
-    "markdown": "# Welcome! {.unnumbered}\n\nWelcome to R packages by [Hadley Wickham](http://hadley.nz) and [Jennifer Bryan](http://jennybryan.org/).\nPackages are the fundamental units of reproducible R code.\nThey include reusable R functions, the documentation that describes how to use them, and sample data.\nIn this book you'll learn how to turn your code into packages that others can easily download and use.\nWriting a package can seem overwhelming at first.\nSo start with the basics and improve it over time.\nIt doesn't matter if your first version isn't perfect as long as the next version is better.\n\nThis is the online version of the 2nd edition of the book.\n",
-    "supporting": [],
+    "markdown": "# Welcome! {.unnumbered}\n\n欢迎使用 [Hadley Wickham](http://hadley.nz) 和 [Jennifer Bryan](http://jennybryan.org/) 编写的 R packages。Packages 是可重现的 R 代码的基本单元。它们包括可重用的 R functions、描述如何使用它们的 documentation 以及示例数据。在本书中，您将学习如何将代码转换成其他人可以轻松下载和使用的 packages。写一个 package 一开始似乎让人不知所措。因此，从基础开始，并随着时间的推移进行改进。如果您的第一个版本不完美，只要下一个版本更好就没关系。\n\n这是本书第二版的在线版本。\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],
