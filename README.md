@@ -12,8 +12,8 @@ Try to translate R Packages (the second edition) into Simplified Chinese.
 
 | Chapter                                  | progress | Time      |
 |:-----------------------------------------|:---------|:----------|
-| 1  The Whole Game                        |          |           |
-| 2  System setup                          |          |           |
+| 1  The Whole Game                        |    ✔     | 2023.7.1  |
+| 2  System setup                          |    ✔     | 2023.7.1  |
 | 3  Package structure and state           |          |           |
 | 4  Fundamental development workflows     |          |           |
 | 5  The package within                    |          |           |

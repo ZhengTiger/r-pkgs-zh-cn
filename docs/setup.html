@@ -135,7 +135,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div class="sidebar-title mb-0 py-0">
       <a href="./">R Packages (2e)</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/hadley/r-pkgs/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/zhenghu159/r-pkgs-zh-cn" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -378,7 +378,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul>
 </li>
   <li><a href="#verify-system-prep" id="toc-verify-system-prep" class="nav-link" data-scroll-target="#verify-system-prep"><span class="toc-section-number">2.4</span>  Verify system prep</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/hadley/r-pkgs/edit/main/setup.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/hadley/r-pkgs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/zhenghu159/r-pkgs-zh-cn/edit/main/setup.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/zhenghu159/r-pkgs-zh-cn/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -400,43 +400,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="setup-prep" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="setup-prep">
 <span class="header-section-number">2.1</span> Prepare your system</h2>
-<p>To get started, make sure you have the latest version of R (at least 4.2.0, which is the version being used to render this book), then run the following code to get the packages you’ll need:</p>
+<p>首先，请确保您已经安装了最新版本的 R（至少 4.2.0，这是本书使用的版本），然后再运行以下代码来获取您将使用到的程序包：</p>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"devtools"</span>, <span class="st">"roxygen2"</span>, <span class="st">"testthat"</span>, <span class="st">"knitr"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Make sure you have a recent version of the RStudio integrated development environment (IDE). New versions are released regularly, so we recommend updating often to get access to the latest and greatest features.</p>
-<p>Download the current version of RStudio Desktop here: <a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a>. Most readers can use the free, open source version of RStudio Desktop.</p>
+<p>请确保您已经安装了最新版本的 RStudio 集成开发环境（IDE）。 新版本会定期发布，因此我们建议经常更新以获得最新和最强大的功能。</p>
+<p>在此处下载当前版本的 RStudio Desktop：<a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a>。 大多数读者可以使用 RStudio Desktop 的免费开源版本。</p>
 </section><section id="sec-setup-usage" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="sec-setup-usage">
 <span class="header-section-number">2.2</span> devtools, usethis, and you</h2>
 <blockquote class="blockquote">
 <p>“I am large, I contain multitudes.”</p>
 <p>— Walt Whitman, Song of Myself</p>
 </blockquote>
-<p>As mentioned in <a href="#sec-intro-phil"><span class="quarto-unresolved-ref">sec-intro-phil</span></a>, devtools is a ‘meta-package’, encompassing and exposing functionality maintained in several smaller packages<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. For example, devtools might provide a wrapper function in order to set user-friendly defaults, introduce helpful interactive behaviour, or to combine functionality from multiple sub-packages. In some cases it simply re-exports a function from another package to make it easily available when devtools is attached.</p>
-<p>What’s our recommended approach to using devtools and its constituent packages? It varies, depending on your intention:</p>
+<p>如 <a href="introduction.html#sec-intro-phil"><span>Section&nbsp;1</span></a> 所述，devtools 是一个 ‘meta-package’，涵盖并公开维护在几个较小的软件包中的功能<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。 例如，devtools 可能提供一个包装函数以设置用户友好的默认值、引入有用的交互行为或将多个子软件包的功能组合起来。 在某些情况下，它只是从另一个软件包重新导出函数，使得当加载 devtools 时很容易使用该函数。</p>
+<p>我们推荐的使用 devtools 及其组成包的方法是什么？ 着取决于您的意图：</p>
 <ul>
-<li>If you are using the functions interactively to help you develop your package, you should think of devtools as the provider of your favorite functions for package development. In this case you should attach devtools with <code><a href="https://devtools.r-lib.org/">library(devtools)</a></code> and call the functions without qualification (e.g., <code><a href="https://devtools.r-lib.org/reference/load_all.html">load_all()</a></code>).</li>
-<li>If you are using functions from devtools and friends within the package code you are writing, you should NOT depend on devtools, but should instead access functions via the package that is their primary home.
+<li>如果您正在交互式地使用这些函数来帮助您开发自己的软件包，则应将 devtools 视为提供程序。 通过 <code><a href="https://devtools.r-lib.org/">library(devtools)</a></code> 加载它，并无限制地调用函数（e.g., <code><a href="https://devtools.r-lib.org/reference/load_all.html">load_all()</a></code>）。</li>
+<li>如果您正在编写代码并使用来自于 devtools 和相关工具中的函数，则不应依赖于 devtools，而应通过主要归属于这些函数所在位置上面对应相应软件包进行访问。
 <ul>
-<li>devtools should rarely appear in the role of <code>pkg</code> in a qualified call of the form <code>pkg::fcn()</code>. Instead, <code>pkg</code> should be the package where <code>fcn()</code> is defined. For example, if you are creating a function in your package in which you need to query the state of the user’s R session, use <code><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">sessioninfo::session_info()</a></code> in your package instead of <code><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">devtools::session_info()</a></code>.</li>
+<li>在形如 <code>pkg::fcn()</code> 的限定调用中，devtool 应该很少出现在 <code>pkg</code> 的角色。 相反，<code>pkg</code> 应该是定义了 <code>fcn()</code> 的包。 例如，如果您在包中创建一个需要查询用户 R 会话状态的函数，请在包中使用 <code><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">sessioninfo::session_info()</a></code> 而不是 <code><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">devtools::session_info()</a></code>。</li>
 </ul>
 </li>
-<li>If you find bugs, try to report them on the package that is a function’s primary home. The help for <code>devtools::fcn()</code> usually states when devtools is re-exporting a function from another package.</li>
+<li>如果您发现了 bugs，请尝试在函数主要归属的软件包上报告它们。 <code>devtools::fcn()</code> 的帮助通常会说明 devtools 是否正在从另一个软件包重新导出函数。</li>
 </ul>
-<p>The usethis package is the one constituent package that more people may be aware of and that they may use directly. It holds the functions that act on the files and folders in an R project, most especially for any project that is also an R package. devtools makes it easy to access usethis functions interactively, as when you call <code><a href="https://devtools.r-lib.org/">library(devtools)</a></code>, usethis is also attached. Then you can use any function in usethis without qualification, e.g., just call <code><a href="https://usethis.r-lib.org/reference/use_testthat.html">use_testthat()</a></code>. If you choose to specify the namespace, such as when working in a more programmatic style, then make sure you qualify the call with usethis, e.g., <code><a href="https://usethis.r-lib.org/reference/use_testthat.html">usethis::use_testthat()</a></code>.</p>
+<p>usethis 包是一个可能被更多人知道并可以直接使用的组成包。 现在，它包含对 R 项目中的文件和文件夹执行操作的函数，尤其是对于同时也是 R 程序包的任何项目而言。 devtools 可以轻松地以交互方式访问 usethis 函数，因为当您调用 <code><a href="https://devtools.r-lib.org/">library(devtools)</a></code> 时，也会附加 usethis 。 然后你可以在 usethis 中使用任何函数而无需限定，例如，只需调用 <code><a href="https://usethis.r-lib.org/reference/use_testthat.html">use_testthat()</a></code>。 如果您选择指定命名空间，例如以更具编程性的方式工作时，请确保使用 usethis 限定调用，例如 <code><a href="https://usethis.r-lib.org/reference/use_testthat.html">usethis::use_testthat()</a></code>。</p>
 <section id="personal-startup-configuration" class="level3" data-number="2.2.1"><h3 data-number="2.2.1" class="anchored" data-anchor-id="personal-startup-configuration">
 <span class="header-section-number">2.2.1</span> Personal startup configuration</h3>
-<p>You can attach devtools like so:</p>
+<p>您可以像这样加载 devtools：</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>But it soon grows aggravating to repeatedly attach devtools in every R session. Therefore, we strongly recommend attaching<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> devtools in your <code>.Rprofile</code> startup file, like so:</p>
+<p>但是随着在每个 R 会话（R Session）中反复添加 devtools，它就变得令人烦恼了。 因此，我们强烈建议将 devtools 附加到您的 <code>.Rprofile</code> 启动文件中，如下所示：</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>For convenience, the function <code><a href="https://usethis.r-lib.org/reference/rprofile-helper.html">use_devtools()</a></code> creates <code>.Rprofile</code>, if needed, opens it for editing, and puts the necessary lines of code on the clipboard and the screen.</p>
+<p>为了方便起见，<code><a href="https://usethis.r-lib.org/reference/rprofile-helper.html">use_devtools()</a></code> 函数会在您需要时创建 <code>.Rprofile</code> 文件，将其打开并进行编辑，然后在剪切板和屏幕上放置必要的代码行。</p>
 <div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -447,10 +447,10 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In general, it’s a bad idea to attach packages in <code>.Rprofile</code>, as it invites you to create R scripts that don’t reflect all of their dependencies via explicit calls to <code><a href="https://rdrr.io/r/base/library.html">library(foo)</a></code>. But devtools is a workflow package that smooths the process of package development and is, therefore, unlikely to get baked into any analysis scripts. Note how we still take care to only attach in interactive sessions.</p>
+<p>一般来说，在 <code>.Rprofile</code> 中添加程序包是一个坏主意，因为它邀请您通过显式调用 <code><a href="https://rdrr.io/r/base/library.html">library(foo)</a></code> 创建不反映所有依赖关系的 R 脚本。 但是 devtools 是一个工作流程包，它简化了程序包的开发流程，因此不太可能融入到任何分析脚本中。 请注意，我们仍然注意只在交互式会话中添加。</p>
 </div>
 </div>
-<p>usethis consults certain options when, for example, creating R packages <em>de novo</em>. This allows you to specify personal defaults for yourself as a package maintainer or for your preferred license. Here’s an example of a code snippet that could go in <code>.Rprofile</code>:</p>
+<p>例如，在从头（de novo）创建 R 包时，usethis 参考了某些选项。 这允许您指定程序包维护者或首选许可证等个人默认设置。 下面是 <code>.Rprofile</code> 中可能包含的代码片段的示例：</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Authors@R"</span> <span class="op">=</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/person.html">person</a></span><span class="op">(</span></span>
@@ -462,7 +462,7 @@ Warning
 <span>  License <span class="op">=</span> <span class="st">"MIT + file LICENSE"</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The following code shows how to install the development versions of devtools and usethis. At times, this book may describe new features that are in the development version of devtools and related packages, but that haven’t been released yet.</p>
+<p>以下代码显示了如何安装开发版本的 devtools 和 usethis。 有时，本书可能会描述 devtools 和相关包的开发版本中的新功能，但尚未发布。</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"r-lib/devtools"</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"r-lib/usethis"</span><span class="op">)</span></span>
@@ -473,29 +473,29 @@ Warning
 </div>
 </section></section><section id="setup-tools" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="setup-tools">
 <span class="header-section-number">2.3</span> R build toolchain</h2>
-<p>To be fully capable of building R packages from source, you’ll also need a compiler and a few other command line tools. This may not be strictly necessary until you want to build packages containing C or C++ code. Especially if you are using RStudio, you can set this aside for now. The IDE will alert you and provide support once you try to do something that requires you to setup your development environment. Read on for advice on doing this yourself.</p>
+<p>要能够完全从源代码构建 R 程序包，还需要一个编译器和其他一些命令行工具。 这可能不是必须的，除非您想构建包含 C 或 C++ 代码的程序包。 特别是如果您正在使用 RStudio，您可以暂时把它放在一边。 一旦您尝试执行需要您设置开发环境的操作，IDE 将向您发出警报并提供支持。 请继续阅读以获取有关自己操作的建议。</p>
 <section id="windows" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="windows">
 <span class="header-section-number">2.3.1</span> Windows</h3>
-<p>On Windows the collection of tools needed for building packages from source is called Rtools.</p>
-<p>Rtools is NOT an R package. It is NOT installed with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code>. Instead, download it from <a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a> and run the installer.</p>
-<p>During the Rtools installation you may see a window asking you to “Select Additional Tasks”.</p>
+<p>在 Windows 上，从源代码构建程序包所需要的工具集叫做 RTools。</p>
+<p>RTools 不是 R 程序包，它不能通过 <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code> 安装。 而是通过从 <a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a> 下载并运行安装程序来安装。</p>
+<p>在 RTools 的安装过程中，您可能会看到一个窗口，它询问您 “Select Additional Tasks”。</p>
 <ul>
-<li>Do <em>not</em> select the box for “Edit the system PATH”. devtools and RStudio should put Rtools on the <code>PATH</code> automatically when it is needed.</li>
-<li>Do select the box for “Save version information to registry”. It should be selected by default.</li>
+<li>不要选中 “Edit the system PATH”。devtools 和 Rstudio 应该在需要时自动将 RTools 放入 <code>PATH</code>。</li>
+<li>选中 “Save version information to registry”。它应该是默认选中的。</li>
 </ul></section><section id="macos" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="macos">
 <span class="header-section-number">2.3.2</span> macOS</h3>
-<p>You need to install the Xcode command line tools, which requires that you <a href="https://developer.apple.com/programs/register/">register as an Apple developer</a> (don’t worry, it’s free).</p>
-<p>Then, in the shell, do:</p>
+<p>您需要安装 Xcode 命令行工具，这需要您 <a href="https://developer.apple.com/programs/register/">register as an Apple developer</a>（不用担心，它是免费的）。</p>
+<p>然后，在 shell 中执行以下操作：</p>
 <pre class="shell"><code>xcode-select --install</code></pre>
-<p>Alternatively, you can install the current release of full <a href="https://itunes.apple.com/ca/app/xcode/id497799835?mt=12">Xcode from the Mac App Store</a>. This includes a very great deal that you do not need, but it offers the advantage of App Store convenience.</p>
+<p>或者，您可以安装当前版本的完整 <a href="https://itunes.apple.com/ca/app/xcode/id497799835?mt=12">Xcode from the Mac App Store</a>。 其中包括大量您不需要的内容，但它提供了 App Store 便利性的优势。</p>
 </section><section id="linux" class="level3" data-number="2.3.3"><h3 data-number="2.3.3" class="anchored" data-anchor-id="linux">
 <span class="header-section-number">2.3.3</span> Linux</h3>
-<p>Make sure you’ve installed not only R, but also the R development tools. For example, on Ubuntu (and Debian) you need to install the <code>r-base-dev</code> package with:</p>
+<p>确保您不仅安装了 R，还安装了 R 开发工具。 例如，在 Ubuntu（and Debian）上，您需要使用以下命令安装 <code>r-base-dev</code> 软件包：</p>
 <pre><code>sudo apt install r-base-dev</code></pre>
-<p>On Fedora and RedHat, the development tools (called <code>R-core-devel</code>) will be installed automatically when you install with R with <code>sudo dnf install R</code>.</p>
+<p>在 Fedora 和 RedHat 上，当您使用 <code>sudo dnf install R</code> 安装 R 时，将自动安装开发工具（称为 <code>R-core-devel</code>）。</p>
 </section></section><section id="verify-system-prep" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="verify-system-prep">
 <span class="header-section-number">2.4</span> Verify system prep</h2>
-<p>You can request a “(package) development situation report” with <code><a href="https://devtools.r-lib.org/reference/dev_sitrep.html">devtools::dev_sitrep()</a></code>:</p>
+<p>您可以使用 <code><a href="https://devtools.r-lib.org/reference/dev_sitrep.html">devtools::dev_sitrep()</a></code> 请求 “(package) development situation report”：</p>
 <div class="cell">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/dev_sitrep.html">dev_sitrep</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── R ───────────────────────────────────────────────────────────────────────</span></span>
@@ -515,13 +515,12 @@ Warning
 <span><span class="co">#&gt;   'gitcreds', 'generics', 'tidyselect', 'dplyr', 'tidyr', 'broom', 'gh'</span></span>
 <span><span class="co">#&gt;  Update them with `devtools::install_dev_deps()`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>If this reveals that certain tools or packages are missing or out-of-date, you are encouraged to update them.</p>
+<p>如果这表明某些工具或包丢失或已过时，我们鼓励您更新它们。</p>
 
 
 </section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
 <li id="fn1"><p>At the time of writing, devtools exposes functionality from <a href="https://remotes.r-lib.org/">remotes</a>, <a href="https://pkgbuild.r-lib.org/">pkgbuild</a>, <a href="https://pkgload.r-lib.org/">pkgload</a>, <a href="https://rcmdcheck.r-lib.org/">rcmdcheck</a>, <a href="https://revdepcheck.r-lib.org/">revdepcheck</a>, <a href="https://sessioninfo.r-lib.org/">sessioninfo</a>, <a href="https://usethis.r-lib.org/">usethis</a>, <a href="https://testthat.r-lib.org">testthat</a>, and <a href="https://roxygen2.r-lib.org">roxygen2</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>This is one of the few cases where we recommend using <code><a href="https://rdrr.io/r/base/library.html">require()</a></code> over <code>library().</code> <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> will fail with an error if it is unable to attach the package, and thus abort the execution of your <code>.Rprofile</code>. If <code><a href="https://rdrr.io/r/base/library.html">require()</a></code> fails to attach the package it will emit a warning but will allow the remainder of your <code>.Rprofile</code> to execute. This is discussed further in <a href="#sec-dependencies-attach-vs-load"><span class="quarto-unresolved-ref">sec-dependencies-attach-vs-load</span></a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
