@@ -4,38 +4,39 @@
 source("common.R")
 ```
 
-Having peeked under the hood of R packages and libraries in @sec-package-structure-state, here we provide the basic workflows for creating a package and moving it through the different states that come up during development.
+在 @sec-package-structure-state 中了解了 R 包和库的底层之后，我们在这里提供了创建包并将其移动到开发过程中出现的不同状态的基本工作流程。
+
 
 ## Create a package {#sec-workflow101-create-package}
 
 ### Survey the existing landscape
 
-Many packages are born out of one person's frustration at some common task that should be easier.
-How should you decide whether something is package-worthy?
-There's no definitive answer, but it's helpful to appreciate at least two types of payoff:
+许多程序包都是由于一个人对一些本应更容易完成的普通任务感到沮丧而产生的。
+您应该如何判断某些东西是否值得制作为程序包呢？
+虽然这个问题没有明确的答案，但了解至少两种类型的回报对您是有帮助的：
 
--   Product: your life will be better when this functionality is implemented formally, in a package.
--   Process: greater mastery of R will make you more effective in your work.
+-   结果（Product）：当这个功能正式实现时，您的工作生活会变得更好。
+-   过程（Progress）：更好地掌握 R 会使您的工作更有效率。
 
-If all you care about is the existence of a product, then your main goal is to navigate the space of existing packages.
-Silge, Nash, and Graves organized a survey and sessions around this at useR!
-2017 and their write up for the R Journal [@silge-nash-graves] provides a comprehensive roundup of resources.
+如果您只关心结果带来的好处，那么您的主要目标就是在现有的程序包中探索。
+Silge，Nash 和 Graves 在 useR! 2017 组织了一次调查和会议。
+他们为 R Journal [@silge-nash-graves] 撰写的文章提供了全面的资源综述。
 
-If you are looking for ways to increase your R mastery, you should still educate yourself about the landscape.
-But there are plenty of good reasons to make your own package, even if there is relevant prior work.
-The way experts got that way is by actually building things, often very basic things, and you deserve the same chance to learn by tinkering.
-If you're only allowed to work on things that have never been touched, you're likely looking at problems that are either very obscure or very difficult.
+如果您正在寻找方法来提高对 R 的掌握，那么您仍然应该对 R 的运行环境多加了解。
+但是，即使有相关的前期工作，也有很多充分的理由来制作自己的程序包。
+专家们的方式是通过实践来为许多功能构建程序包，通常是非常基本的功能，并且您应该有同样的机会通过修补来学习。
+如果您只被允许做一些从未接触过的事情，那么您可能会遇到一些非常模糊或非常困难的问题。 
 
-It's also valid to evaluate the suitability of existing tools on the basis of user interface, defaults, and edge case behaviour.
-A package may technically do what you need, but perhaps it's very unergonomic for your use case.
-In this case, it may make sense for you to develop your own implementation or to write wrapper functions that smooth over the sharp edges.
+根据用户界面、默认值和在极端情况下的表现来评估现有工具的适用性也是有效的。
+如果一个程序包在技术上可以满足您的需要，但是对于您的用例来说非常不符合舒适正确的使用方式，那么仍然可以说它不能满足您的需求。
+在这种情况下，您可能需要开发自己的实现或编写平滑尖锐边缘的包装函数。
 
-If your work falls into a well-defined domain, educate yourself about the existing R packages, even if you've resolved to create your own package.
-Do they follow specific design patterns?
-Are there specific data structures that are common as the primary input and output?
-For example, there is a very active R community around spatial data analysis ([r-spatial.org](https://www.r-spatial.org)) that has successfully self-organised to promote greater consistency across packages with different maintainers.
-In modeling, the [hardhat package](https://hardhat.tidymodels.org) provides scaffolding for creating a modeling package that plays well with the [tidymodels](https://www.tidymodels.org) ecosystem.
-Your package will get more usage and will need less documentation if it fits nicely into the surrounding landscape.
+如果您的工作属于明确定义的领域，请了解现有的 R 包，即使您已决定创建自己的包。
+他们是否遵循特定的设计模式？
+是否有作为主要输入和输出的通用特定数据结构？
+例如，围绕空间数据分析 ([r-spatial.org](https://www.r-spatial.org/)) 有一个非常活跃的 R 社区，它已经成功地自我组织，以促进不同维护者包之间的更大一致性。
+在建模中，[hardhat package](https://hardhat.tidymodels.org/) 提供了脚手架，用于创建与 [tidymodels](https://www.tidymodels.org/) 生态系统配合良好的建模包。
+如果你的包很好地融入周围的环境，它会得到更多的使用并且需要更少的文档。
 
 ### Name your package
 
@@ -43,70 +44,70 @@ Your package will get more usage and will need less documentation if it fits nic
 >
 > --- Phil Karlton
 
-Before you can create your package, you need to come up with a name for it.
-This can be the hardest part of creating a package!
-(Not least because no one can automate it for you.)
+在创建程序包之前，您需要为它取一个名字。
+这可能是创建程序包的过程中最困难的部分！
+（尤其是因为没有人可以为您实现取名的自动化。）
 
 #### Formal requirements
 
-There are three formal requirements:
+有三个正式的要求：
 
-1.  The name can only consist of letters, numbers, and periods, i.e., `.`.
-2.  It must start with a letter.
-3.  It cannot end with a period.
+1.  名称只能由字母、数字和句点组成，即 `.`。
+2.  它必须以字母开头。
+3.  它不能以句点结尾。
 
-Unfortunately, this means you can't use either hyphens or underscores, i.e., `-` or `_`, in your package name.
-We recommend against using periods in package names, due to confusing associations with file extensions and S3 methods.
+不幸的是，这意味着您不能在您的包名中使用连字符或下划线，即 `-` 或 `_`。
+我们建议不要在包名中使用句点，因为这会混淆句点与文件扩展名和 S3 方法的关联。
 
 #### Things to consider
 
-If you plan to share your package with others, it's important to come up with a good name.
-Here are some tips:
+如果您打算和别人分享您的程序包，那么花几分钟想一个好名字是值得的。
+以下是一些需要考虑的事项：
 
--   Pick a unique name that's easy to Google.
-    This makes it easy for potential users to find your package (and associated resources) and for you to see who's using it.
+-   选择一个便于 Google 搜索的独特名称。
+    这使得潜在的用户能够很容易地找到您的程序包（以及相关的资源），并能让您看到是谁在使用它。
 
--   Don't pick a name that's already in use on CRAN or Bioconductor.
-    You may also want to consider some other types of name collision:
+-   不要选择一个已经在 CRAN 或 Bioconductor 上使用的包名。
+    您可能还需要考虑一些其他类型的命名冲突：
 
-    -   Is there an in-development package maturing on, say, GitHub that already has some history and seems to be heading towards release?
-    -   Is this name already used for another piece of software or for a library or framework in, e.g., the Python or JavaScript ecosystem?
+    -   是否有在 GitHub 上成熟的且正在开发中的程序包，该程序包已经有了一定的历史，并且似乎即将发布？
+    -   这个名称是否已经用于另一个软件，例如是 Python 或 JavaScript 生态系统中的库或框架？
 
--   Avoid using both upper and lower case letters: doing so makes the package name hard to type and even harder to remember.
-    For example, it's hard to remember if it's Rgtk2 or RGTK2 or RGtk2.
+-   避免同时使用大写和小写字母：这样做会使包名称难以键入，甚至难以记住。
+    例如，很难记住一个程序包叫做 Rgtk2 还是 RGTK2 或 RGtk2。
 
--   Give preference to names that are pronounceable, so people are comfortable talking about your package and have a way to hear it inside their head.
+-   优先选择可发音的名字，这样人们在谈论你的程序包时会很舒服，并且能够在他们的脑海里听到它。
 
--   Find a word that evokes the problem and modify it so that it's unique.
-    Here are some examples:
+-   找到一个能唤起对问题的联想的单词，并对其进行修改，使其具有唯一性。
+    以下是一些示例：
 
-    -   lubridate makes dates and times easier.
-    -   rvest "harvests" the content from web pages.
-    -   r2d3 provides utilities for working with D3 visualizations.
-    -   forcats is an anagram of factors, which we use **for** **cat**egorical data.
+    -   lubridate 使日期和时间更容易。
+    -   rvest 从网页中“收获”内容。
+    -   r2d3 提供了使用 D3 可视化的实用程序。
+    -   forcats 是因子（factors）的变位词，我们用它来表示分类数据（**for** **cat**egorical data）。
 
--   Use abbreviations, like the following:
+-   使用缩写，如下所示：
 
     -   Rcpp = R + C++ (plus plus)
     -   brms = Bayesian Regression Models using Stan
 
--   Add an extra R, for example:
+-   名字后添加额外的字符 R：
 
-    -   stringr provides string tools.
-    -   beepr plays notification sounds.
-    -   callr calls R, from R.
+    -   stringr 提供字符串工具。
+    -   beepr 播放通知声音。
+    -   callr 从 R 调用 R。
 
--   Don't get sued.
+-   别被起诉。
 
-    -   If you're creating a package that talks to a commercial service, check the branding guidelines. For example, rDrop isn't called rDropbox because Dropbox prohibits any applications from using the full trademarked name.
+    -   如果您要创建一个与商业服务交互的包，请查看商标使用指南。例如，rDrop 不被称为 rDropbox，因为 Dropbox 禁止任何应用程序使用完整的商标名。
 
-Nick Tierney presents a fun typology of package names in his [Naming Things](https://www.njtierney.com/post/2018/06/20/naming-things/) blog post, which also includes more inspiring examples.
-He also has some experience with renaming packages; the post [So, you've decided to change your r package name](https://www.njtierney.com/post/2017/10/27/change-pkg-name/) is a good resource if you don't get this right the first time.
+Nick Tierney 在他的 [Naming Things](https://www.njtierney.com/post/2018/06/20/naming-things/) 博客文章中展示了一个有趣的程序包名称类型学；请参阅该文章以获取更多鼓舞人心的示例。
+他也有一些重命名包的经验，因此，如果您第一次取名没有做对，他的博客文章 [So, you’ve decided to change your r package name](https://www.njtierney.com/post/2017/10/27/change-pkg-name/) 将是一个很好的资源。
 
 #### Use the available package
 
-It is impossible to abide by all of the above suggestions simultaneously, so you will need to make some trade-offs.
-The [available package](https://cran.r-project.org/package=available) has a function called `available()` that helps you evaluate a potential package name from many angles:
+同时遵守上述所有建议是十分困难的，因此您显然需要做出一些权衡。 
+[available](https://cran.r-project.org/package=available) 程序包中有一个名为 `available()` 的函数，可以帮助您从多个角度评估可能的程序包名称：
 
 ```{r, eval = FALSE}
 library(available)
@@ -126,94 +127,97 @@ available("doofus")
 #> Sentiment:???
 ```
 
-`available::available()` does the following:
+`available::available()` 执行以下操作：
 
--   Checks for validity.
--   Checks availability on CRAN, Bioconductor, and beyond.
--   Searches various websites to help you discover any unintended meanings. In an interactive session, the URLs you see above are opened in browser tabs.
--   Attempts to report whether name has positive or negative sentiment.
+-   检查有效性。
+-   检查在 CRAN、Bioconductor 和其他产品上的可用性。
+-   搜索各种网站，帮助您发现任何意料之外的含义。在交互式会话中，您在上面看到的 URLs 将在浏览器选项卡中打开。
+-   试图报告该名称是否有积极情绪或消极情绪。
 
-`pak::pkg_name_check()` is alternative function with a similar purpose.
-Since the pak package is under more active development than available, it may emerge as the better option going forward.
+`pak::pkg_name_check()` 是具有类似目的的替代函数。
+由于 pak 包的开发比现有的更积极，它可能会成为未来更好的选择。
 
 ### Package creation {#sec-creating}
 
-Once you've come up with a name, there are two ways to create the package.
+为程序包命名后，有两种创建程序包的方法：
 
--   Call `usethis::create_package()`.
--   In RStudio, do *File \> New Project \> New Directory \> R Package*. This ultimately calls `usethis::create_package()`, so really there's just one way.
+-   调用 `usethis::create_package()`。
+-   在 RStudio 中，依次点击 *File \> New Project \> New Directory \> R Package*。
+    它最终会调用 `usethis::create_package()`，所以实际上只有一种创建程序包的方法。
 
 <!-- *TODO: revisit when I tackle usethis + RStudio project templates <https://github.com/r-lib/usethis/issues/770>. In particular, contemplate whether to reinstate any screenshot-y coverage of RStudio workflows here.* -->
 
-This produces the smallest possible *working* package, with three components:
+这将产生最小的可工作的程序包，它包含三个组件：
 
-1.  An `R/` directory, which you'll learn about in @sec-r.
+1.  一个 `R/` 目录，您将在 @sec-r 中了解到具体内容。
 
-2.  A basic `DESCRIPTION` file, which you'll learn about in @sec-description.
+2.  一个基础的 `DESCRIPTION` 文件，您将在 @sec-description 中了解到具体内容。
 
-3.  A basic `NAMESPACE` file, which you'll learn about in @sec-dependencies-NAMESPACE-file.
+3.  一个基础的 `NAMESPACE` 文件，您将在 @sec-dependencies-NAMESPACE-file 中了解到具体内容。
 
-It may also include an RStudio project file, `pkgname.Rproj`, that makes your package easy to use with RStudio, as described below.
-Basic `.Rbuildignore` and `.gitignore` files are also left behind.
+它也可能包含一个 RStudio 项目文件，`pkgname.Rproj`，这使您的程序包易于与 RStudio 一起使用，如下所述。
+基础的 `.Rbuildignore` 和 `.gitignore` 文件也被包含在目录中。
 
 ::: callout-warning
-Don't use `package.skeleton()` to create a package.
-Because this function comes with R, you might be tempted to use it, but it creates a package that immediately throws errors with `R CMD build`.
-It anticipates a different development process than we use here, so repairing this broken initial state just makes unnecessary work for people who use devtools (and, especially, roxygen2).
-Use `create_package()`.
+
+不要使用 `package.skeleton()` 创建程序包。
+因为这个函数与 R 一起提供，您可能会想使用它，但是它会创建一个在调用 `R CMD build` 时立刻抛出错误的程序包。
+它期望的开发过程与我们在这里使用的不同，所以修复这个损坏的初始状态只会让使用 devtools（尤其是 roxygen2）的人做不必要的工作。
+请使用 `create_package()`。
 :::
 
 ### Where should you `create_package()`?
 
-The main and only required argument to `create_package()` is the `path` where your new package will live:
+`create_package()` 的主要且唯一必需的参数是新程序包所在的 `path`：
 
 ```{r, eval = FALSE}
 create_package("path/to/package/pkgname")
 ```
 
-Remember that this is where your package lives in its **source** form (@sec-source-package), not in its **installed** form (@sec-installed-package).
-Installed packages live in a **library** and we discussed conventional setups for libraries in @sec-library.
+请记住，这是您的程序包在源代码（**source**）形式（@sec-source-package）时所处的位置，而不是已安装（**installed**）形式（@sec-installed-package）。
+已安装的包位于库（**library**）中，我们在 @sec-library 中讨论了库的常规设置。
 
-Where should you keep source packages?
-The main principle is that this location should be distinct from where installed packages live.
-In the absence of external considerations, a typical user should designate a directory inside their home directory for R (source) packages.
-We discussed this with colleagues and the source of many tidyverse packages lives inside directories like `~/rrr/`, `~/documents/tidyverse/`, `~/r/packages/`, or `~/pkg/`.
-Some of us use one directory for this, others divide source packages among a few directories based on their development role (contributor vs. not), GitHub organization (tidyverse vs r-lib), development stage (active vs. not), and so on.
+源码包应该放在哪里？
+主要原则是该位置应该与已安装包所在的位置不同。
+在没有其他外部考虑的情况下，典型的用户应该在其主目录中为 R（源代码）包指定一个目录。
+我们与同事讨论过这一点，您最喜欢的一些 R 包的源代码位于 `~/rrr/`、`~/documents/tidyverse/`、`~/R/packages/` 或 `~/pkg/` 等目录中。
+我们中的一些人使用一个目录来实现这一点，其他人则根据他们的开发角色（contributor vs. not）、GitHub 组织（tidyverse vs r-lib）、开发阶段（active vs. not）等将源码包划分为几个目录。
 
-The above probably reflects that we are primarily tool-builders.
-An academic researcher might organize their files around individual publications, whereas a data scientist might organize around data products and reports.
-There is no particular technical or traditional reason for one specific approach.
-As long as you keep a clear distinction between source and installed packages, just pick a strategy that works within your overall system for file organization, and use it consistently.
+以上内容可能反映出我们主要是工具构建者。
+学术研究人员可能会围绕单个出版物组织他们的文件，而数据科学家可能会围绕数据产品和报告来组织。
+对于每一种特定的方法，没有特定的技术或传统原因来说明为何要选择它。
+只要在源码包和已安装的包之间保持清晰的区别，仅仅需要选择一种在整个系统中有效的文件组织策略，并始终如一地使用它即可。
+
 
 ## RStudio Projects {#sec-workflow101-rstudio-projects}
 
-devtools works hand-in-hand with RStudio, which we believe is the best development environment for most R users.
-To be clear, you can use devtools without using RStudio and you can develop packages in RStudio without using devtools.
-But there is a special, two-way relationship that makes it very rewarding to use devtools and RStudio together.
+devtools 与 RStudio，一个我们相信是大多数 R 用户的最佳开发环境联系紧密、携手合作。
+明确地说，您可以使用 devtools 而不使用 RStudio，也可以在 RStudio 中开发程序包而不使用 devtools。
+但是这种特殊的、双向的关系使得一起使用 devtools 和 RStudio 变得非常有意义。
 
 ::: callout-tip
 ## RStudio
 
-An RStudio **Project**, with a capital "P", is a regular directory on your computer that includes some (mostly hidden) RStudio infrastructure to facilitate your work on one or more **projects**, with a lowercase "p".
-A project might be an R package, a data analysis, a Shiny app, a book, a blog, etc.
+一个 RStudio **Project**，包含一个大写字母 "P"，是您计算机上的一个常规目录，其中包含一些（大部分是隐藏的）RStudio 基础文件，以便您在一个或多个 **projects** 上工作，带有小写字母 "p"。
+一个 project 可以是一个 R 包、一个数据分析报告、一个 Shiny app、一本书、一个博客等等。
 :::
 
 ### Benefits of RStudio Projects
 
-From @sec-source-package, you already know that a source package lives in a directory on your computer.
-We strongly recommend that each source package is also an RStudio Project.
-Here are some of the payoffs:
+从 @sec-source-package 中，您已经知道源码包位于您计算机上的目录中。
+我们强烈建议将每个源码包作为一个 RStudio 项目。
+以下是这样做的好处：
 
--   Projects are very "launch-able".
-    It's easy to fire up a fresh instance of RStudio in a Project, with the file browser and working directory set exactly the way you need, ready for work.
+-   项目是非常可启动的（"launch-able"）。
+    文件浏览器和工作目录将完全按照您需要的方式进行设置，马上可以开始工作，从而很容易在一个项目中启动一个新的 RStudio 实例。
 
--   Each Project is isolated; code run in one Project does not affect any other Project.
+-   每个项目都是独立的；在一个项目中运行的代码不会影响任何其他项目。
 
-    -   You can have several RStudio Projects open at once and code executed in Project A does not have any effect on the R session and workspace of Project B.
+    -   您可以同时打开多个 RStudio 项目，并且在项目 A 中执行的代码不会对项目 B 的 R session 和工作区（workspace）产生任何影响。
 
--   You get handy code navigation tools like `F2` to jump to a function definition and `Ctrl + .` to look up functions or files by name.
+-   您可以使用方便的代码导航工具，如 `F2` 跳转到函数定义，`Ctrl + .` 来按名称查找函数或文件。
 
--   You get useful keyboard shortcuts and a clickable interface for common package development tasks, like generating documentation, running tests, or checking the entire package.
+-   您可以使用很有帮助的键盘快捷键和可点击的界面，以执行常见的程序包开发任务，如生成文档、运行测试或检查整个程序包。
 
     ```{r}
     #| echo: false
@@ -231,39 +235,41 @@ Here are some of the payoffs:
 ::: callout-tip
 ## RStudio
 
-To see the most useful keyboard shortcuts, press Alt + Shift + K or use *Help \> Keyboard Shortcuts Help*.
-You should see something like @fig-keyboard-shortcuts.
+查看最有用的键盘快捷键，请按 Alt + Shift + K，或者使用 *Help \> Keyboard Shortcuts Help*。
+您应该会看到类似 @fig-keyboard-shortcuts 的内容。
 
-RStudio also provides the [*Command Palette*](https://docs.posit.co/ide/user/ide/reference/shortcuts.html#command-palette) which gives fast, searchable access to all of the IDE's commands -- especially helpful when you can't remember a particular keyboard shortcut.
-It is invoked via Ctrl + Shift + P (Windows & Linux) or Cmd + Shift + P (macOS).
+RStudio 还提供 [Command Palette](https://docs.posit.co/ide/user/ide/reference/shortcuts.html#command-palette)，它可以快速、可搜索地访问所有 IDE 的命令 -- 当您不记得特定的键盘快捷键时尤其有用。
+它通过 Ctrl + Shift + P（Windows 和 Linux）或 Cmd + Shift + P（macOS）调用。
 :::
 
 ::: callout-tip
 ## RStudio
 
-Follow \@[rstudiotips](https://twitter.com/rstudiotips) on Twitter for a regular dose of RStudio tips and tricks.
+在 Twitter 上关注 \@[rstudiotips](https://twitter.com/rstudiotips)，定期获取 RStudio 提示和技巧。
 :::
 
 ### How to get an RStudio Project
 
-If you follow our recommendation to create new packages with `create_package()`, each new package will also be an RStudio Project, if you're working from RStudio.
+如果您按照我们的建议使用 `create_package()` 创建新的程序包，那么这会自行解决。
+如果你在 RStudio 工作，每个新程序包也将是一个 RStudio 项目。
 
-If you need to designate the directory of a pre-existing source package as an RStudio Project, choose one of these options:
+如果您需要将预先存在的源码包的目录指定为 RStudio 项目，请选择以下选项之一：
 
--   In RStudio, do *File \> New Project \> Existing Directory*.
--   Call `create_package()` with the path to the pre-existing R source package.
--   Call `usethis::use_rstudio()`, with the [active usethis project](#sec-rstudio-project-vs-active-usethis-project) set to an existing R package. In practice, this probably means you just need to make sure your working directory is inside the pre-existing package directory.
+-   在 RStudio 中，执行 *File \> New Project \> Existing Directory*。
+-   使用预先存在的 R 源码包的路径调用 `create_package()`。
+-   调用 `usethis::use_rstudio()`，将 [active usethis project](#sec-rstudio-project-vs-active-usethis-project) 设置为现有的 R 包。
+    实际上，这可能意味着您只需要确保工作目录在已经存在的程序包中。
 
 ### What makes an RStudio Project?
 
-A directory that is an RStudio Project will contain an `.Rproj` file.
-Typically, if the directory is named "foo", the Project file is `foo.Rproj`.
-And if that directory is also an R package, then the package name is usually also "foo".
-The path of least resistance is to make all of these names coincide and to NOT nest your package inside a subdirectory inside the Project.
-If you settle on a different workflow, just know it may feel like you are fighting with the tools.
+RStudio 项目的目录将包含一个 `.Rproj` 文件。
+通常，如果目录名为“foo”，则项目文件为 `foo.Rproj`。
+如果这个目录也是一个 R 包，那么包名通常也是 "foo"。
+故障最少的方法是使所有这些名称一致，并且不要将程序包嵌套在项目内的子目录中。
+如果您决定采用其他工作流程，那么可能会让您觉得您在与工具进行不必要的争斗。
 
-An `.Rproj` file is just a text file.
-Here is a representative project file you might see in a Project initiated via usethis:
+`.Rproj` 文件只是一个文本文件。
+以下是 usethis 使用的默认项目文件：
 
 ```         
 Version: 1.0
@@ -285,8 +291,8 @@ PackageInstallArgs: --no-multiarch --with-keep.source
 PackageRoxygenize: rd,collate,namespace
 ```
 
-You don't need to modify this file by hand.
-Instead, use the interface available via *Tools \> Project Options* (@fig-project-options) or *Project Options* in the Projects menu in the top-right corner (@fig-projects-menu).
+您不需要手动修改这个文件。
+可以通过 *Tools \> Project Options* (@fig-project-options) 或者右上角 Project 菜单栏中的 *Project Options* (@fig-projects-menu) 提供的界面进行编辑。
 
 ```{r}
 #| echo: false
@@ -330,32 +336,31 @@ knitr::include_graphics("images/project-options-1.png")
 
 ### How to launch an RStudio Project
 
-Double-click the `foo.Rproj` file in macOS's Finder or Windows Explorer to launch the foo Project in RStudio.
+在 macOS 的 Finder 或 Windows 资源管理器中双击 `foo.Rproj` 文件，以便在 RStudio 中启动 foo Project。
 
-You can also launch Projects from within RStudio via *File \> Open Project (in New Session)* or the Projects menu in the top-right corner.
+您也可以通过 *File \> Open Project (in New Session)* 或右上角的 Project 菜单从 RStudio 中启动 Projects。
 
-If you use a productivity or launcher app, you can probably configure it to do something delightful for `.Rproj` files.
-We both use Alfred for this [^workflow101-1], which is macOS only, but similar tools exist for Windows.
-In fact, this is a very good reason to use a productivity app in the first place.
+如果您使用的是一个生产力应用程序或启动器应用程序，您可能可以将其配置为对 `.Rproj` 文件执行一些令人愉快的操作。
+我们都使用 Alfred 来实现这一点[^workflow101-1]，只有 macOS 有该工具，但是 Windows 也有类似的工具。
+事实上，这是一个非常好的理由首选使用生产力应用程序。
 
-[^workflow101-1]: Specifically, we configure Alfred to favor `.Rproj` files in its search results when proposing apps or files to open.
-    To register the `.Rproj` file type with Alfred, go to *Preferences \> Features \> Default Results \> Advanced*.
-    Drag any `.Rproj` file onto this space and then close.
+[^workflow101-1]: 具体来说，我们将 Alfred 配置为在建议打开应用程序或文件时在其搜索结果中优先选择 `.Rproj` 文件。
+    要向 Alfred 注册 `.Rproj` 文件类型，请转至 *Preferences \> Features \> Default Results \> Advanced*。
+    将任何 `.Rproj` 文件拖到此空间中，然后关闭。
 
-It is very normal -- and productive!
--- to have multiple Projects open at once.
+一次性打开多个项目是非常正常的而且富有成效！
 
 ### RStudio Project vs. active usethis project {#sec-rstudio-project-vs-active-usethis-project}
 
-You will notice that most usethis functions don't take a path: they operate on the files in the "active usethis project".
-The usethis package assumes that 95% of the time all of these coincide:
+您会注意到，大多数 usethis 函数不使用路径：它们对 "active usethis project" 中的文件进行操作。
+usethis 程序包假设以下这些在 95% 的时间内都是一致的：
 
--   The current RStudio Project, if using RStudio.
--   The active usethis project.
--   Current working directory for the R process.
+-   当前的 RStudio Project，如果使用 RStudio。
+-   活跃的 usethat 项目。
+-   R 进程的当前工作目录。
 
-If things seem funky, call `proj_sitrep()` to get a "situation report".
-This will identify peculiar situations and propose ways to get back to a happier state.
+如果事情看起来很奇怪，可以调用 `proj_sitrep()` 来获取“情况报告”。
+这将识别出一些特殊情况，并提出如何回到更良好的状态。
 
 ```{r eval = FALSE}
 # these should usually be the same (or unset)
@@ -367,31 +372,35 @@ proj_sitrep()
 
 ## Working directory and filepath discipline
 
-As you develop your package, you will be executing R code.
-This will be a mix of workflow calls (e.g., `document()` or `test()`) and *ad hoc* calls that help you write your functions, examples, and tests.
-We *strongly recommend* that you keep the top-level of your source package as the working directory of your R process.
-This will generally happen by default, so this is really a recommendation to avoid development workflows that require you to fiddle with working directory.
+在开发包时，您将会执行 R 代码。
+这将是工作流调用（例如 `document()` 或 `test()`）和帮助您编写函数、示例和测试的特殊（*ad hoc*）调用的混合。
+我们强烈建议您将 R 进程的工作目录设置为源码包的顶层目录。
+这通常会默认发生，所以这确实是一个建议，可以避免需要您摆弄工作目录的开发工作流程。
 
-If you're totally new to package development, you don't have much basis for supporting or resisting this proposal.
-But those with some experience may find this recommendation somewhat upsetting.
-You may be wondering how you are supposed to express paths when working in subdirectories, such as `tests/`.
-As it becomes relevant, we'll show you how to exploit path-building helpers, such as `testthat::test_path()`, that determine paths at execution time.
+如果您在程序包开发方面毫无经验，那么您没有太多的基础来支持或抵制此建议。
+但那些有经验的人可能会觉得有些不安。
+在子目录中工作时，我们应该如何表示路径，比如 `tests/`？
+当它变得与我们的工作相关时，我们将向您展示如何利用路径构建帮助器，例如 `testthat::test_path()`，它会在执行时确定路径。
 
-The basic idea is that by leaving working directory alone, you are encouraged to write paths that convey intent explicitly ("read `foo.csv` from the test directory") instead of implicitly ("read `foo.csv` from current working directory, which I *think* is going to be the test directory").
-A sure sign of reliance on implicit paths is incessant fiddling with your working directory, because you're using `setwd()` to manually fulfill the assumptions that are implicit in your paths.
+它的基本思想是，通过不使用工作目录，鼓励您编写能够明确表达意图的路径（“从测试目录中读取 `foo.csv`），而不是隐式的表达（“从当前的工作目录中读取 `foo.csv`，我认为该目录将是测试目录）。
+依赖隐式路径的一个可靠迹象就是不断地修改工作目录，因为您正在使用 `setwd()` 手动实现路径中隐含的假设。
 
-Using explicit paths can design away a whole class of path headaches and makes day-to-day development more pleasant as well.
-There are two reasons why implicit paths are hard to get right:
+这种思想可以消除所有路径问题，让日常的开发变得更加愉快。
+隐式路径难以正确设置的原因有两个：
 
--   Recall the different forms that a package can take during the development cycle (@sec-package-structure-state). These states differ from each other in terms of which files and folders exist and their relative positions within the hierarchy. It's tricky to write relative paths that work across all package states.
--   Eventually, your package will be processed with built-in tools like `R CMD build`, `R CMD check`, and `R CMD INSTALL`, by you and potentially CRAN. It's hard to keep track of what the working directory will be at every stage of these processes.
+-   回想一下在开发周期中程序包可以采用的不同形式（@sec-package-structure-state）。
+    在这些状态中，存在哪些文件和文件夹以及它们在层次结构中的相对位置都是互不相同的。
+    编写满足所有程序包状态的相对路径是很困难的。
+-   最终，您的程序包将由您和 CRAN 使用内置工具（built-in tools）处理，如 `R CMD build`、`R CMD check` 和 `R CMD INSTALL`。
+    很难跟踪这些过程中每个阶段的工作目录是什么。
 
-Path helpers like `testthat::test_path()`, `fs::path_package()`, and the [rprojroot package](https://rprojroot.r-lib.org) are extremely useful for building resilient paths that hold up across the whole range of situations that come up during development and usage.
-Another way to eliminate brittle paths is to be rigorous in your use of proper methods for storing data inside your package (@sec-data) and to target the session temp directory when appropriate, such as for ephemeral testing artefacts (@sec-testing-basics).
+像 `testthat::test_path()`、`fs::path_package()` 和 [rprojroot package](https://rprojroot.r-lib.org/) 这样的路径帮助器对于构建弹性的路径非常有用，这些路径可以在开发和使用过程中出现的所有情况下都有效。
+消除脆弱路径的另一种方法是严格使用在程序包中存储数据的适当方法（@sec-data），并在适当的时候采用会话（session）的临时目录，例如针对短暂的测试工件（ephemeral testing artefacts）（@sec-testing-basics）。
+
 
 ## Test drive with `load_all()` {#sec-workflow101-load-all}
 
-The `load_all()` function is arguably the most important part of the devtools workflow.
+`load_all()` 函数无疑是 devtools 工作流中最重要的部分。
 
 ```{r, eval = FALSE}
 # with devtools attached and
@@ -402,26 +411,26 @@ load_all()
 # ... now experiment with the functions in your package
 ```
 
-`load_all()` is the key step in this "lather, rinse, repeat" cycle of package development:
+`load_all()` 是在 “lather, rinse, repeat” 这一程序包开发周期中的关键步骤：
 
-1.  Tweak a function definition.
+1.  调整函数定义。
 2.  `load_all()`
-3.  Try out the change by running a small example or some tests.
+3.  通过运行一个较小的示例或一些测试来尝试更改。
 
-When you're new to package development or to devtools, it's easy to overlook the importance of `load_all()` and fall into some awkward habits from a data analysis workflow.
+当您刚接触程序包开发或 devtools 时，很容易忽视 `load_all()` 的重要性，并在数据分析工作流中养成一些不合适的习惯。
 
 ### Benefits of `load_all()`
 
-When you first start to use a development environment, like RStudio or VS Code, the biggest win is the ability to send lines of code from an `.R` script for execution in R console.
-The fluidity of this is what makes it tolerable to follow the best practice of regarding your source code as real [^workflow101-2] (as opposed to objects in the workspace) and saving `.R` files (as opposed to saving and reloading `.Rdata`).
+当您第一次开始使用开发环境，如 RStudio 或 VS Code 时，最大的便利之处是能够从 `.R` 脚本中发送代码到 R 控制台（R console）中执行。
+这种流动性使得遵循将源代码视为真实存在（而不是工作区中的对象）和保存 `.R` 文件（而不是保存和重新加载 `.Rdata`）的最佳做法是可以接受的。
 
-[^workflow101-2]: Quoting the usage philosophy favored by [Emacs Speaks Statistics](https://ess.r-project.org/Manual/ess.html#Philosophies-for-using-ESS_0028R_0029) (ESS).
+[^workflow101-2]: 引用 [Emacs Speaks Statistics](https://ess.r-project.org/Manual/ess.html#Philosophies-for-using-ESS_0028R_0029) (ESS) 所青睐的使用理念。
 
-`load_all()` has the same significance for package development and, ironically, requires that you NOT test drive package code in the same way as script code.
-`load_all()` *simulates* the full blown process for seeing the effect of a source code change, which is clunky enough [^workflow101-3] that you won't want to do it very often.
-@fig-load-all reinforces that the `library()` function can only load a package that has been installed, whereas `load_all()` gives a high-fidelity simulation of this, based on the current package source.
+`load_all()` 对于程序包开发来说有着同样的意义，相反的是，它要求您不要像脚本代码那样测试程序包代码。
+`load_all()` 模拟查看源代码更改效果的完整过程，这是一个非常笨重的过程，您不会希望经常这样做。
+@fig-load-all 强调了 `library()` 函数只能加载已安装的包，而 `load_all()` 基于当前包源对此进行了高保真模拟。
 
-[^workflow101-3]: The command line approach is to quit R, go to the shell, do `R CMD build foo` in the package's parent directory, then `R CMD INSTALL foo_x.y.x.tar.gz`, restart R, and call `library(foo`).
+[^workflow101-3]: 命令行方法是退出 R，转到 shell，在包的父目录中执行 `R CMD build foo`，然后 `R CMD INSTALL foo_x.y.x.tar.gz`，重新启动 R，并调用 `library(foo)`。
 
 ```{r}
 #| echo: false
@@ -440,117 +449,123 @@ The fluidity of this is what makes it tolerable to follow the best practice of r
 knitr::include_graphics("diagrams/loading.png")
 ```
 
-The main benefits of `load_all()` include:
+`load_all()` 的主要优点有：
 
--   You can iterate quickly, which encourages exploration and incremental progress.
-    -   This iterative speedup is especially noticeable for packages with compiled code.
--   You get to develop interactively under a namespace regime that accurately mimics how things are when someone uses your installed package, with the following additional advantages:
-    -   You can call your own internal functions directly, without using `:::` and without being tempted to temporarily define your functions in the global workspace.
-    -   You can also call functions from other packages that you've imported into your `NAMESPACE`, without being tempted to attach these dependencies via `library()`.
+-   您可以快速迭代，这将鼓励探索和渐进式开发过程。
 
-`load_all()` removes friction from the development workflow and eliminates the temptation to use workarounds that often lead to mistakes around namespace and dependency management.
+    -   这种迭代加速对于具有编译代码的程序包来说尤其显著。
+
+-   您可以在命名空间机制下进行交互开发，该机制准确模拟了其他人使用您的已安装程序包时的情况：
+
+    -   您可以直接调用自己的内部函数，而不必使用 `:::`，也不必在全局工作区中临时定义函数。
+    -   您还可以从导入到 `NAMESPACE` 的其他程序包中调用函数，而不必试图通过 `library()` 附加这些依赖项。
+
+`load_all()` 消除了开发工作流中的麻烦，也消除了使用替代方法的诱惑，该替代方法通常会导致命名空间和依赖项管理方面的错误。
 
 ### Other ways to call `load_all()`
 
-When working in a Project that is a package, RStudio offers several ways to call `load_all()`:
+在程序包 Project 中工作时，RStudio 提供了几种调用 `load_all()` 的方法：
 
--   Keyboard shortcut: Cmd+Shift+L (macOS), Ctrl+Shift+L (Windows, Linux)
--   Build pane's *More ...* menu
+-   键盘快捷键：Cmd + Shift + L (macOS)、Ctrl + Shift + L (Windows, Linux)
+-   Build 窗格的 *More ...* 菜单
 -   *Build \> Load All*
 
-`devtools::load_all()` is a thin wrapper around `pkgload::load_all()` that adds a bit of user-friendliness.
-It is unlikely you will use `load_all()` programmatically or inside another package, but if you do, you should probably use `pkgload::load_all()` directly.
+`devtools::load_all()` 是 `pkgload::load_all()` 的一个简单封装，它增加了一点用户友好性。
+您不太可能以编程的方式或在另一个程序包中使用 `load_all()`，但如果您这样做了，您可能应该直接使用 `pkgload::load_all()`。
+
 
 ## `check()` and `R CMD check` {#sec-workflow101-r-cmd-check}
 
-Base R provides various command line tools and `R CMD check` is the official method for checking that an R package is valid.
-It is essential to pass `R CMD check` if you plan to submit your package to CRAN, but we **highly recommend** holding yourself to this standard even if you don't intend to release your package on CRAN.
-`R CMD check` detects many common problems that you'd otherwise discover the hard way.
+Base R 提供各种命令行工具，`R CMD check` 是检查 R 包是否有效的官方方法。
+如果你打算将你的包提交给 CRAN，那么通过 `R CMD check` 是必不可少的，但我们强烈建议你自己遵守这个标准，即使你不打算在 CRAN 上发布你的包。
+`R CMD check` 可以检测到许多您很难发现的常见问题。
 
-Our recommended way to run `R CMD check` is in the R console via devtools:
+我们推荐的运行 `R CMD check` 的方法是在 R 控制台中通过 devtools：
 
 ```{r}
 #| eval: false
 devtools::check()
 ```
 
-We recommend this because it allows you to run `R CMD check` from within R, which dramatically reduces friction and increases the likelihood that you will `check()` early and often!
-This emphasis on fluidity and fast feedback is exactly the same motivation as given for `load_all()`.
-In the case of `check()`, it really is executing `R CMD check` for you.
-It's not just a high fidelity simulation, which is the case for `load_all()`.
+我们推荐这样做是因为它允许您从 R 内部运行 `R CMD check`，这会显着减少摩擦并增加您尽早和经常 `check()` 的可能性！
+这种对流动性和快速反馈的强调与 `load_all()` 的动机完全相同。
+对于 `check()`，它实际上是在为您执行 `R CMD check`。
+这不仅仅是一个高保真模拟，`load_all()` 就是这样。
 
 ::: callout-tip
 ## RStudio
 
-RStudio exposes `check()` in the *Build* menu, in the *Build* pane via *Check*, and in keyboard shortcuts Ctrl + Shift + E (Windows & Linux) or Cmd + Shift + E (macOS).
+RStudio 在 *Build* 菜单、*Build* 窗格中通过 *Check* 以及键盘快捷键 Ctrl + Shift + E（Windows 和 Linux）或 Cmd + Shift + E（macOS）公开 `check()` 。
 :::
 
-A rookie mistake that we see often in new package developers is to do too much work on their package before running `R CMD check`.
-Then, when they do finally run it, it's typical to discover many problems, which can be very demoralizing.
-It's counter-intuitive but the key to minimizing this pain is to run `R CMD check` more often: the sooner you find a problem, the easier it is to fix[^workflow101-4].
-We model this behaviour very intentionally in @sec-whole-game.
+我们在新包开发人员中经常看到的一个菜鸟错误是在运行 `R CMD check` 之前对他们的包做太多工作。
+然后，当他们最终运行它时，通常会发现很多问题，这会让人非常沮丧。
+这是违反直觉的，但减少这种痛苦的关键是更频繁地运行 `R CMD check`：越早发现问题，就越容易修复[^workflow101-4]。
+我们在 @sec-whole-game 中非常有意地模拟了这种行为。
 
-[^workflow101-4]: A great blog post advocating for "if it hurts, do it more often" is [FrequencyReducesDifficulty](https://martinfowler.com/bliki/FrequencyReducesDifficulty.html) by Martin Fowler.
+[^workflow101-4]: Martin Fowler 撰写的 [FrequencyReducesDifficulty](https://martinfowler.com/bliki/FrequencyReducesDifficulty.html) 是一篇很棒的博客文章，提倡“如果有困难，就多做几次”。
 
-The upper limit of this approach is to run `R CMD check` every time you make a change.
-We don't run `check()` manually quite that often, but when we're actively working on a package, it's typical to `check()` multiple times per day.
-Don't tinker with your package for days, weeks, or months, waiting for some special milestone to finally run `R CMD check`.
-If you use GitHub (@sec-sw-dev-practices-git-github), we'll show you how to set things up so that `R CMD check` runs automatically every time you push (@sec-sw-dev-practices-gha).
+这种方法的上限是每次进行更改时都运行 `R CMD check`。
+我们不会经常手动运行 `check()`，但是当我们积极处理一个包时，通常每天多次运行 `check()` 。
+不要在几天、几周或几个月内修补你的包，等待一些特殊的里程碑来最终运行 `R CMD check`。
+如果您使用 GitHub（@sec-sw-dev-practices-git-github），我们将向您展示如何进行设置，以便在您每次推送时自动运行 `R CMD check`（@sec-sw-dev-practices-gha）。
 
 ### Workflow {#check-workflow}
 
-Here's what happens inside `devtools::check()`:
+这是 `devtools::check()` 内部发生的事情：
 
--   Ensures that the documentation is up-to-date by running `devtools::document()`.
+-   通过运行 `devtools::document()` 确保文档是最新的。
 
--   Bundles the package before checking it (@sec-bundled-package).
-    This is the best practice for checking packages because it makes sure the check starts with a clean slate: because a package bundle doesn't contain any of the temporary files that can accumulate in your source package, e.g. artifacts like `.so` and `.o` files which accompany compiled code, you can avoid the spurious warnings such files will generate.
+-   在检查之前捆绑包（@sec-bundled-package）。
+    这是检查包的最佳实践，因为它确保检查从一个干净的状态开始：因为捆绑包不包含任何可以在源包中累积的临时文件，例如编译代码附带的 `.so` 和 `.o` 文件，您可以避免此类文件将生成的虚假警告。
+    
+-   将 `NOT_CRAN` 环境变量设置为`“true”`。
+    这允许您有选择地跳过 CRAN 上的测试。
+    有关详细信息，请参阅 `?testthat::skip_on_cran` 和 @sec-testing-advanced-skip-on-cran。
 
--   Sets the `NOT_CRAN` environment variable to `"true"`.
-    This allows you to selectively skip tests on CRAN.
-    See `?testthat::skip_on_cran` and @sec-testing-advanced-skip-on-cran for details.
+检查包的工作流程很简单，但很乏味：
 
-The workflow for checking a package is simple, but tedious:
+1.  运行 `devtools::check()`，或按 Ctrl/Cmd + Shift + E。
 
-1.  Run `devtools::check()`, or press Ctrl/Cmd + Shift + E.
+2.  解决第一个问题。
 
-2.  Fix the first problem.
+3.  重复直到没有问题为止。
 
-3.  Repeat until there are no more problems.
+`R CMD check` 返回三种类型的消息：
 
-`R CMD check` returns three types of messages:
+-   `ERRORs`：无论您是否提交给 CRAN，都应该解决的严重问题。
 
--   `ERROR`s: Severe problems that you should fix regardless of whether or not you're submitting to CRAN.
+-   `WARNINGs`：如果您打算提交给 CRAN，则可能必须解决的问题（即使您不打算提交也是一个好主意）。
 
--   `WARNING`s: Likely problems that you must fix if you're planning to submit to CRAN (and a good idea to look into even if you're not).
+-   `NOTEs`：轻微的问题，或者在少数情况下，只是一个观察。
+    如果你提交给 CRAN，你应该努力消除所有的 NOTEs，即使它们是误报。
+    如果您没有 NOTEs，则不需要人为干预，并且包提交过程会更容易。
+    如果无法消除 NOTEs，您需要在提交评论中说明可以的原因，如 @sec-release-process 所述。
+    如果您不提交给 CRAN，请仔细阅读每条注意事项。
+    如果消除 NOTE 很容易，那是值得的，这样您就可以继续争取完全干净的结果。
+    但是，如果删除 NOTE 会对您的包产生净负面影响，那么容忍它是合理的。
+    确保这不会导致您忽略其他真正应该解决的问题。
 
--   `NOTE`s: Mild problems or, in a few cases, just an observation.
-    If you are submitting to CRAN, you should strive to eliminate all NOTEs, even if they are false positives.
-    If you have no NOTEs, human intervention is not required, and the package submission process will be easier.
-    If it's not possible to eliminate a `NOTE`, you'll need describe why it's OK in your submission comments, as described in @sec-release-process.
-    If you're not submitting to CRAN, carefully read each NOTE.
-    If it's easy to eliminate the NOTEs, it's worth it, so that you can continue to strive for a totally clean result.
-    But if eliminating a NOTE will have a net negative impact on your package, it is reasonable to just tolerate it.
-    Make sure that doesn't lead to you ignoring other issues that really should be addressed.
-
-`R CMD check` consists of dozens of individual checks and it would be overwhelming to enumerate them here.
-See our [online-only guide to `R CMD check`](https://r-pkgs.org/R-CMD-check.html) for details.
+`R CMD check` 由几十个单独的检查组成，在这里一一列举会让人不知所措。
+有关详细信息，请参阅我们的 [online-only guide to R CMD check](https://r-pkgs.org/R-CMD-check.html)。
 
 ### Background on `R CMD check`
 
-As you accumulate package development experience, you might want to access `R CMD check` directly at some point.
-Remember that `R CMD check` is something you must run in the terminal, not in the R console.
-You can see its documentation like so:
+随着您积累包开发经验，您可能希望在某些时候直接访问 `R CMD check`。
+请记住，`R CMD check` 是您必须在终端而不是 R 控制台中运行的东西。
+您可以这样查看其文档：
 
 ``` bash
 R CMD check --help
 ```
 
-`R CMD check` can be run on a directory that holds an R package in source form (@sec-source-package) or, preferably, on a package bundle (@sec-bundled-package):
+`R CMD check` 可以在以源码形式（@sec-source-package）保存 R 包的目录上运行，或者最好在捆绑包（@sec-bundled-package）上运行：
 
 ``` bash
 R CMD build somepackage
 R CMD check somepackage_0.0.0.9000.tar.gz  
 ```
 
-To learn more, see the [Checking packages](https://cran.r-project.org/doc/manuals/R-exts.html#Checking-packages) section of [Writing R Extensions](https://cran.r-project.org/doc/manuals/R-exts.html).
+要了解更多信息，请参阅 [Writing R Extensions](https://cran.r-project.org/doc/manuals/R-exts.html) 的 [Checking packages](https://cran.r-project.org/doc/manuals/R-exts.html#Checking-packages)。
+
+
