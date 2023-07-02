@@ -4,28 +4,29 @@
 source("common.R")
 ```
 
-The first principle of making a package is that all R code goes in the `R/` directory.
-In this chapter, you'll learn about organising your functions into files, maintaining a consistent style, and recognizing the stricter requirements for functions in a package (versus in a script).
-We'll also remind you of the fundamental workflows for test-driving and formally checking an in-development package: `load_all()`, `test()`, and `check()`.
+制作包的首要原则是所有 R 代码都放在 `R/` 目录中。
+在本章中，您将学习如何将函数组织到文件中，保持一致的风格，并认识到包中函数的更严格要求（与脚本中的函数相比）。
+我们还将提醒您测试驱动和正式检查开发中包的基本工作流程：`load_all()`、`test()` 和 `check()`。
+
 
 ## Organise functions into files {#sec-code-organising}
 
-The only hard rule is that your package must store its function definitions in R scripts, i.e. files with extension `.R`, that live in the `R/` directory[^code-1].
-However, a few more conventions can make the source code of your package easier to navigate and relieve you of re-answering "How should I name this?" each time you create a new file.
-The Tidyverse Style Guide offers some [general advice about file names](https://style.tidyverse.org/files.html) and also [advice that specifically applies to files in a package](https://style.tidyverse.org/package-files.html).
-We expand on this here.
+唯一的硬性规定是您的包必须将其函数定义存储在 R 脚本中，即扩展名为 `.R` 的文件，它们位于 `R/` 目录中[^code-1]。
+然而，更多的约定可以使您的包的源代码更易于浏览，并使您不必重新回答“我应该如何命名它？”，在每次创建新文件时。
+Tidyverse Style Guide 提供了一些 [general advice about file names](https://style.tidyverse.org/files.html)，以及 [advice that specifically applies to files in a package](https://style.tidyverse.org/package-files.html)。
+我们在这里展开。
 
-[^code-1]: Unfortunately you can't use subdirectories inside `R/`.
-    The next best thing is to use a common prefix, e.g., `abc-*.R`, to signal that a group of files are related.
+[^code-1]: 不幸的是你不能在 `R/` 中使用子目录。
+    下一个最好的办法是使用公共前缀，例如 `abc-*.R`，来表示一组文件是相关的。
 
-The file name should be meaningful and convey which functions are defined within.
-While you're free to arrange functions into files as you wish, the two extremes are bad: don't put all functions into one file and don't put each function into its own separate file.
-This advice should inform your general policy, but there are exceptions to every rule.
-If a specific function is very large or has lots of documentation, it can make sense to give it its own file, named after the function.
-More often, a single `.R` file will contain multiple function definitions: such as a main function and its supporting helpers, a family of related functions, or some combination of the two.
+文件名应该有意义并传达其中定义了哪些功能。
+虽然您可以随意将函数安排到文件中，但有两个极端是不好的：不要将所有函数放入一个文件中，也不要将每个函数放入其自己的单独文件中。
+该建议应告知您的一般政策，但每条规则都有例外。
+如果一个特定的函数非常大或有很多文档，给它一个自己的文件，以函数命名是有意义的。
+更常见的是，单个 `.R` 文件将包含多个函数定义：例如一个主函数及其辅助函数、一系列相关函数或两者的某种组合。
 
-@tbl-putting-functions-in-files presents some examples from the actual source of the [tidyr package](http://tidyr.tidyverse.org/) at version 1.1.2.
-There are some departures from the hard-and-fast rules given above, which illustrates that there's a lot of room for judgment here.
+@tbl-putting-functions-in-files 展示了 [tidyr package](http://tidyr.tidyverse.org/)  1.1.2 版的实际来源中的一些示例。
+与上面给出的硬性规定有一些偏差，这说明这里有很大的判断空间。
 
 ```{r include = FALSE}
 library(tidyverse)
@@ -59,23 +60,24 @@ knitr::kable(dat)
 ```
 
 ::: callout-tip
-Another file you often see in the wild is `R/utils.R`.
-This is a common place to define small utilities that are used inside multiple package functions.
-Since they serve as helpers to multiple functions, placing them in `R/utils.R` makes them easier to re-discover when you return to your package after a long break.
 
-Bob Rudis assembled a collection of such files and did some analysis in the post [Dissecting R Package "Utility Belts"](https://rud.is/b/2018/04/08/dissecting-r-package-utility-belts/).
+您经常看到的另一个文件是 `R/utils.R`。
+这是定义在多个包函数中使用的小型实用程序的常见位置。
+由于它们充当多个函数的 helpers，将它们放在 `R/utils.R` 中可以让您在经过长时间后返回包时更容易重新发现它们。
+
+Bob Rudis 汇集了此类文件，并在后文 [Dissecting R Package “Utility Belts”](https://rud.is/b/2018/04/08/dissecting-r-package-utility-belts/) 中进行了一些分析。
 :::
 
-If it's very hard to predict which file a function lives in, that suggests it's time to separate your functions into more files or reconsider how you are naming your functions and/or files.
+如果很难预测函数位于哪个文件中，则表明是时候将函数分成更多文件或重新考虑如何命名函数和/或文件了。
 
 ::: callout-tip
 ## RStudio
 
-The organisation of functions within files is less important in RStudio, which offers two ways to jump to the definition of a function:
+文件中函数的组织在 RStudio 中不太重要，它提供了两种跳转到函数定义的方法：
 
--   Press Ctrl + `.` (the period) to bring up the *Go to File/Function* tool, as shown in @fig-go-to-file-function, then start typing the name.
-    Keep typing to narrow the list and eventually pick a function (or file) to visit.
-    This works for both functions and files in your project.
+-   按 Ctrl + `.`（句号）调出 *Go to File/Function* 工具，如 @fig-go-to-file-function 所示，然后开始输入名称。
+    继续键入以缩小列表并最终选择要访问的函数（或文件）。
+    这适用于项目中的函数和文件。
 
     ```{r}
     #| label: fig-go-to-file-function
@@ -89,39 +91,41 @@ The organisation of functions within files is less important in RStudio, which o
     knitr::include_graphics("images/file-finder.png", dpi = 220)
     ```
 
--   With your cursor in a function name or with a function name selected, press F2.
-    This works for functions defined in your package or in another package.
+-   将光标放在函数名称上或选中函数名称后，按 F2。
+    这适用于在您的包或另一个包中定义的函数。
 
-After navigating to a function with one of these methods, return to where you started by clicking the back arrow at the top-left of the editor (![](images/arrows.png){width="33" height="16"}) or by pressing Ctrl + F9 (Windows & Linux) or Cmd + F9 (macOS).
+使用其中一种方法导航到函数后，通过单击编辑器左上角的后退箭头 (![](images/arrows.png){width="33" height="16"}) 或按 Ctrl + F9（Windows 和 Linux）或 Cmd + F9（macOS）返回到开始的位置。
 :::
+
 
 ## Fast feedback via `load_all()` {#sec-code-load-all}
 
-As you add or modify functions defined in files below `R/`, you will naturally want to try them out.
-We want to reiterate our strong recommendation to use `devtools::load_all()` to make them available for interactive exploration instead of, for example, `source()`ing files below `R/`.
-The main coverage of `load_all()` is in @sec-workflow101-load-all and `load_all()` also shows up as one of the natural development tasks in @sec-whole-game-load-all.
-The importance of `load_all()` in the testthat workflow is explained in @sec-testing-design-tension.
-Compared to the alternatives, `load_all()` helps you to iterate more quickly and provides an excellent approximation to the namespace regime of an installed package.
+当您添加或修改在 `R/` 下的文件中定义的函数时，您自然会想要尝试它们。
+我们想重申我们强烈建议使用 `devtools::load_all()` 来使它们可用于交互式探索，而不是使用例如 `R/` 下的 `source()`ing 文件。
+`load_all()` 的主要内容在 @sec-workflow101-load-all 中，`load_all()` 也作为自然开发任务之一出现在 @sec-whole-game-load-all 中。
+`load_all()` 在 testthat 工作流中的重要性在 @sec-testing-design-tension 中进行了解释。
+与备选方案相比，`load_all()` 可帮助您更快地进行迭代，并提供对已安装包的命名空间机制的出色近似。
+
 
 ## Code style
 
-We recommend following the tidyverse style guide (<https://style.tidyverse.org>), which goes into much more detail than we can here.
-Its format also allows it to be a more dynamic document than this book.
+我们建议遵循 tidyverse 风格指南 (<https://style.tidyverse.org>)，它比我们在这里介绍的更详细。
+它的格式也使其成为比本书更具活力的文档。
 
-Although the style guide explains the "what" and the "why", another important decision is *how* to enforce a specific code style.
-For this we recommend the styler package (<https://styler.r-lib.org>); its default behaviour enforces the tidyverse style guide.
-There are many ways to apply styler to your code, depending on the context:
+尽管风格指南解释了“什么”和“为什么”，另一个重要的决定是如何实施特定的代码风格。
+为此，我们推荐 styler 包 (<https://styler.r-lib.org>)；它的默认行为强制执行 tidyverse 风格指南。
+有多种方法可以将 styler 应用于您的代码，具体取决于上下文：
 
--   `styler::style_pkg()` restyles an entire R package.
--   `styler::style_dir()` restyles all files in a directory.
--   `usethis::use_tidy_style()` is wrapper that applies one of the above functions depending on whether the current project is an R package or not.
--   `styler::style_file()` restyles a single file.
--   `styler::style_text()` restyles a character vector.
+-   `styler::style_pkg()` 重新设置整个 R 包的样式。
+-   `styler::style_dir()` 重新设置目录中所有文件的样式。
+-   `usethis::use_tidy_style()` 是根据当前项目是否为 R 包应用上述功能之一的包装器。
+-   `styler::style_file()` 重新设置单个文件的样式。
+-   `styler::style_file()` 重新设置字符向量的样式。
 
 ::: callout-tip
 ## RStudio
 
-When styler is installed, the RStudio Addins menu will offer several additional ways to style code:
+安装 styler 后，RStudio Addins 菜单将提供几种额外的样式代码方式：
 
 -   the active selection
 -   the active file
@@ -129,54 +133,53 @@ When styler is installed, the RStudio Addins menu will offer several additional 
 :::
 
 ::: callout-warning
-If you don't use Git or another version control system, applying a function like `styler::style_pkg()` is nerve-wracking and somewhat dangerous, because you lack a way to see exactly what changed and to accept/reject such changes in a granular way.
+如果您不使用 Git 或其他版本控制系统，那么应用像 `styler::style_pkg()` 这样的函数会很伤脑筋，而且有些危险，因为您无法准确查看更改内容并接受/拒绝此类更改颗粒状的方式。
 :::
 
-The styler package can also be integrated with various platforms for hosting source code and doing continuous integration.
-For example, the tidyverse packages use a GitHub Action that restyles a package when triggered by a special comment (`/style`) on a pull request.
-This allows maintainers to focus on reviewing the substance of the pull request, without having to nitpick small issues of whitespace or indentation[^code-2][^code-3]
-.
+styler 包还可以与各种平台集成，用于托管源代码和进行持续集成。
+例如，tidyverse 包使用 GitHub 操作，当拉取请求中的特殊评论 (`/style`) 触发时，该操作会重新设置包的样式。
+这允许维护者专注于审查拉取请求的实质内容，而不必挑剔空白或缩进的小问题[^code-2][^code-3]。
 
-[^code-2]: See the [Commands workflow](https://github.com/r-lib/actions/tree/master/examples#commands-workflow) in the [GitHub Actions for the R language](https://github.com/r-lib/actions) repository.
+[^code-2]: 请参阅 [GitHub Actions for the R language](https://github.com/r-lib/actions) repository 中的 [Commands workflow](https://github.com/r-lib/actions/tree/master/examples#commands-workflow)。
 
-[^code-3]: The [Robot Pedantry, Human Empathy](https://mikemcquaid.com/2018/06/05/robot-pedantry-human-empathy/) blog post by Mike McQuaid does an excellent job summarizing the benefit of automating tasks like code re-styling.
+[^code-3]: [Robot Pedantry, Human Empathy](https://mikemcquaid.com/2018/06/05/robot-pedantry-human-empathy/) 博客文章出色地总结了代码重新设计等自动化任务的好处。
 
 ## Understand when code is executed {#sec-code-when-executed}
 
-Up until now, you've probably been writing **scripts**, R code saved in a file that you execute interactively, perhaps using an IDE and/or `source()`, or noninteractively via `Rscript`.
-There are two main differences between code in scripts and packages:
+到目前为止，您可能一直在编写脚本，R 代码保存在您交互式执行的文件中，可能使用 IDE 和/或 `source()`，或者通过 `Rscript` 非交互式执行。
+脚本和包中的代码之间有两个主要区别：
 
--   In a script, code is run ... when you run it!
-    The awkwardness of this statement reflects that it's hard to even think about this issue with a script.
-    However, we must, in order to appreciate that the code in a package is run **when the package is built**.
-    This has big implications for how you write the code below `R/`: package code should only create objects, the vast majority of which will be functions.
+-   在脚本中，代码运行 ... 当你运行它的时候！
+    这种说法的尴尬反映了用剧本来思考这个问题是很困难的。
+    但是，我们必须了解包中的代码是在构建包时运行的。
+    这对你如何编写 `R/` 下的代码有很大的影响：包代码应该只创建对象，其中绝大多数是函数。
 
--   Functions in your package will be used in situations that you didn't imagine.
-    This means your functions need to be thoughtful in the way that they interact with the outside world.
+-   你的包中的函数将在你没有想象到的情况下使用。
+    这意味着您的函数在与外界交互的方式上需要深思熟虑。
 
-We expand on the first point here and the second in the next section.
-These topics are also illustrated concretely in @sec-package-within-build-time-run-time.
+我们在这里扩展第一点，在下一节中扩展第二点。
+这些主题也在 @sec-package-within-build-time-run-time 中具体说明。
 
-When you `source()` a script, every line of code is executed and the results are immediately made available.
-Things are different with package code, because it is loaded in two steps.
-When the binary package is built (often, by CRAN) all the code in `R/` is executed and the results are saved.
-When you attach a package with `library()`, these cached results are re-loaded and certain objects (mostly functions) are made available for your use.
-The full details on what it means for a package to be in binary form are given in @sec-structure-binary.
-We refer to the creation of the binary package as (binary) "build time" and, specifically, we mean when `R CMD INSTALL --build` is run.
-(You might think that this is what `R CMD build` does, but that actually makes a bundled package, a.k.a. a "source tarball".) For macOS and Windows users of CRAN packages, build time is whenever CRAN built the binary package for their OS.
-For those who install packages from source, build time is essentially when they (built and) installed the package.
+当你 `source()` 一个脚本时，每一行代码都会被执行，结果会立即可用。
+包代码的情况不同，因为它是分两步加载的。
+当构建二进制包时（通常由 CRAN），`R/` 中的所有代码都会被执行并保存结果。
+当您使用 `library()` 附加一个包时，这些缓存的结果将被重新加载，并且某些对象（主要是函数）可供您使用。
+@sec-structure-binary 中给出了二进制形式的包的含义的完整详细信息。
+我们将二进制包的创建称为（binary）“构建时间”，具体来说，我们指的是 `R CMD INSTALL --build` 运行时。
+（您可能认为这就是 `R CMD build` 所做的，但实际上它生成了一个捆绑包，也就是"source tarball"。）对于 CRAN 包的 macOS 和 Windows 用户，构建时间是 CRAN 为其操作系统构建二进制包时。
+对于那些从源代码安装包的人来说，构建时间本质上是他们（构建和）安装包的时间。
 
-Consider the assignment `x <- Sys.time()`.
-If you put this in a script, `x` tells you when the script was `source()`d.
-But if you put that same code at the top-level in a package, `x` tells you when the package binary was *built*.
-In @sec-package-within-build-time-run-time, we show a complete example of this in the context of forming timestamps inside a package.
+考虑赋值 `x <- Sys.time()`。
+如果你把它放在脚本中，`x` 会告诉你脚本何时是 `source()`d。
+但是，如果您将相同的代码放在包的顶层，`x` 会告诉您包二进制文件的构建时间。
+在 @sec-package-within-build-time-run-time 中，我们展示了在包内形成时间戳的上下文中的完整示例。
 
-The main takeaway is this:
+主要内容是：
 
-> Any R code outside of a function is suspicious and should be carefully reviewed.
+> 函数之外的任何 R 代码都是可疑的，应该仔细检查。
 
-We explore a few real-world examples below that show how easy it is to get burned by this "build time vs. load time" issue.
-Luckily, once you diagnose this problem, it is generally not difficult to fix.
+我们在下面探索了一些真实世界的例子，这些例子展示了这个“构建时间与加载时间”问题是多么容易被烧毁。
+幸运的是，一旦您诊断出此问题，通常不难解决。
 
 ### Example: A path returned by `system.file()`
 
