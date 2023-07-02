@@ -135,7 +135,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div class="sidebar-title mb-0 py-0">
       <a href="./">R Packages (2e)</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/hadley/r-pkgs/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/zhenghu159/r-pkgs-zh-cn" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
   <div class="quarto-reader-toggle-btn">
   <i class="bi"></i>
@@ -377,7 +377,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#package-code-is-different" id="toc-package-code-is-different" class="nav-link" data-scroll-target="#package-code-is-different"><span class="toc-section-number">5.8.3</span>  Package code is different</a></li>
   </ul>
 </li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/hadley/r-pkgs/edit/main/package-within.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/hadley/r-pkgs/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/zhenghu159/r-pkgs-zh-cn/edit/main/package-within.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/zhenghu159/r-pkgs-zh-cn/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -407,19 +407,19 @@ Unused ideas for little data cleaning tasks:
 
 * using the degree symbol properly with unicode escape sequence
 -->
-<p>This part of the book ends the same way it started, with the development of a small toy package. <a href="#sec-whole-game"><span class="quarto-unresolved-ref">sec-whole-game</span></a> established the basic mechanics, workflow, and tooling of package development, but said practically nothing about the R code inside the package. This chapter focuses primarily on the package’s R code and how it differs from R code in a script.</p>
-<p>Starting with a data analysis script, you learn how to find the package that lurks within. You’ll isolate and then extract reusable data and logic from the script, put this into an R package, and then use that package in a much simplified script. We’ve included a few rookie mistakes along the way, in order to highlight special considerations for the R code inside a package.</p>
-<p>Note that the section headers incorporate the NATO phonetic alphabet (alfa, bravo, etc.) and have no specific meaning. They are just a convenient way to mark our progress towards a working package. It is fine to follow along just by reading and this chapter is completely self-contained, i.e.&nbsp;it’s not a prerequisite for material later in the book. But if you wish to see the state of specific files along the way, they can be found in the <a href="https://github.com/hadley/r-pkgs/tree/main/package-within-files">source files for the book</a>.</p>
+<p>本书的这一部分以与开始相同的方式结束，开发了一个小玩具包。 <a href="whole-game.html"><span>Chapter&nbsp;1</span></a> 建立了包开发的基本机制、工作流程和工具，但几乎没有提及包内的 R 代码。 本章主要关注包的 R 代码以及它与脚本中的 R 代码有何不同。</p>
+<p>从数据分析脚本开始，您将学习如何找到隐藏在其中的包。 您将从脚本中分离并提取可重用的数据和逻辑，将其放入 R 包中，然后在简化得多的脚本中使用该包。 我们在此过程中包含了一些菜鸟错误，以突出包内 R 代码的特殊注意事项。</p>
+<p>请注意，节标题包含北约音标（alfa、bravo 等），没有特定含义。 它们只是一种方便的方式来标记我们在工作包方面取得的进展。 仅通过阅读就可以跟进，并且本章是完全独立的，即它不是本书后面材料的先决条件。 但是，如果您希望在此过程中查看特定文件的状态，可以在 <a href="https://github.com/hadley/r-pkgs/tree/main/package-within-files">source files for the book</a> 中找到它们。</p>
 <section id="alfa-a-script-that-works" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="alfa-a-script-that-works">
 <span class="header-section-number">5.1</span> Alfa: a script that works</h2>
 <!--
 There's quite a bit of ugliness and awkwardness around paths here. But I'm not convinced it's worth it to do this properly, whatever that would even mean here.
 -->
-<p>Let’s consider <code>data-cleaning.R</code>, a fictional data analysis script for a group that collects reports from people who went for a swim:</p>
+<p>让我们考虑一下 <code>data-cleaning.R</code>，这是一个虚构的数据分析脚本，用于收集游泳者的报告：</p>
 <blockquote class="blockquote">
-<p>Where did you swim and how hot was it outside?</p>
+<p>你在哪里游泳，外面有多热？</p>
 </blockquote>
-<p>Their data usually comes as a CSV file, such as <code>swim.csv</code>:</p>
+<p>他们的数据通常以 CSV 文件的形式出现，例如 <code>swim.csv</code>：</p>
 <div class="cell">
 <pre><code>name,where,temp
 Adam,beach,95
@@ -428,7 +428,7 @@ Cora,seashore,28
 Dale,beach,85
 Evan,seaside,31</code></pre>
 </div>
-<p><code>data-cleaning.R</code> begins by reading <code>swim.csv</code> into a data frame:</p>
+<p><code>data-cleaning.R</code> 首先将 <code>swim.csv</code> 读取到数据框中：</p>
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">infile</span> <span class="op">&lt;-</span> <span class="st">"swim.csv"</span></span>
 <span><span class="op">(</span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">infile</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -441,14 +441,14 @@ Evan,seaside,31</code></pre>
 #&gt; 4 Dale    beach   85
 #&gt; 5 Evan  seaside   31</code></pre>
 </div>
-<p>They then classify each observation as using American (“US”) or British (“UK”) English, based on the word chosen to describe the sandy place where the ocean and land meet. The <code>where</code> column is used to build the new <code>english</code> column.</p>
+<p>然后，他们根据选择用来描述海洋和陆地交汇处的沙地的词，将每个观察结果分类为使用美式（“US”）或英式（“UK”）英语。 <code>where</code> 列用于构建新的 <code>english</code> 列。</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span><span class="op">$</span><span class="va">english</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">where</span> <span class="op">==</span> <span class="st">"beach"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"US"</span></span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">english</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">where</span> <span class="op">==</span> <span class="st">"coast"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"US"</span></span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">english</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">where</span> <span class="op">==</span> <span class="st">"seashore"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"UK"</span></span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">english</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">where</span> <span class="op">==</span> <span class="st">"seaside"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"UK"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Sadly, the temperatures are often reported in a mix of Fahrenheit and Celsius. In the absence of better information, they guess that Americans report temperatures in Fahrenheit and therefore those observations are converted to Celsius.</p>
+<p>遗憾的是，温度通常以华氏度和摄氏度的混合形式报告。 在没有更好的信息的情况下，他们猜测美国人报告的温度是华氏度，因此这些观测值被转换为摄氏度。</p>
 <div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span><span class="op">$</span><span class="va">temp</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">english</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">temp</span><span class="op">[</span><span class="va">dat</span><span class="op">$</span><span class="va">english</span> <span class="op">==</span> <span class="st">"US"</span><span class="op">]</span> <span class="op">-</span> <span class="fl">32</span><span class="op">)</span> <span class="op">*</span> <span class="fl">5</span><span class="op">/</span><span class="fl">9</span></span>
 <span><span class="va">dat</span></span>
@@ -459,15 +459,15 @@ Evan,seaside,31</code></pre>
 <span><span class="co">#&gt; 4 Dale    beach 29.4      US</span></span>
 <span><span class="co">#&gt; 5 Evan  seaside 31.0      UK</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Finally, this cleaned (cleaner?) data is written back out to a CSV file. They like to capture a timestamp in the filename when they do this<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>最后，这个清理过（更干净？）的数据被写回 CSV 文件。 他们喜欢在执行此操作时在文件名中捕获时间戳<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>。</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">now</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">timestamp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">now</span>, <span class="st">"%Y-%B-%d_%H-%M-%S"</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">outfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">timestamp</span>, <span class="st">"_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">sub</a></span><span class="op">(</span><span class="st">"(.*)([.]csv$)"</span>, <span class="st">"\\1_clean\\2"</span>, <span class="va">infile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-六月-19_19-44-49_swim_clean.csv"</span></span>
+<span><span class="co">#&gt; [1] "2023-七月-02_15-54-30_swim_clean.csv"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">dat</span>, file <span class="op">=</span> <span class="va">outfile</span>, quote <span class="op">=</span> <span class="cn">FALSE</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here is <code>data-cleaning.R</code> in its entirety:</p>
+<p>这是 <code>data-cleaning.R</code> 的全部内容：</p>
 <!--
 Any edits to the code shown above must be manually transferred to this file.
 -->
@@ -488,12 +488,12 @@ Any edits to the code shown above must be manually transferred to this file.
 <span><span class="op">(</span><span class="va">outfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">timestamp</span>, <span class="st">"_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">sub</a></span><span class="op">(</span><span class="st">"(.*)([.]csv$)"</span>, <span class="st">"\\1_clean\\2"</span>, <span class="va">infile</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">dat</span>, file <span class="op">=</span> <span class="va">outfile</span>, quote <span class="op">=</span> <span class="cn">FALSE</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Even if your typical analytical tasks are quite different, hopefully you see a few familiar patterns here. It’s easy to imagine that this group does very similar pre-processing of many similar data files over time. Their analyses can be more efficient and consistent if they make these standard data maneuvers available to themselves as functions in a package, instead of inlining the same data and logic into dozens or hundreds of data ingest scripts.</p>
+<p>即使您的典型分析任务非常不同，希望您在这里看到一些熟悉的模式。 很容易想象，随着时间的推移，这个小组对许多相似的数据文件进行了非常相似的预处理。 如果他们将这些标准数据操作作为包中的函数提供给他们自己使用，而不是将相同的数据和逻辑内联到几十个或数百个数据摄取脚本中，他们的分析就会更加高效和一致。</p>
 </section><section id="bravo-a-better-script-that-works" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="bravo-a-better-script-that-works">
 <span class="header-section-number">5.2</span> Bravo: a better script that works</h2>
-<p>The package that lurks within the original script is actually pretty hard to see! It’s obscured by a few suboptimal coding practices, such as the use of repetitive copy/paste-style code and the mixing of code and data. Therefore a good first step is to refactor this code, isolating as much data and logic as possible in proper objects and functions, respectively.</p>
-<p>This is also a good time to introduce the use of some add-on packages, for several reasons. First, we would actually use the tidyverse for this sort of data wrangling. Second, many people use add-on packages in their scripts, so it is good to see how add-on packages are handled inside a package.</p>
-<p>Here’s the new and improved version of the script.</p>
+<p>隐藏在原始脚本中的包实际上很难看到！ 它被一些次优的编码实践所掩盖，例如使用重复的复制/粘贴式代码以及代码和数据的混合。 因此，好的第一步是重构此代码，分别在适当的对象和函数中隔离尽可能多的数据和逻辑。</p>
+<p>出于几个原因，这也是介绍一些附加包的使用的好时机。 首先，我们实际上会使用 tidyverse 进行此类数据整理。 其次，许多人在他们的脚本中使用附加包，因此很高兴了解如何在包内处理附加包。</p>
+<p>这是脚本的新改进版本。</p>
 <div class="cell" data-file="package-within-files/bravo/data-cleaning.R">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
@@ -524,18 +524,18 @@ Any edits to the code shown above must be manually transferred to this file.
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu">outfile_path</span><span class="op">(</span><span class="va">infile</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The key changes to note are:</p>
+<p>需要注意的主要变化是：</p>
 <ul>
-<li>We are using functions from tidyverse packages (specifically from readr and dplyr) and we make them available with <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code>.</li>
-<li>The map between different “beach” words and whether they are considered to be US or UK English is now isolated in a lookup table, which lets us create the <code>english</code> column in one go with a <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code>. This lookup table makes the mapping easier to comprehend and would be much easier to extend in the future with new “beach” words.</li>
+<li>我们正在使用 tidyverse 包中的函数（特别是来自 readr 和 dplyr 的函数），并且我们通过 <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code> 提供它们。</li>
+<li>不同 “beach” 单词之间的映射以及它们被认为是美国英语还是英国英语现在被隔离在一个查找表中，这让我们可以使用 <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join()</a></code> 一次性创建英语列。 这个查找表使映射更容易理解，并且将来更容易用新的 “beach” 词进行扩展。</li>
 <li>
-<code>f_to_c()</code>, <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code>, and <code>outfile_path()</code> are new helper functions that hold the logic for converting temperatures and forming the timestamped output file name.</li>
+<code>f_to_c()</code>、<code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> 和 <code>outfile_path()</code> 是新的辅助函数，它们包含转换温度和形成带时间戳的输出文件名的逻辑。</li>
 </ul>
-<p>It’s getting easier to recognize the reusable bits of this script, i.e.&nbsp;the bits that have nothing to do with a specific input file, like <code>swim.csv</code>. This sort of refactoring often happens naturally on the way to creating your own package, but if it does not, it’s a good idea to do this intentionally.</p>
+<p>识别此脚本的可重用位变得越来越容易，即与特定输入文件无关的位，如 <code>swim.csv</code>。 这种重构通常在创建您自己的包的过程中自然发生，但如果没有发生，最好有意这样做。</p>
 </section><section id="charlie-a-separate-file-for-helper-functions" class="level2" data-number="5.3"><h2 data-number="5.3" class="anchored" data-anchor-id="charlie-a-separate-file-for-helper-functions">
 <span class="header-section-number">5.3</span> Charlie: a separate file for helper functions</h2>
-<p>A typical next step is to move reusable data and logic out of the analysis script and into one or more separate files. This is a conventional opening move, if you want to use these same helper files in multiple analyses.</p>
-<p>Here is the content of <code>beach-lookup-table.csv</code>:</p>
+<p>典型的下一步是将可重用数据和逻辑从分析脚本中移出，并移到一个或多个单独的文件中。 如果您想在多个分析中使用这些相同的帮助文件，这是一个常规的开场白。</p>
+<p>以下是 <code>beach-lookup-table.csv</code> 的内容：</p>
 <div class="cell">
 <pre><code>where,english
 beach,US
@@ -543,7 +543,7 @@ coast,US
 seashore,UK
 seaside,UK</code></pre>
 </div>
-<p>Here is the content of <code>cleaning-helpers.R</code>:</p>
+<p>下面是 <code>cleaning-helpers.R</code> 的内容：</p>
 <div class="cell" data-file="package-within-files/charlie/cleaning-helpers.R">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
@@ -567,8 +567,8 @@ seaside,UK</code></pre>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/savehistory.html">timestamp</a></span><span class="op">(</span><span class="va">now</span><span class="op">)</span>, <span class="st">"_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">sub</a></span><span class="op">(</span><span class="st">"(.*)([.]csv$)"</span>, <span class="st">"\\1_clean\\2"</span>, <span class="va">infile</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’ve added some high-level helper functions, <code>localize_beach()</code> and <code>celsify_temp()</code>, to the pre-existing helpers (<code>f_to_c()</code>, <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code>, and <code>outfile_path()</code>).</p>
-<p>Here is the next version of the data cleaning script, now that we’ve pulled out the helper functions (and lookup table).</p>
+<p>我们已将一些高级帮助函数 <code>localize_beach()</code> 和 <code>celsify_temp()</code> 添加到预先存在的帮助函数（<code>f_to_c()</code>、<code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> 和 <code>outfile_path()</code>）中。</p>
+<p>这是数据清理脚本的下一个版本，现在我们已经提取了帮助函数（和查找表）。</p>
 <div class="cell" data-file="package-within-files/charlie/data-cleaning.R">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"cleaning-helpers.R"</span><span class="op">)</span></span>
@@ -582,35 +582,35 @@ seaside,UK</code></pre>
 <span></span>
 <span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu">outfile_path</span><span class="op">(</span><span class="va">infile</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Notice that the script is getting shorter and, hopefully, easier to read and modify, because repetitive and fussy clutter has been moved out of sight. Whether the code is actually easier to work with is subjective and depends on how natural the “interface” feels for the people who actually preprocess swimming data. These sorts of design decisions are the subject of a separate project: <a href="https://design.tidyverse.org/">design.tidyverse.org</a>.</p>
-<p>Let’s assume the group agrees that our design decisions are promising, i.e.&nbsp;we seem to be making things better, not worse. Sure, the existing code is not perfect, but this is a typical developmental stage when you’re trying to figure out what the helper functions should be and how they should work.</p>
+<p>请注意，脚本变得越来越短，并且希望更易于阅读和修改，因为重复和繁琐的杂乱已经消失了。 代码是否真的更容易使用是主观的，取决于实际预处理游泳数据的人对“界面”的感觉有多自然。 这些类型的设计决策是一个单独项目的主题：<a href="https://design.tidyverse.org/">design.tidyverse.org</a>。</p>
+<p>让我们假设小组同意我们的设计决策是有前途的，即我们似乎正在让事情变得更好，而不是更糟。 当然，现有代码并不完美，但这是一个典型的开发阶段，当您试图弄清楚辅助函数应该是什么以及它们应该如何工作时。</p>
 </section><section id="delta-a-failed-attempt-at-making-a-package" class="level2" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="delta-a-failed-attempt-at-making-a-package">
 <span class="header-section-number">5.4</span> Delta: a failed attempt at making a package</h2>
-<p>While this first attempt to create a package will end in failure, it’s still helpful to go through some common missteps, to illuminate what happens behind the scenes.</p>
-<p>Here are the simplest steps that you might take, in an attempt to convert <code>cleaning-helpers.R</code> into a proper package:</p>
+<p>虽然第一次创建包的尝试将以失败告终，但通过一些常见的失误仍然有助于阐明幕后发生的事情。</p>
+<p>为了将 <code>cleaning-helpers.R</code> 转换为合适的包，您可能会采取以下最简单的步骤：</p>
 <ul>
-<li>Use <code>usethis::create_package("path/to/delta")</code> to scaffold a new R package, with the name “delta”.
+<li>使用 <code>usethis::create_package("path/to/delta")</code> 搭建一个名为 “delta” 的新 R 包。
 <ul>
-<li>This is a good first step!</li>
+<li>这是很好的第一步！</li>
 </ul>
 </li>
-<li>Copy <code>cleaning-helpers.R</code> into the new package, specifically, to <code>R/cleaning-helpers.R</code>.
+<li>将 <code>cleaning-helpers.R</code> 复制到新包中，具体为 <code>R/cleaning-helpers.R</code>。
 <ul>
-<li>This is morally correct, but mechanically wrong in several ways, as we will soon see.</li>
+<li>这在道德上是正确的，但在几个方面在机制上是错误的，我们很快就会看到。</li>
 </ul>
 </li>
-<li>Copy <code>beach-lookup-table.csv</code> into the new package. But where? Let’s try the top-level of the source package.
+<li>将 <code>beach-lookup-table.csv</code> 复制到新包中。但是哪里？让我们试试源码包的顶层。
 <ul>
-<li>This is not going to end well. Shipping data files in a package is a special topic, which is covered in <a href="#sec-data"><span class="quarto-unresolved-ref">sec-data</span></a>.</li>
+<li>这不会有好结果。在包中运送数据文件是一个特殊主题，将在 <a href="data.html"><span>Chapter&nbsp;7</span></a> 中介绍。</li>
 </ul>
 </li>
-<li>Install this package, perhaps using <code><a href="https://devtools.r-lib.org/reference/install.html">devtools::install()</a></code> or via Ctrl + Shift + B (Windows &amp; Linux) or Cmd + Shift + B in RStudio.
+<li>安装此包，可能使用 <code><a href="https://devtools.r-lib.org/reference/install.html">devtools::install()</a></code> 或通过 Ctrl + Shift + B（Windows 和 Linux）或 RStudio 中的 Cmd + Shift + B。
 <ul>
-<li>Despite all of the problems identified above, this actually works! Which is interesting, because we can (try to) use it and see what happens.</li>
+<li>尽管存在上述所有问题，但这确实有效！这很有趣，因为我们可以（尝试）使用它并看看会发生什么。</li>
 </ul>
 </li>
 </ul>
-<p>Here is the next version of the data cleaning script that you hope will run after successfully installing this package (which we’re calling “delta”).</p>
+<p>这是您希望在成功安装此软件包（我们称之为 “delta”）后运行的下一个数据清理脚本版本。</p>
 <div class="cell" data-file="package-within-files/delta-data-cleaning.R">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">delta</span><span class="op">)</span></span>
@@ -624,15 +624,15 @@ seaside,UK</code></pre>
 <span></span>
 <span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu">outfile_path</span><span class="op">(</span><span class="va">infile</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The only change from our previous script is that</p>
+<p>我们之前脚本的唯一变化是</p>
 <div class="cell">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"cleaning-helpers.R"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>has been replaced by</p>
+<p>被替换成了</p>
 <div class="cell">
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">delta</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here’s what actually happens if you install the delta package and try to run the data cleaning script:</p>
+<p>如果您安装 delta 包并尝试运行数据清理脚本，实际会发生以下情况：</p>
 <div class="cell">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">delta</span><span class="op">)</span></span>
@@ -648,24 +648,24 @@ seaside,UK</code></pre>
 <span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_csv</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu">outfile_path</span><span class="op">(</span><span class="va">infile</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error in outfile_path(infile) : could not find function "outfile_path"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>None of the helper functions are actually available for use, even though you call <code><a href="https://rdrr.io/r/base/library.html">library(delta)</a></code>! In contrast to <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>ing a file of helper functions, attaching a package does not dump its functions into the global workspace. By default, functions in a package are only for internal use. You need to export <code>localize_beach()</code>, <code>celsify_temp()</code>, and <code>outfile_path()</code> so your users can call them. In the devtools workflow, we achieve this by putting <code>@export</code> in the special roxygen comment above each function (namespace management is covered in <a href="#sec-dependencies-NAMESPACE-workflow"><span class="quarto-unresolved-ref">sec-dependencies-NAMESPACE-workflow</span></a>), like so:</p>
+<p>即使您调用 <code><a href="https://rdrr.io/r/base/library.html">library(delta)</a></code>，实际上也没有任何帮助函数可供使用！ 与 <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>ing 帮助函数文件相比，附加包不会将其函数转储到全局工作区中。 默认情况下，包中的函数仅供内部使用。 您需要导出 <code>localize_beach()</code>、<code>celsify_temp()</code> 和 <code>outfile_path()</code>，以便您的用户可以调用它们。 在 devtools 工作流程中，我们通过将 <code>@export</code> 放在每个函数上方的特殊 roxygen 注释中来实现这一点（名称空间管理在 <a href="dependencies-in-practice.html#sec-dependencies-NAMESPACE-workflow"><span>Section&nbsp;11.3</span></a> 中介绍），如下所示：</p>
 <div class="cell">
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#' @export</span></span>
 <span><span class="va">celsify_temp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="va">dat</span>, temp <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">english</span> <span class="op">==</span> <span class="st">"US"</span>, <span class="fu">f_to_c</span><span class="op">(</span><span class="va">temp</span><span class="op">)</span>, <span class="va">temp</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>After you add the <code>@export</code> tag to <code>localize_beach()</code>, <code>celsify_temp()</code>, and <code>outfile_path()</code>, you run <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code> to (re)generate the <code>NAMESPACE</code> file, and re-install the delta package. Now when you re-execute the data cleaning script, it works!</p>
-<p>Correction: it <em>sort of</em> works <em>sometimes</em>. Specifically, it works if and only if the working directory is set to the top-level of the source package. From any other working directory, you still get an error:</p>
+<p>在将 <code>@export</code> 标记添加到 <code>localize_beach()</code>、<code>celsify_temp()</code> 和 <code>outfile_path()</code> 之后，运行 <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code> 以（重新）生成 <code>NAMESPACE</code> 文件，并重新安装 delta 包。 现在，当您重新执行数据清理脚本时，它就可以工作了！</p>
+<p>更正：它有时会起作用。 具体来说，当且仅当工作目录设置为源包的顶层时，它才有效。 从任何其他工作目录，您仍然会收到错误消息：</p>
 <div class="cell">
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">localize_beach</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">celsify_temp</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error: 'beach-lookup-table.csv' does not exist in current working directory ('/Users/jenny/tmp').</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The lookup table consulted inside <code>localize_beach()</code> cannot be found. One does not simply dump CSV files into the source of an R package and expect things to “just work”. We will fix this in our next iteration of the package (<a href="#sec-data"><span class="quarto-unresolved-ref">sec-data</span></a> has full coverage of how to include data in a package).</p>
-<p>Before we abandon this initial experiment, let’s also marvel at the fact that you were able to install, attach, and, to a certain extent, use a fundamentally broken package. <code><a href="https://devtools.r-lib.org/reference/load_all.html">devtools::load_all()</a></code> works fine, too! This is a sobering reminder that you should be running <code>R CMD check</code>, probably via <code><a href="https://devtools.r-lib.org/reference/check.html">devtools::check()</a></code>, very often during development. This will quickly alert you to many problems that simple installation and usage does not reveal.</p>
-<p>Indeed, <code>check()</code> fails for this package and you see this:</p>
+<p>找不到在 <code>localize_beach()</code> 内部查询的查找表。 人们不会简单地将 CSV 文件转储到 R 包的源代码中并期望事情“正常工作”。 我们将在包的下一次迭代中解决这个问题（<a href="data.html"><span>Chapter&nbsp;7</span></a> 全面介绍了如何在包中包含数据）。</p>
+<p>在我们放弃这个最初的实验之前，让我们也惊叹于您能够安装、附加并在一定程度上使用一个根本损坏的包这一事实。 <code><a href="https://devtools.r-lib.org/reference/load_all.html">devtools::load_all()</a></code> 也工作正常！ 这是一个发人深省的提醒，您应该在开发过程中经常运行 <code>R CMD check</code>，可能是通过 <code><a href="https://devtools.r-lib.org/reference/check.html">devtools::check()</a></code>。 这将迅速提醒您注意许多简单安装和使用无法揭示的问题。</p>
+<p>事实上，这个包的 <code>check()</code> 失败了，你会看到：</p>
 <pre><code> * installing *source* package ‘delta’ ...
  ** using staged installation
  ** R
@@ -675,21 +675,21 @@ seaside,UK</code></pre>
  Execution halted
  ERROR: lazy loading failed for package ‘delta’
  * removing ‘/Users/jenny/rrr/delta.Rcheck/delta’</code></pre>
-<p>What do you mean “there is no package called ‘tidyverse’”?!? We’re using it, with no problems, in our main script! Also, we’ve already installed and used this package, why can’t <code>R CMD check</code> find it?</p>
-<p>This error is what happens when the strictness of <code>R CMD check</code> meets the very first line of <code>R/cleaning-helpers.R</code>:</p>
+<p>“there is no package called ‘tidyverse’” 是什么意思？ 我们在主脚本中使用它，没有任何问题！ 另外，我们已经安装并使用了这个包，为什么 <code>R CMD check</code> 找不到呢？</p>
+<p>当 <code>R CMD check</code> 的严格性符合 <code>R/cleaning-helpers.R</code> 的第一行时会发生此错误：</p>
 <div class="cell">
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This is <em>not</em> how you declare that your package depends on another package (the tidyverse, in this case). This is <em>also not</em> how you make functions in another package available for use in yours. Dependencies must be declared in <code>DESCRIPTION</code> (and that’s not all). Since we declared no dependencies, <code>R CMD check</code> takes us at our word and tries to install our package with only the base packages available, which means this <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code> call fails. A “regular” installation succeeds, simply because the tidyverse is available in your regular library, which hides this particular mistake.</p>
-<p>To review, copying <code>cleaning-helpers.R</code> to <code>R/cleaning-helpers.R</code>, without further modification, was problematic in (at least) the following ways:</p>
+<p>这不是您声明包依赖于另一个包（在本例中为 tidyverse）的方式。 这也不是您使另一个包中的函数可用于您的包的方式。 依赖关系必须在 <code>DESCRIPTION</code> 中声明（这还不是全部）。 由于我们声明没有依赖关系，<code>R CMD check</code> 相信我们并尝试安装我们的包，只有可用的基础包，这意味着这个 <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code> 调用失败。 “常规”安装成功，仅仅是因为 tidyverse 在您的常规库中可用，它隐藏了这个特定的错误。</p>
+<p>回顾一下，将 <code>cleaning-helpers.R</code> 复制到 <code>R/cleaning-helpers.R</code>，而无需进一步修改，在（至少）以下方面存在问题：</p>
 <ul>
-<li>Does not account for exported vs.&nbsp;non-exported functions.</li>
-<li>The CSV file holding our lookup table cannot be found in the installed package.</li>
-<li>Does not properly declare our dependency on other add-on packages.</li>
+<li>不考虑导出函数与非导出函数。</li>
+<li>在已安装的包中找不到包含查找表的 CSV 文件。</li>
+<li>没有正确声明我们对其他附加包的依赖。</li>
 </ul></section><section id="echo-a-working-package" class="level2" data-number="5.5"><h2 data-number="5.5" class="anchored" data-anchor-id="echo-a-working-package">
 <span class="header-section-number">5.5</span> Echo: a working package</h2>
-<p>We’re ready to make the most minimal version of this package that actually works.</p>
-<p>Here is the new version of <code>R/cleaning-helpers.R</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
+<p>我们已经准备好制作这个包的最小版本。</p>
+<p>这是 <code>R/cleaning-helpers.R</code> 的新版本<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>：</p>
 <div class="cell" data-file="package-within-files/echo/R/cleaning-helpers.R">
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lookup_table</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span></span>
 <span>      <span class="op">~</span><span class="va">where</span>, <span class="op">~</span><span class="va">english</span>,</span>
@@ -719,16 +719,16 @@ seaside,UK</code></pre>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/savehistory.html">timestamp</a></span><span class="op">(</span><span class="va">now</span><span class="op">)</span>, <span class="st">"_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">sub</a></span><span class="op">(</span><span class="st">"(.*)([.]csv$)"</span>, <span class="st">"\\1_clean\\2"</span>, <span class="va">infile</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’ve gone back to defining the <code>lookup_table</code> with R code, since the initial attempt to read it from CSV created some sort of filepath snafu. This is OK for small, internal, static data, but remember to see <a href="#sec-data"><span class="quarto-unresolved-ref">sec-data</span></a> for more general techniques for storing data in a package.</p>
-<p>All of the calls to tidyverse functions have now been qualified with the name of the specific package that actually provides the function, e.g.&nbsp;<code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code>. There are other ways to access functions in another package, explained in <a href="#sec-dependencies-in-imports"><span class="quarto-unresolved-ref">sec-dependencies-in-imports</span></a>, but this is our recommended default. It is also our strong recommendation that no one depend on the tidyverse meta-package in a package<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Instead, it is better to identify the specific package(s) you actually use. In this case, the package only uses dplyr.</p>
-<p>The <code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code> call is gone and instead we declare the use of dplyr in the <code>Imports</code> field of <code>DESCRIPTION</code>:</p>
+<p>我们已经回到使用 R 代码定义 <code>lookup_table</code>，因为最初尝试从 CSV 读取它会造成某种文件路径混乱。 这对于小的、内部的、静态的数据是可以的，但是请记住参阅 <a href="data.html"><span>Chapter&nbsp;7</span></a> 以了解在包中存储数据的更通用的技术。</p>
+<p>现在，所有对 tidyverse 函数的调用都已使用实际提供该函数的特定包的名称进行限定，例如 <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">dplyr::mutate()</a></code>。 还有其他方法可以访问另一个包中的函数，如 <a href="dependencies-in-practice.html#sec-dependencies-in-imports"><span>Section&nbsp;11.4</span></a> 所述，但这是我们推荐的默认方法。 我们也强烈建议没有人依赖 package 中的 tidyverse meta-package<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>。 相反，最好确定您实际使用的特定包。 在这种情况下，包只使用 dplyr。</p>
+<p><code><a href="https://tidyverse.tidyverse.org">library(tidyverse)</a></code> 调用消失了，取而代之的是我们在 <code>DESCRIPTION</code> 的 <code>Imports</code> 字段中声明使用 <code>dplyr</code>：</p>
 <pre><code>Package: echo
 (... other lines omitted ...)
 Imports: 
     dplyr</code></pre>
-<p>This, together with the use of namespace-qualified calls, like <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">dplyr::left_join()</a></code>, constitutes a valid way to use another package within yours. The metadata conveyed via <code>DESCRIPTION</code> is covered in <a href="#sec-description"><span class="quarto-unresolved-ref">sec-description</span></a>.</p>
-<p>All of the user-facing functions have an <code>@export</code> tag in their roxygen comment, which means that <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code> adds them correctly to the <code>NAMESPACE</code> file. Note that <code>f_to_c()</code> is currently only used internally, inside <code>celsify_temp()</code>, so it is not exported (likewise for <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code>).</p>
-<p>This version of the package can be installed, used, AND it technically passes <code>R CMD check</code>, though with 1 warning and 1 note.</p>
+<p>这与使用命名空间限定的调用（如 <code><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">dplyr::left_join()</a></code>）一起，构成了在您的包中使用另一个包的有效方法。 通过 <code>DESCRIPTION</code> 传送的 metadata 在 <a href="description.html"><span>Chapter&nbsp;9</span></a> 中介绍。</p>
+<p>所有面向用户的函数在其 roxygen 注释中都有一个 <code>@export</code> 标记，这意味着 <code><a href="https://devtools.r-lib.org/reference/document.html">devtools::document()</a></code> 将它们正确添加到 <code>NAMESPACE</code> 文件中。 请注意，<code>f_to_c()</code> 目前仅在内部使用，在 <code>celsify_temp()</code> 内部，因此不会导出（对于 <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> 也是如此）。</p>
+<p>这个版本的包可以安装、使用，并且它在技术上通过了 <code>R CMD check</code>，尽管有 1 warning 和 1 note。</p>
 <pre><code>* checking for missing documentation entries ... WARNING
 Undocumented code objects:
   ‘celsify_temp’ ‘localize_beach’ ‘outfile_path’
@@ -741,7 +741,7 @@ celsify_temp: no visible binding for global variable ‘english’
 celsify_temp: no visible binding for global variable ‘temp’
 Undefined global functions or variables:
   english temp</code></pre>
-<p>The “no visible binding” note is a peculiarity of using dplyr and unquoted variable names inside a package, where the use of bare variable names (<code>english</code> and <code>temp</code>) looks suspicious. You can add either of these lines to any file below <code>R/</code> to eliminate this note (such as the package-level documentation file described in <a href="#sec-man-package-doc"><span class="quarto-unresolved-ref">sec-man-package-doc</span></a>):</p>
+<p>“no visible binding” note 是在包内使用 dplyr 和不带引号的变量名的一个特点，其中使用裸变量名（<code>english</code> 和 <code>temp</code>）看起来很可疑。 您可以将这些行中的任何一行添加到 <code>R/</code> 下面的任何文件中以删除此注释（例如 <a href="man.html#sec-man-package-doc"><span>Section&nbsp;16.7</span></a> 中描述的包级文档文件）：</p>
 <div class="cell">
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># option 1 (then you should also put utils in Imports)</span></span>
 <span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/globalVariables.html">globalVariables</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"english"</span>, <span class="st">"temp"</span><span class="op">)</span><span class="op">)</span></span>
@@ -749,11 +749,11 @@ Undefined global functions or variables:
 <span><span class="co"># option 2</span></span>
 <span><span class="va">english</span> <span class="op">&lt;-</span> <span class="va">temp</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We’re seeing that it can be tricky to program around a package like dplyr, which makes heavy use of nonstandard evaluation. Behind the scenes, that is the technique that allows dplyr’s end users to use bare (not quoted) variable names. Packages like dplyr prioritize the experience of the typical end user, at the expense of making them trickier to depend on. The two options shown above for suppressing the “no visible binding” note, represent entry-level solutions. For a more sophisticated treatment of these issues, see <code><a href="https://dplyr.tidyverse.org/articles/in-packages.html">vignette("in-packages", package = "dplyr")</a></code> and <code><a href="https://dplyr.tidyverse.org/articles/programming.html">vignette("programming", package = "dplyr")</a></code>.</p>
-<p>The warning about missing documentation is because the exported functions have not been properly documented. This is a valid concern and something you should absolutely address in a real package. You’ve already seen how to create help files with roxygen comments in <a href="#sec-whole-game-document"><span class="quarto-unresolved-ref">sec-whole-game-document</span></a> and we cover this topic thoroughly in <a href="#sec-man"><span class="quarto-unresolved-ref">sec-man</span></a>.</p>
+<p>我们看到围绕像 dplyr 这样大量使用非标准评估的包进行编程可能很棘手。 在幕后，这是允许 dplyr 的最终用户使用裸（未引用）变量名的技术。 像 dplyr 这样的软件包优先考虑典型最终用户的体验，但代价是让他们更难以依赖。 上面显示的两个用于抑制 “no visible binding” note 的选项代表入门级解决方案。 有关这些问题的更复杂处理，请参阅 <code><a href="https://dplyr.tidyverse.org/articles/in-packages.html">vignette("in-packages", package = "dplyr")</a></code> 和 <code><a href="https://dplyr.tidyverse.org/articles/programming.html">vignette("programming", package = "dplyr")</a></code>。</p>
+<p>关于缺少文档的 warning 是因为没有正确记录导出的函数。 这是一个合理的问题，您绝对应该在一个真正的包中解决这个问题。 您已经在 <a href="whole-game.html#sec-whole-game-document"><span>Section&nbsp;1.12</span></a> 中了解了如何创建带有 roxygen 注释的帮助文件，我们将在 <a href="man.html"><span>Chapter&nbsp;16</span></a> 中全面介绍该主题。</p>
 </section><section id="sec-package-within-build-time-run-time" class="level2" data-number="5.6"><h2 data-number="5.6" class="anchored" data-anchor-id="sec-package-within-build-time-run-time">
 <span class="header-section-number">5.6</span> Foxtrot: build time vs.&nbsp;run time</h2>
-<p>The echo package works, which is great, but group members notice something odd about the timestamps:</p>
+<p>echo 包很好用，但小组成员注意到时间戳有些奇怪：</p>
 <div class="cell">
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "2023-03-26 22:48:48 PDT"</span></span>
@@ -761,8 +761,8 @@ Undefined global functions or variables:
 <span><span class="fu">outfile_path</span><span class="op">(</span><span class="st">"INFILE.csv"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "2020-September-03_11-06-33_INFILE_clean.csv"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The datetime in the timestamped filename doesn’t reflect the time reported by the system. In fact, the users claim that the timestamp never seems to change at all! Why is this?</p>
-<p>Recall how we form the filepath for output files:</p>
+<p>带时间戳的文件名中的日期时间不反映系统报告的时间。 事实上，用户声称时间戳似乎永远不会改变！ 为什么是这样？</p>
+<p>回想一下我们是如何形成输出文件的文件路径的：</p>
 <div class="cell">
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">now</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">timestamp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">time</span>, <span class="st">"%Y-%B-%d_%H-%M-%S"</span><span class="op">)</span></span>
@@ -770,10 +770,10 @@ Undefined global functions or variables:
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/savehistory.html">timestamp</a></span><span class="op">(</span><span class="va">now</span><span class="op">)</span>, <span class="st">"_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">sub</a></span><span class="op">(</span><span class="st">"(.*)([.]csv$)"</span>, <span class="st">"\\1_clean\\2"</span>, <span class="va">infile</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The fact that we capture <code>now &lt;- Sys.time()</code> outside of the definition of <code>outfile_path()</code> has probably been vexing some readers for a while. <code>now</code> reflects the instant in time when we execute <code>now &lt;- Sys.time()</code>. In the initial approach, <code>now</code> was assigned when we <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>d <code>cleaning-helpers.R</code>. That’s not ideal, but it was probably a pretty harmless mistake, because the helper file would be <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>d shortly before we wrote the output file.</p>
-<p>But this approach is quite devastating in the context of a package. <code>now &lt;- Sys.time()</code> is executed <strong>when the package is built</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. And never again. It is very easy to assume your package code is re-evaluated when the package is attached or used. But it is not. Yes, the code <em>inside your functions</em> is absolutely run whenever they are called. But your functions – and any other objects created in top-level code below <code>R/</code> – are defined exactly once, at build time.</p>
-<p>By defining <code>now</code> with top-level code below <code>R/</code>, we’ve doomed our package to timestamp all of its output files with the same (wrong) time. The fix is to make sure the <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> call happens at run time.</p>
-<p>Let’s look again at parts of <code>R/cleaning-helpers.R</code>:</p>
+<p>事实上，我们在 <code>outfile_path()</code> 的定义之外捕获了 <code>now &lt;- Sys.time()</code> 可能已经让一些读者烦恼了一段时间。 <code>now</code> 反映了我们执行 <code>now &lt;- Sys.time()</code> 时的时间。 在最初的方法中，现在是在我们 <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>d <code>cleaning-helpers.R</code> 时分配的。 这并不理想，但这可能是一个非常无害的错误，因为帮助文件将在我们编写输出文件之前不久被 <code><a href="https://rdrr.io/r/base/source.html">source()</a></code>d。</p>
+<p>但这种方法在包的上下文中是相当具有破坏性的。 <code>now &lt;- Sys.time()</code> 在构建包时执行<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。 再也不会了。 很容易假设您的包裹代码在附加或使用包裹时被重新评估。 但事实并非如此。 是的，函数中的代码在调用时绝对会运行。 但是您的函数——以及在 <code>R/</code> 下面的顶级代码中创建的任何其他对象——在构建时只定义一次。</p>
+<p>通过在 <code>R/</code> 下使用顶级代码定义 <code>now</code>，我们注定了我们的包会用相同（错误）的时间为其所有输出文件加上时间戳。 解决方法是确保 <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> 调用在运行时发生。</p>
+<p>我们再看一下 <code>R/cleaning-helpers.R</code> 的部分内容：</p>
 <div class="cell">
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lookup_table</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html">tribble</a></span><span class="op">(</span></span>
 <span>      <span class="op">~</span><span class="va">where</span>, <span class="op">~</span><span class="va">english</span>,</span>
@@ -789,8 +789,8 @@ Undefined global functions or variables:
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/savehistory.html">timestamp</a></span><span class="op">(</span><span class="va">now</span><span class="op">)</span>, <span class="st">"_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">sub</a></span><span class="op">(</span><span class="st">"(.*)([.]csv$)"</span>, <span class="st">"\\1_clean\\2"</span>, <span class="va">infile</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>There are four top-level <code>&lt;-</code> assignments in this excerpt. The top-level definitions of the data frame <code>lookup_table</code> and the functions <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> and <code>outfile_path()</code> are correct. It is appropriate that these be defined exactly once, at build time. The top-level definition of <code>now</code>, which is then used inside <code>outfile_path()</code>, is regrettable.</p>
-<p>Here are better versions of <code>outfile_path()</code>:</p>
+<p>这段摘录中有四个顶级 <code>&lt;-</code> 赋值。 数据框 <code>lookup_table</code> 和函数 <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> 和 <code>outfile_path()</code> 的顶级定义是正确的。 这些在构建时只定义一次是合适的。 <code>now</code> 的顶级定义，然后在 <code>outfile_path()</code> 内部使用，令人遗憾。</p>
+<p>以下是 <code>outfile_path()</code> 的更好版本：</p>
 <div class="cell">
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># always timestamp as "now"</span></span>
 <span><span class="va">outfile_path</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">infile</span><span class="op">)</span> <span class="op">{</span></span>
@@ -804,16 +804,16 @@ Undefined global functions or variables:
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">ts</span>, <span class="st">"_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">sub</a></span><span class="op">(</span><span class="st">"(.*)([.]csv$)"</span>, <span class="st">"\\1_clean\\2"</span>, <span class="va">infile</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This illustrates that you need to have a different mindset when defining objects inside a package. The vast majority of those objects should be functions and these functions should generally only use data they create or that is passed via an argument. There are some types of sloppiness that are fairly harmless when a function is defined immediately before its use, but that can be more costly for functions distributed as a package.</p>
+<p>这说明在包内定义对象时需要有不同的思维方式。 这些对象中的绝大多数应该是函数，并且这些函数通常应该只使用它们创建的数据或通过参数传递的数据。 有一些类型的草率在函数使用前立即定义时是相当无害的，但对于作为包分发的函数来说，这种草率的代价可能更高。</p>
 </section><section id="sec-package-within-side-effects" class="level2" data-number="5.7"><h2 data-number="5.7" class="anchored" data-anchor-id="sec-package-within-side-effects">
 <span class="header-section-number">5.7</span> Golf: side effects</h2>
-<p>The timestamps now reflect the current time, but the group raises a new concern. As it stands, the timestamps reflect who has done the data cleaning and which part of the world they’re in. The heart of the timestamp strategy is this format string<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>:</p>
+<p>时间戳现在反映了当前时间，但该小组提出了一个新的问题。 就目前而言，时间戳反映了谁完成了数据清理以及他们在世界的哪个部分。 时间戳策略的核心是这种格式 string<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>：</p>
 <div class="cell">
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%Y-%B-%d_%H-%M-%S"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-六月-19_19-44-50"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; [1] "2023-七月-02_15-54-31"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This formats <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> in such a way that it includes the month <em>name</em> (not number) and the local time<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
-<p><a href="#tbl-timestamps">Table&nbsp;<span class="quarto-unresolved-ref">tbl-timestamps</span></a> shows what happens when such a timestamp is produced by several hypothetical colleagues cleaning some data at exactly the same instant in time.</p>
+<p>这会将 <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> 格式化为包含月份名称（而非数字）和本地时间<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>。</p>
+<p><a href="#tbl-timestamps">Table&nbsp;<span>5.1</span></a> 显示了当这样一个时间戳是由几个假设的同事在完全相同的时间及时清理一些数据时产生的。</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="tbl-timestamps" class="anchored">
@@ -867,8 +867,8 @@ Undefined global functions or variables:
 </div>
 </div>
 </div>
-<p>Note that the month names vary, as does the time, and even the date! The safest choice is to form timestamps with respect to a fixed locale and time zone (presumably the non-geographic choices represented by “Computer World!” above).</p>
-<p>You do some research and learn that you can force a certain locale via <code><a href="https://rdrr.io/r/base/locales.html">Sys.setlocale()</a></code> and force a certain time zone by setting the TZ environment variable. Specifically, we set the LC_TIME component of the locale to “C” and the time zone to “UTC” (Coordinated Universal Time). Here’s your first attempt to improve <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code>:</p>
+<p>请注意，月份名称会有所不同，时间也会有所不同，甚至日期也会有所不同！ 最安全的选择是根据固定的语言环境和时区形成时间戳（大概是上面 “Computer World!” 所代表的非地理选择）。</p>
+<p>您进行了一些研究，了解到可以通过 <code><a href="https://rdrr.io/r/base/locales.html">Sys.setlocale()</a></code> 强制使用特定区域设置，并通过设置 TZ 环境变量强制使用特定时区。 具体来说，我们将语言环境的 LC_TIME 组件设置为 “C”，将时区设置为 “UTC”（协调世界时）。 这是您改进 <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> 的第一次尝试：</p>
 <div class="cell">
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">timestamp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/locales.html">Sys.setlocale</a></span><span class="op">(</span><span class="st">"LC_TIME"</span>, <span class="st">"C"</span><span class="op">)</span></span>
@@ -876,24 +876,24 @@ Undefined global functions or variables:
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="va">time</span>, <span class="st">"%Y-%B-%d_%H-%M-%S"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>But your Brazilian colleague notices that datetimes print differently, before and after she uses <code>outfile_path()</code> from your package:</p>
-<p>Before:</p>
+<p>但是您的巴西同事注意到，在她使用您的包中的 <code>outfile_path()</code> 之前和之后，日期时间打印不同：</p>
+<p>之前：</p>
 <div class="cell">
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%Y-%B-%d_%H-%M-%S"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<pre><code>#&gt; [1] "2023-junho-19_08-44-51"</code></pre>
+<pre><code>#&gt; [1] "2023-julho-02_04-54-33"</code></pre>
 </div>
-<p>After:</p>
+<p>之后：</p>
 <div class="cell">
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">outfile_path</span><span class="op">(</span><span class="st">"INFILE.csv"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-June-19_11-44-50_INFILE_clean.csv"</span></span>
+<span><span class="co">#&gt; [1] "2023-July-02_07-54-31_INFILE_clean.csv"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/format.html">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%Y-%B-%d_%H-%M-%S"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2023-June-19_11-44-51"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#&gt; [1] "2023-July-02_07-54-33"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Notice that her month name switched from Portuguese to English and the time is clearly being reported in a different time zone. The calls to <code><a href="https://rdrr.io/r/base/locales.html">Sys.setlocale()</a></code> and <code><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv()</a></code> inside <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> have made persistent (and very surprising) changes to her R session. This sort of side effect is very undesirable and is extremely difficult to track down and debug, especially in more complicated settings.</p>
-<p>Here are better versions of <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code>:</p>
+<p>请注意，她的月份名称从葡萄牙语切换为英语，而且时间显然是在不同的时区报告的。 在 <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> 中对 <code><a href="https://rdrr.io/r/base/locales.html">Sys.setlocale()</a></code> 和 <code><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv()</a></code> 的调用对她的 R 会话进行了持续（并且非常令人惊讶）的更改。 这种副作用是非常不受欢迎的，并且极难追踪和调试，尤其是在更复杂的设置中。</p>
+<p>以下是 <code><a href="https://rdrr.io/r/utils/savehistory.html">timestamp()</a></code> 的更好版本：</p>
 <div class="cell">
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># use withr::local_*() functions to keep the changes local to timestamp()</span></span>
 <span><span class="va">timestamp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -916,38 +916,38 @@ Undefined global functions or variables:
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>These show various methods to limit the scope of our changes to LC_TIME and the timezone. A good rule of thumb is to make the scope of such changes as narrow as is possible and practical. The <code>tz</code> argument of <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> is the most surgical way to deal with the timezone, but nothing similar exists for LC_TIME. We make the temporary locale modification using the withr package, which provides a very flexible toolkit for temporary state changes. This (and <code><a href="https://rdrr.io/r/base/on.exit.html">base::on.exit()</a></code>) are discussed further in <a href="#sec-code-r-landscape"><span class="quarto-unresolved-ref">sec-code-r-landscape</span></a>. Note that if you use withr as we do above, you would need to list it in <code>DESCRIPTION</code> in <code>Imports</code> (<a href="#sec-dependencies-in-practice"><span class="quarto-unresolved-ref">sec-dependencies-in-practice</span></a>, <a href="#sec-dependencies-tidyverse"><span class="quarto-unresolved-ref">sec-dependencies-tidyverse</span></a>).</p>
-<p>This underscores a point from the previous section: you need to adopt a different mindset when defining functions inside a package. Try to avoid making any changes to the user’s overall state. If such changes are unavoidable, make sure to reverse them (if possible) or to document them explicitly (if related to the function’s primary purpose).</p>
+<p>这些显示了各种方法来限制我们对 LC_TIME 和时区的更改范围。 一个好的经验法则是尽可能缩小此类更改的范围并切实可行。 <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> 的 <code>tz</code> 参数是处理时区的最手术方法，但 LC_TIME 不存在类似的方法。 我们使用 withr 包进行临时区域设置修改，它为临时状态更改提供了一个非常灵活的工具包。 这（和 <code><a href="https://rdrr.io/r/base/on.exit.html">base::on.exit()</a></code>）将在 <a href="code.html#sec-code-r-landscape"><span>Section&nbsp;6.5</span></a> 中进一步讨论。 请注意，如果您像我们上面那样使用 withr，则需要在 <code>Imports</code> 的 <code>DESCRIPTION</code> 中列出它（<a href="dependencies-in-practice.html"><span>Chapter&nbsp;11</span></a>, <a href="dependencies-mindset-background.html#sec-dependencies-tidyverse"><span>Section&nbsp;10.1.3</span></a>）。</p>
+<p>这强调了上一节的一点：在包内定义函数时需要采用不同的思维方式。 尽量避免对用户的整体状态进行任何更改。 如果此类更改不可避免，请确保撤销它们（如果可能）或明确记录它们（如果与功能的主要目的相关）。</p>
 </section><section id="concluding-thoughts" class="level2" data-number="5.8"><h2 data-number="5.8" class="anchored" data-anchor-id="concluding-thoughts">
 <span class="header-section-number">5.8</span> Concluding thoughts</h2>
-<p>Finally, after several iterations, we have successfully extracted the repetitive data cleaning code for the swimming survey into an R package. This example concludes the first part of book and marks the transition into more detailed reference material on specific package components. Before we move on, let’s review the lessons learned in this chapter.</p>
+<p>最后，经过多次迭代，我们成功将游泳调查的重复数据清理代码提取到 R 包中。 这个例子结束了本书的第一部分，标志着过渡到关于特定包组件的更详细的参考资料。 在我们继续之前，让我们回顾一下本章中学到的教训。</p>
 <section id="script-vs.package" class="level3" data-number="5.8.1"><h3 data-number="5.8.1" class="anchored" data-anchor-id="script-vs.package">
 <span class="header-section-number">5.8.1</span> Script vs.package</h3>
-<p>When you first hear that expert R users often put their code into packages, you might wonder exactly what that means. Specifically, what happens to your existing R scripts, R Markdown reports, and Shiny apps? Does all of that code somehow get put into a package? The answer is “no”, in most contexts.</p>
-<p>Typically, you identify certain recurring operations that occur across multiple projects and this is what you extract into an R package. You will still have R scripts, R Markdown reports, and Shiny apps, but by moving specific pieces of code into a formal package, your data products tend to become more concise and easier to maintain.</p>
+<p>当您第一次听说 R 专家用户经常将他们的代码放入包中时，您可能想知道这到底是什么意思。 具体来说，您现有的 R 脚本、R Markdown 报告和 Shiny 应用程序会发生什么变化？ 是否所有这些代码都以某种方式被放入一个包中？ 在大多数情况下，答案是否定的。</p>
+<p>通常，您会识别跨多个项目发生的某些重复操作，这就是您提取到 R 包中的内容。 你仍然会有 R 脚本、R Markdown 报告和 Shiny 应用程序，但是通过将特定的代码片段移动到一个正式的包中，你的数据产品往往会变得更加简洁和易于维护。</p>
 </section><section id="finding-the-package-within" class="level3" data-number="5.8.2"><h3 data-number="5.8.2" class="anchored" data-anchor-id="finding-the-package-within">
 <span class="header-section-number">5.8.2</span> Finding the package within</h3>
-<p>Although the example in this chapter is rather simple, it still captures the typical process of developing an R package for personal or organizational use. You typically start with a collection of idiosyncratic and related R scripts, scattered across different projects. Over time, you begin to notice that certain needs come up over and over again.</p>
-<p>Each time you revisit a similar analysis, you might try to elevate your game a bit, compared to the previous iteration. You refactor copy/paste-style code using more robust patterns and start to encapsulate key “moves” in helper functions, which might eventually migrate into their own file. Once you reach this stage, you’re in a great position to take the next step and create a package.</p>
+<p>尽管本章中的示例相当简单，但它仍然捕获了开发供个人或组织使用的 R 包的典型过程。 您通常从分散在不同项目中的一组特殊且相关的 R 脚本开始。 随着时间的推移，您开始注意到某些需求一遍又一遍地出现。</p>
+<p>每次重新访问类似的分析时，与上一次迭代相比，您可能会尝试提升游戏水平。 您使用更健壮的模式重构复制/粘贴式代码，并开始将关键“移动”封装在辅助函数中，这些函数最终可能会迁移到它们自己的文件中。 一旦你到达这个阶段，你就可以采取下一步并创建一个包。</p>
 </section><section id="package-code-is-different" class="level3" data-number="5.8.3"><h3 data-number="5.8.3" class="anchored" data-anchor-id="package-code-is-different">
 <span class="header-section-number">5.8.3</span> Package code is different</h3>
-<p>Writing package code is a bit different from writing R scripts and it’s natural to feel some discomfort when making this adjustment. Here are the most common gotchas that trip many of us up at first:</p>
+<p>编写包代码与编写 R 脚本有点不同，在进行这种调整时自然会感到有些不适。 以下是一开始让我们中的许多人感到困惑的最常见陷阱：</p>
 <ul>
-<li>Package code requires new ways of working with functions in other packages. The <code>DESCRIPTION</code> file is the principle way to declare dependencies; we don’t do this via <code><a href="https://rdrr.io/r/base/library.html">library(somepackage)</a></code>.</li>
-<li>If you want data or files to be persistently available, there are package-specific methods of storage and retrieval. You can’t just put files in the package and hope for the best.</li>
-<li>It’s necessary to be explicit about which functions are user-facing and which are internal helpers. By default, functions are not exported for use by others.</li>
-<li>A new level of discipline is required to ensure that code runs at the intended time (build time vs.&nbsp;run time) and that there are no unintended side effects.</li>
+<li>包代码需要新的方法来处理其他包中的函数。<code>DESCRIPTION</code> 文件是声明依赖关系的主要方式；我们不通过 <code><a href="https://rdrr.io/r/base/library.html">library(somepackage)</a></code> 来做到这一点。</li>
+<li>如果您希望数据或文件持久可用，可以使用包特定的存储和检索方法。您不能只是将文件放入包中并希望得到最好的结果。</li>
+<li>有必要明确哪些功能是面向用户的，哪些是内部助手。默认情况下，函数不会被导出供其他人使用。</li>
+<li>需要新级别的纪律来确保代码在预期时间（构建时间与运行时间）运行并且没有意外的副作用。</li>
 </ul>
 
 
 </section></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
 <ol>
-<li id="fn1"><p><code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> returns an object of class <code>POSIXct</code>, therefore when we call <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> on it, we are actually using <code><a href="https://rdrr.io/r/base/strptime.html">format.POSIXct()</a></code>. Read the help for <a href="https://rdrr.io/r/base/strptime.html"><code>?format.POSIXct</code></a> if you’re not familiar with such format strings.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Putting everything in one file, with this name, is not ideal, but it is technically allowed. We discuss organising and naming the files below <code>R/</code> in <a href="#sec-code-organising"><span class="quarto-unresolved-ref">sec-code-organising</span></a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>The blog post <a href="https://www.tidyverse.org/blog/2018/06/tidyverse-not-for-packages/">The tidyverse is for EDA, not packages</a> elaborates on this.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Here we’re referring to when the package code is compiled, which could be either when the binary is made (for macOS or Windows; <a href="#sec-structure-binary"><span class="quarto-unresolved-ref">sec-structure-binary</span></a>) or when the package is installed from source (<a href="#sec-installed-package"><span class="quarto-unresolved-ref">sec-installed-package</span></a>).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p><code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> returns an object of class <code>POSIXct</code>, therefore when we call <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> on it, we are actually using <code><a href="https://rdrr.io/r/base/strptime.html">format.POSIXct()</a></code>. Read the help for <a href="https://rdrr.io/r/base/strptime.html"><code>?format.POSIXct</code></a> if you’re not familiar with such format strings.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>It would clearly be better to format according to ISO 8601, which encodes the month by number, but please humor me for the sake of making this example more obvious.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p><code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> 返回一个 <code>POSIXct</code> 类的对象，因此当我们对其调用 <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> 时，我们实际上使用的是 <code><a href="https://rdrr.io/r/base/strptime.html">format.POSIXct()</a></code>。 如果您不熟悉此类格式字符串，请阅读 <a href="https://rdrr.io/r/base/strptime.html"><code>?format.POSIXct</code></a> 的帮助。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>将所有内容都放在一个文件中并使用此名称并不理想，但技术上是允许的。 我们在 <a href="code.html#sec-code-organising"><span>Section&nbsp;6.1</span></a> 中讨论 <code>R/</code> 下面的文件的组织和命名。<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>博客文章 <a href="https://www.tidyverse.org/blog/2018/06/tidyverse-not-for-packages/">The tidyverse is for EDA, not packages</a> 对此进行了详细说明。<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>这里我们指的是编译包代码的时间，可以是生成二进制文件时（for macOS or Windows; <a href="structure.html#sec-structure-binary"><span>Section&nbsp;3.4</span></a>），也可以是从源代码安装包时（<a href="structure.html#sec-installed-package"><span>Section&nbsp;3.5</span></a>）。<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code> 返回一个 <code>POSIXct</code> 类的对象，因此当我们对其调用 <code><a href="https://rdrr.io/r/base/format.html">format()</a></code> 时，我们实际上使用的是 <code><a href="https://rdrr.io/r/base/strptime.html">format.POSIXct()</a></code>。 如果您不熟悉此类格式字符串，请阅读 <a href="https://rdrr.io/r/base/strptime.html"><code>?format.POSIXct</code></a> 的帮助。<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>显然，根据 ISO 8601 进行格式化会更好，ISO 8601 按数字对月份进行编码，但是为了使这个示例更加明显，请迁就我。<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

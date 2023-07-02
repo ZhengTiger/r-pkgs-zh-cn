@@ -16,7 +16,7 @@ Try to translate R Packages (the second edition) into Simplified Chinese.
 | 2  System setup                          |    ✔     | 2023.7.1  |
 | 3  Package structure and state           |    ✔     | 2023.7.2  |
 | 4  Fundamental development workflows     |    ✔     | 2023.7.2  |
-| 5  The package within                    |          |           |
+| 5  The package within                    |    ✔     | 2023.7.2  |
 | 6  R code                                |          |           |
 | 7  Data                                  |          |           |
 | 8  Other components                      |          |           |

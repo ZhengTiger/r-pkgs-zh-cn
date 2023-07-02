@@ -16,18 +16,20 @@ Unused ideas for little data cleaning tasks:
 * using the degree symbol properly with unicode escape sequence
 -->
 ```
-This part of the book ends the same way it started, with the development of a small toy package.
-@sec-whole-game established the basic mechanics, workflow, and tooling of package development, but said practically nothing about the R code inside the package.
-This chapter focuses primarily on the package's R code and how it differs from R code in a script.
 
-Starting with a data analysis script, you learn how to find the package that lurks within.
-You'll isolate and then extract reusable data and logic from the script, put this into an R package, and then use that package in a much simplified script.
-We've included a few rookie mistakes along the way, in order to highlight special considerations for the R code inside a package.
+本书的这一部分以与开始相同的方式结束，开发了一个小玩具包。
+@sec-whole-game 建立了包开发的基本机制、工作流程和工具，但几乎没有提及包内的 R 代码。
+本章主要关注包的 R 代码以及它与脚本中的 R 代码有何不同。
 
-Note that the section headers incorporate the NATO phonetic alphabet (alfa, bravo, etc.) and have no specific meaning.
-They are just a convenient way to mark our progress towards a working package.
-It is fine to follow along just by reading and this chapter is completely self-contained, i.e. it's not a prerequisite for material later in the book.
-But if you wish to see the state of specific files along the way, they can be found in the [source files for the book](https://github.com/hadley/r-pkgs/tree/main/package-within-files).
+从数据分析脚本开始，您将学习如何找到隐藏在其中的包。
+您将从脚本中分离并提取可重用的数据和逻辑，将其放入 R 包中，然后在简化得多的脚本中使用该包。
+我们在此过程中包含了一些菜鸟错误，以突出包内 R 代码的特殊注意事项。
+
+请注意，节标题包含北约音标（alfa、bravo 等），没有特定含义。
+它们只是一种方便的方式来标记我们在工作包方面取得的进展。
+仅通过阅读就可以跟进，并且本章是完全独立的，即它不是本书后面材料的先决条件。
+但是，如果您希望在此过程中查看特定文件的状态，可以在 [source files for the book](https://github.com/hadley/r-pkgs/tree/main/package-within-files) 中找到它们。
+
 
 ## Alfa: a script that works
 
@@ -36,17 +38,18 @@ But if you wish to see the state of specific files along the way, they can be fo
 There's quite a bit of ugliness and awkwardness around paths here. But I'm not convinced it's worth it to do this properly, whatever that would even mean here.
 -->
 ```
-Let's consider `data-cleaning.R`, a fictional data analysis script for a group that collects reports from people who went for a swim:
 
-> Where did you swim and how hot was it outside?
+让我们考虑一下 `data-cleaning.R`，这是一个虚构的数据分析脚本，用于收集游泳者的报告：
 
-Their data usually comes as a CSV file, such as `swim.csv`:
+> 你在哪里游泳，外面有多热？
+
+他们的数据通常以 CSV 文件的形式出现，例如 `swim.csv`：
 
 ```{r echo = FALSE, comment = ''}
 writeLines(readLines("package-within-files/alfa/swim.csv"))
 ```
 
-`data-cleaning.R` begins by reading `swim.csv` into a data frame:
+`data-cleaning.R` 首先将 `swim.csv` 读取到数据框中：
 
 ```{r eval = FALSE}
 infile <- "swim.csv"
@@ -58,8 +61,8 @@ infile <- "package-within-files/alfa/swim.csv"
 (dat <- read.csv(infile))
 ```
 
-They then classify each observation as using American ("US") or British ("UK") English, based on the word chosen to describe the sandy place where the ocean and land meet.
-The `where` column is used to build the new `english` column.
+然后，他们根据选择用来描述海洋和陆地交汇处的沙地的词，将每个观察结果分类为使用美式（“US”）或英式（“UK”）英语。
+`where` 列用于构建新的 `english` 列。
 
 ```{r}
 dat$english[dat$where == "beach"] <- "US"
@@ -68,19 +71,19 @@ dat$english[dat$where == "seashore"] <- "UK"
 dat$english[dat$where == "seaside"] <- "UK"
 ```
 
-Sadly, the temperatures are often reported in a mix of Fahrenheit and Celsius.
-In the absence of better information, they guess that Americans report temperatures in Fahrenheit and therefore those observations are converted to Celsius.
+遗憾的是，温度通常以华氏度和摄氏度的混合形式报告。
+在没有更好的信息的情况下，他们猜测美国人报告的温度是华氏度，因此这些观测值被转换为摄氏度。
 
 ```{r}
 dat$temp[dat$english == "US"] <- (dat$temp[dat$english == "US"] - 32) * 5/9
 dat
 ```
 
-Finally, this cleaned (cleaner?) data is written back out to a CSV file.
-They like to capture a timestamp in the filename when they do this[^package-within-1].
+最后，这个清理过（更干净？）的数据被写回 CSV 文件。
+他们喜欢在执行此操作时在文件名中捕获时间戳[^package-within-1]。
 
-[^package-within-1]: `Sys.time()` returns an object of class `POSIXct`, therefore when we call `format()` on it, we are actually using `format.POSIXct()`.
-    Read the help for [`?format.POSIXct`](https://rdrr.io/r/base/strptime.html) if you're not familiar with such format strings.
+[^package-within-1]: `Sys.time()` 返回一个 `POSIXct` 类的对象，因此当我们对其调用 `format()` 时，我们实际上使用的是 `format.POSIXct()`。
+    如果您不熟悉此类格式字符串，请阅读 [`?format.POSIXct`](https://rdrr.io/r/base/strptime.html) 的帮助。
 
 ```{r include = FALSE}
 # the code that constructs `outfile` is super simple and assumes `infile` is
@@ -101,7 +104,7 @@ outfile <- fs::dir_ls(glob = "*swim_clean.csv")
 fs::file_move(outfile, "package-within-files/alfa/swim_clean.csv")
 ```
 
-Here is `data-cleaning.R` in its entirety:
+这是 `data-cleaning.R` 的全部内容：
 
 ```{=html}
 <!--
@@ -111,78 +114,82 @@ Any edits to the code shown above must be manually transferred to this file.
 ```{r, file = "package-within-files/alfa/data-cleaning.R", eval = FALSE}
 ```
 
-Even if your typical analytical tasks are quite different, hopefully you see a few familiar patterns here.
-It's easy to imagine that this group does very similar pre-processing of many similar data files over time.
-Their analyses can be more efficient and consistent if they make these standard data maneuvers available to themselves as functions in a package, instead of inlining the same data and logic into dozens or hundreds of data ingest scripts.
+即使您的典型分析任务非常不同，希望您在这里看到一些熟悉的模式。
+很容易想象，随着时间的推移，这个小组对许多相似的数据文件进行了非常相似的预处理。
+如果他们将这些标准数据操作作为包中的函数提供给他们自己使用，而不是将相同的数据和逻辑内联到几十个或数百个数据摄取脚本中，他们的分析就会更加高效和一致。
+
 
 ## Bravo: a better script that works
 
-The package that lurks within the original script is actually pretty hard to see!
-It's obscured by a few suboptimal coding practices, such as the use of repetitive copy/paste-style code and the mixing of code and data.
-Therefore a good first step is to refactor this code, isolating as much data and logic as possible in proper objects and functions, respectively.
+隐藏在原始脚本中的包实际上很难看到！
+它被一些次优的编码实践所掩盖，例如使用重复的复制/粘贴式代码以及代码和数据的混合。
+因此，好的第一步是重构此代码，分别在适当的对象和函数中隔离尽可能多的数据和逻辑。
 
-This is also a good time to introduce the use of some add-on packages, for several reasons.
-First, we would actually use the tidyverse for this sort of data wrangling.
-Second, many people use add-on packages in their scripts, so it is good to see how add-on packages are handled inside a package.
+出于几个原因，这也是介绍一些附加包的使用的好时机。
+首先，我们实际上会使用 tidyverse 进行此类数据整理。
+其次，许多人在他们的脚本中使用附加包，因此很高兴了解如何在包内处理附加包。
 
-Here's the new and improved version of the script.
+这是脚本的新改进版本。
 
 ```{r, file = "package-within-files/bravo/data-cleaning.R", eval = FALSE}
 ```
 
-The key changes to note are:
+需要注意的主要变化是：
 
--   We are using functions from tidyverse packages (specifically from readr and dplyr) and we make them available with `library(tidyverse)`.
--   The map between different "beach" words and whether they are considered to be US or UK English is now isolated in a lookup table, which lets us create the `english` column in one go with a `left_join()`. This lookup table makes the mapping easier to comprehend and would be much easier to extend in the future with new "beach" words.
--   `f_to_c()`, `timestamp()`, and `outfile_path()` are new helper functions that hold the logic for converting temperatures and forming the timestamped output file name.
+-   我们正在使用 tidyverse 包中的函数（特别是来自 readr 和 dplyr 的函数），并且我们通过 `library(tidyverse)` 提供它们。
+-   不同 "beach" 单词之间的映射以及它们被认为是美国英语还是英国英语现在被隔离在一个查找表中，这让我们可以使用 `left_join()` 一次性创建英语列。
+    这个查找表使映射更容易理解，并且将来更容易用新的 "beach" 词进行扩展。
+-   `f_to_c()`、`timestamp()` 和 `outfile_path()` 是新的辅助函数，它们包含转换温度和形成带时间戳的输出文件名的逻辑。
 
-It's getting easier to recognize the reusable bits of this script, i.e. the bits that have nothing to do with a specific input file, like `swim.csv`.
-This sort of refactoring often happens naturally on the way to creating your own package, but if it does not, it's a good idea to do this intentionally.
+识别此脚本的可重用位变得越来越容易，即与特定输入文件无关的位，如 `swim.csv`。
+这种重构通常在创建您自己的包的过程中自然发生，但如果没有发生，最好有意这样做。
+
 
 ## Charlie: a separate file for helper functions
 
-A typical next step is to move reusable data and logic out of the analysis script and into one or more separate files.
-This is a conventional opening move, if you want to use these same helper files in multiple analyses.
+典型的下一步是将可重用数据和逻辑从分析脚本中移出，并移到一个或多个单独的文件中。
+如果您想在多个分析中使用这些相同的帮助文件，这是一个常规的开场白。
 
-Here is the content of `beach-lookup-table.csv`:
+以下是 `beach-lookup-table.csv` 的内容：
 
 ```{r echo = FALSE, comment = ''}
 writeLines(readLines("package-within-files/charlie/beach-lookup-table.csv"))
 ```
 
-Here is the content of `cleaning-helpers.R`:
+下面是 `cleaning-helpers.R` 的内容：
 
 ```{r, file = "package-within-files/charlie/cleaning-helpers.R", eval = FALSE}
 ```
 
-We've added some high-level helper functions, `localize_beach()` and `celsify_temp()`, to the pre-existing helpers (`f_to_c()`, `timestamp()`, and `outfile_path()`).
+我们已将一些高级帮助函数 `localize_beach()` 和 `celsify_temp()` 添加到预先存在的帮助函数（`f_to_c()`、`timestamp()` 和 `outfile_path()`）中。
 
-Here is the next version of the data cleaning script, now that we've pulled out the helper functions (and lookup table).
+这是数据清理脚本的下一个版本，现在我们已经提取了帮助函数（和查找表）。
 
 ```{r, file = "package-within-files/charlie/data-cleaning.R", eval = FALSE}
 ```
 
-Notice that the script is getting shorter and, hopefully, easier to read and modify, because repetitive and fussy clutter has been moved out of sight.
-Whether the code is actually easier to work with is subjective and depends on how natural the "interface" feels for the people who actually preprocess swimming data.
-These sorts of design decisions are the subject of a separate project: [design.tidyverse.org](https://design.tidyverse.org/).
+请注意，脚本变得越来越短，并且希望更易于阅读和修改，因为重复和繁琐的杂乱已经消失了。
+代码是否真的更容易使用是主观的，取决于实际预处理游泳数据的人对“界面”的感觉有多自然。
+这些类型的设计决策是一个单独项目的主题：[design.tidyverse.org](https://design.tidyverse.org/)。
 
-Let's assume the group agrees that our design decisions are promising, i.e. we seem to be making things better, not worse.
-Sure, the existing code is not perfect, but this is a typical developmental stage when you're trying to figure out what the helper functions should be and how they should work.
+让我们假设小组同意我们的设计决策是有前途的，即我们似乎正在让事情变得更好，而不是更糟。
+当然，现有代码并不完美，但这是一个典型的开发阶段，当您试图弄清楚辅助函数应该是什么以及它们应该如何工作时。
+
 
 ## Delta: a failed attempt at making a package
 
-While this first attempt to create a package will end in failure, it's still helpful to go through some common missteps, to illuminate what happens behind the scenes.
+虽然第一次创建包的尝试将以失败告终，但通过一些常见的失误仍然有助于阐明幕后发生的事情。
 
-Here are the simplest steps that you might take, in an attempt to convert `cleaning-helpers.R` into a proper package:
+为了将 `cleaning-helpers.R` 转换为合适的包，您可能会采取以下最简单的步骤：
 
--   Use `usethis::create_package("path/to/delta")` to scaffold a new R package, with the name "delta".
-    -   This is a good first step!
--   Copy `cleaning-helpers.R` into the new package, specifically, to `R/cleaning-helpers.R`.
-    -   This is morally correct, but mechanically wrong in several ways, as we will soon see.
--   Copy `beach-lookup-table.csv` into the new package. But where? Let's try the top-level of the source package.
-    -   This is not going to end well. Shipping data files in a package is a special topic, which is covered in @sec-data.
--   Install this package, perhaps using `devtools::install()` or via Ctrl + Shift + B (Windows & Linux) or Cmd + Shift + B in RStudio.
-    -   Despite all of the problems identified above, this actually works! Which is interesting, because we can (try to) use it and see what happens.
+-   使用 `usethis::create_package("path/to/delta")` 搭建一个名为 “delta” 的新 R 包。
+    -   这是很好的第一步！
+-   将 `cleaning-helpers.R` 复制到新包中，具体为 `R/cleaning-helpers.R`。
+    -   这在道德上是正确的，但在几个方面在机制上是错误的，我们很快就会看到。
+-   将 `beach-lookup-table.csv` 复制到新包中。但是哪里？让我们试试源码包的顶层。
+    -   这不会有好结果。在包中运送数据文件是一个特殊主题，将在 @sec-data 中介绍。
+-   安装此包，可能使用 `devtools::install()` 或通过 Ctrl + Shift + B（Windows 和 Linux）或 RStudio 中的 Cmd + Shift + B。
+    -   尽管存在上述所有问题，但这确实有效！这很有趣，因为我们可以（尝试）使用它并看看会发生什么。
 
 ```{r eval = FALSE, include = FALSE}
 create_package("package-within-files/delta", open = FALSE)
@@ -198,24 +205,24 @@ fs::file_copy(
 install("package-within-files/delta")
 ```
 
-Here is the next version of the data cleaning script that you hope will run after successfully installing this package (which we're calling "delta").
+这是您希望在成功安装此软件包（我们称之为 "delta"）后运行的下一个数据清理脚本版本。
 
 ```{r, file = "package-within-files/delta-data-cleaning.R", eval = FALSE}
 ```
 
-The only change from our previous script is that
+我们之前脚本的唯一变化是
 
 ```{r eval = FALSE}
 source("cleaning-helpers.R")
 ```
 
-has been replaced by
+被替换成了
 
 ```{r eval = FALSE}
 library(delta)
 ```
 
-Here's what actually happens if you install the delta package and try to run the data cleaning script:
+如果您安装 delta 包并尝试运行数据清理脚本，实际会发生以下情况：
 
 ```{r eval = FALSE}
 library(tidyverse)
@@ -233,11 +240,11 @@ write_csv(dat, outfile_path(infile))
 #> Error in outfile_path(infile) : could not find function "outfile_path"
 ```
 
-None of the helper functions are actually available for use, even though you call `library(delta)`!
-In contrast to `source()`ing a file of helper functions, attaching a package does not dump its functions into the global workspace.
-By default, functions in a package are only for internal use.
-You need to export `localize_beach()`, `celsify_temp()`, and `outfile_path()` so your users can call them.
-In the devtools workflow, we achieve this by putting `@export` in the special roxygen comment above each function (namespace management is covered in @sec-dependencies-NAMESPACE-workflow), like so:
+即使您调用 `library(delta)`，实际上也没有任何帮助函数可供使用！
+与 `source()`ing 帮助函数文件相比，附加包不会将其函数转储到全局工作区中。
+默认情况下，包中的函数仅供内部使用。
+您需要导出 `localize_beach()`、`celsify_temp()` 和 `outfile_path()`，以便您的用户可以调用它们。
+在 devtools 工作流程中，我们通过将 `@export` 放在每个函数上方的特殊 roxygen 注释中来实现这一点（名称空间管理在 @sec-dependencies-NAMESPACE-workflow 中介绍），如下所示：
 
 ```{r eval = FALSE}
 #' @export
@@ -246,8 +253,8 @@ celsify_temp <- function(dat) {
 }
 ```
 
-After you add the `@export` tag to `localize_beach()`, `celsify_temp()`, and `outfile_path()`, you run `devtools::document()` to (re)generate the `NAMESPACE` file, and re-install the delta package.
-Now when you re-execute the data cleaning script, it works!
+在将 `@export` 标记添加到 `localize_beach()`、`celsify_temp()` 和 `outfile_path()` 之后，运行 `devtools::document()` 以（重新）生成 `NAMESPACE` 文件，并重新安装 delta 包。
+现在，当您重新执行数据清理脚本时，它就可以工作了！
 
 ```{r eval = FALSE, include = FALSE}
 lines <- readLines("package-within-files/delta/R/cleaning-helpers.R")
@@ -272,9 +279,9 @@ document("package-within-files/delta")
 install("package-within-files/delta")
 ```
 
-Correction: it *sort of* works *sometimes*.
-Specifically, it works if and only if the working directory is set to the top-level of the source package.
-From any other working directory, you still get an error:
+更正：它有时会起作用。
+具体来说，当且仅当工作目录设置为源包的顶层时，它才有效。
+从任何其他工作目录，您仍然会收到错误消息：
 
 ```{r eval = FALSE}
 dat <- dat %>% 
@@ -283,16 +290,16 @@ dat <- dat %>%
 #> Error: 'beach-lookup-table.csv' does not exist in current working directory ('/Users/jenny/tmp').
 ```
 
-The lookup table consulted inside `localize_beach()` cannot be found.
-One does not simply dump CSV files into the source of an R package and expect things to "just work".
-We will fix this in our next iteration of the package (@sec-data has full coverage of how to include data in a package).
+找不到在 `localize_beach()` 内部查询的查找表。
+人们不会简单地将 CSV 文件转储到 R 包的源代码中并期望事情“正常工作”。
+我们将在包的下一次迭代中解决这个问题（@sec-data 全面介绍了如何在包中包含数据）。
 
-Before we abandon this initial experiment, let's also marvel at the fact that you were able to install, attach, and, to a certain extent, use a fundamentally broken package.
-`devtools::load_all()` works fine, too!
-This is a sobering reminder that you should be running `R CMD check`, probably via `devtools::check()`, very often during development.
-This will quickly alert you to many problems that simple installation and usage does not reveal.
+在我们放弃这个最初的实验之前，让我们也惊叹于您能够安装、附加并在一定程度上使用一个根本损坏的包这一事实。
+`devtools::load_all()` 也工作正常！
+这是一个发人深省的提醒，您应该在开发过程中经常运行 `R CMD check`，可能是通过 `devtools::check()`。
+这将迅速提醒您注意许多简单安装和使用无法揭示的问题。
 
-Indeed, `check()` fails for this package and you see this:
+事实上，这个包的 `check()` 失败了，你会看到：
 
 ```         
  * installing *source* package ‘delta’ ...
@@ -306,31 +313,32 @@ Indeed, `check()` fails for this package and you see this:
  * removing ‘/Users/jenny/rrr/delta.Rcheck/delta’
 ```
 
-What do you mean "there is no package called 'tidyverse'"?!?
-We're using it, with no problems, in our main script!
-Also, we've already installed and used this package, why can't `R CMD check` find it?
+"there is no package called 'tidyverse'" 是什么意思？
+我们在主脚本中使用它，没有任何问题！
+另外，我们已经安装并使用了这个包，为什么 `R CMD check` 找不到呢？
 
-This error is what happens when the strictness of `R CMD check` meets the very first line of `R/cleaning-helpers.R`:
+当 `R CMD check` 的严格性符合 `R/cleaning-helpers.R` 的第一行时会发生此错误：
 
 ```{r, eval = FALSE}
 library(tidyverse)
 ```
 
-This is *not* how you declare that your package depends on another package (the tidyverse, in this case).
-This is *also not* how you make functions in another package available for use in yours.
-Dependencies must be declared in `DESCRIPTION` (and that's not all).
-Since we declared no dependencies, `R CMD check` takes us at our word and tries to install our package with only the base packages available, which means this `library(tidyverse)` call fails.
-A "regular" installation succeeds, simply because the tidyverse is available in your regular library, which hides this particular mistake.
+这不是您声明包依赖于另一个包（在本例中为 tidyverse）的方式。
+这也不是您使另一个包中的函数可用于您的包的方式。
+依赖关系必须在 `DESCRIPTION` 中声明（这还不是全部）。
+由于我们声明没有依赖关系，`R CMD check` 相信我们并尝试安装我们的包，只有可用的基础包，这意味着这个 `library(tidyverse)` 调用失败。 
+“常规”安装成功，仅仅是因为 tidyverse 在您的常规库中可用，它隐藏了这个特定的错误。
 
-To review, copying `cleaning-helpers.R` to `R/cleaning-helpers.R`, without further modification, was problematic in (at least) the following ways:
+回顾一下，将 `cleaning-helpers.R` 复制到 `R/cleaning-helpers.R`，而无需进一步修改，在（至少）以下方面存在问题：
 
--   Does not account for exported vs. non-exported functions.
--   The CSV file holding our lookup table cannot be found in the installed package.
--   Does not properly declare our dependency on other add-on packages.
+-   不考虑导出函数与非导出函数。
+-   在已安装的包中找不到包含查找表的 CSV 文件。
+-   没有正确声明我们对其他附加包的依赖。
+
 
 ## Echo: a working package
 
-We're ready to make the most minimal version of this package that actually works.
+我们已经准备好制作这个包的最小版本。
 
 ```{r eval = FALSE, include = FALSE}
 create_package("package-within-files/echo", open = FALSE)
@@ -345,26 +353,26 @@ install("package-within-files/echo")
 check("package-within-files/echo")
 ```
 
-Here is the new version of `R/cleaning-helpers.R`[^package-within-2]:
+这是 `R/cleaning-helpers.R` 的新版本[^package-within-2]：
 
-[^package-within-2]: Putting everything in one file, with this name, is not ideal, but it is technically allowed.
-    We discuss organising and naming the files below `R/` in @sec-code-organising.
+[^package-within-2]: 将所有内容都放在一个文件中并使用此名称并不理想，但技术上是允许的。
+    我们在 @sec-code-organising 中讨论 `R/` 下面的文件的组织和命名。
 
 ```{r, file = "package-within-files/echo/R/cleaning-helpers.R", eval = FALSE}
 ```
 
-We've gone back to defining the `lookup_table` with R code, since the initial attempt to read it from CSV created some sort of filepath snafu.
-This is OK for small, internal, static data, but remember to see @sec-data for more general techniques for storing data in a package.
+我们已经回到使用 R 代码定义 `lookup_table`，因为最初尝试从 CSV 读取它会造成某种文件路径混乱。
+这对于小的、内部的、静态的数据是可以的，但是请记住参阅 @sec-data 以了解在包中存储数据的更通用的技术。
 
-All of the calls to tidyverse functions have now been qualified with the name of the specific package that actually provides the function, e.g. `dplyr::mutate()`.
-There are other ways to access functions in another package, explained in @sec-dependencies-in-imports, but this is our recommended default.
-It is also our strong recommendation that no one depend on the tidyverse meta-package in a package[^package-within-3].
-Instead, it is better to identify the specific package(s) you actually use.
-In this case, the package only uses dplyr.
+现在，所有对 tidyverse 函数的调用都已使用实际提供该函数的特定包的名称进行限定，例如 `dplyr::mutate()`。
+还有其他方法可以访问另一个包中的函数，如 @sec-dependencies-in-imports 所述，但这是我们推荐的默认方法。
+我们也强烈建议没有人依赖 package 中的 tidyverse meta-package[^package-within-3]。
+相反，最好确定您实际使用的特定包。
+在这种情况下，包只使用 dplyr。
 
-[^package-within-3]: The blog post [The tidyverse is for EDA, not packages](https://www.tidyverse.org/blog/2018/06/tidyverse-not-for-packages/) elaborates on this.
+[^package-within-3]: 博客文章 [The tidyverse is for EDA, not packages](https://www.tidyverse.org/blog/2018/06/tidyverse-not-for-packages/) 对此进行了详细说明。
 
-The `library(tidyverse)` call is gone and instead we declare the use of dplyr in the `Imports` field of `DESCRIPTION`:
+`library(tidyverse)` 调用消失了，取而代之的是我们在 `DESCRIPTION` 的 `Imports` 字段中声明使用 `dplyr`：
 
 ```         
 Package: echo
@@ -373,13 +381,13 @@ Imports:
     dplyr
 ```
 
-This, together with the use of namespace-qualified calls, like `dplyr::left_join()`, constitutes a valid way to use another package within yours.
-The metadata conveyed via `DESCRIPTION` is covered in @sec-description.
+这与使用命名空间限定的调用（如 `dplyr::left_join()`）一起，构成了在您的包中使用另一个包的有效方法。
+通过 `DESCRIPTION` 传送的 metadata 在 @sec-description 中介绍。
 
-All of the user-facing functions have an `@export` tag in their roxygen comment, which means that `devtools::document()` adds them correctly to the `NAMESPACE` file.
-Note that `f_to_c()` is currently only used internally, inside `celsify_temp()`, so it is not exported (likewise for `timestamp()`).
+所有面向用户的函数在其 roxygen 注释中都有一个 `@export` 标记，这意味着 `devtools::document()` 将它们正确添加到 `NAMESPACE` 文件中。
+请注意，`f_to_c()` 目前仅在内部使用，在 `celsify_temp()` 内部，因此不会导出（对于 `timestamp()` 也是如此）。
 
-This version of the package can be installed, used, AND it technically passes `R CMD check`, though with 1 warning and 1 note.
+这个版本的包可以安装、使用，并且它在技术上通过了 `R CMD check`，尽管有 1 warning 和 1  note。
 
 ```         
 * checking for missing documentation entries ... WARNING
@@ -396,8 +404,8 @@ Undefined global functions or variables:
   english temp
 ```
 
-The "no visible binding" note is a peculiarity of using dplyr and unquoted variable names inside a package, where the use of bare variable names (`english` and `temp`) looks suspicious.
-You can add either of these lines to any file below `R/` to eliminate this note (such as the package-level documentation file described in @sec-man-package-doc):
+"no visible binding" note 是在包内使用 dplyr 和不带引号的变量名的一个特点，其中使用裸变量名（`english` 和 `temp`）看起来很可疑。
+您可以将这些行中的任何一行添加到 `R/` 下面的任何文件中以删除此注释（例如 @sec-man-package-doc 中描述的包级文档文件）：
 
 ```{r, eval = FALSE}
 # option 1 (then you should also put utils in Imports)
@@ -407,19 +415,20 @@ utils::globalVariables(c("english", "temp"))
 english <- temp <- NULL
 ```
 
-We're seeing that it can be tricky to program around a package like dplyr, which makes heavy use of nonstandard evaluation.
-Behind the scenes, that is the technique that allows dplyr's end users to use bare (not quoted) variable names.
-Packages like dplyr prioritize the experience of the typical end user, at the expense of making them trickier to depend on.
-The two options shown above for suppressing the "no visible binding" note, represent entry-level solutions.
-For a more sophisticated treatment of these issues, see `vignette("in-packages", package = "dplyr")` and `vignette("programming", package = "dplyr")`.
+我们看到围绕像 dplyr 这样大量使用非标准评估的包进行编程可能很棘手。
+在幕后，这是允许 dplyr 的最终用户使用裸（未引用）变量名的技术。
+像 dplyr 这样的软件包优先考虑典型最终用户的体验，但代价是让他们更难以依赖。
+上面显示的两个用于抑制 "no visible binding" note 的选项代表入门级解决方案。
+有关这些问题的更复杂处理，请参阅 `vignette("in-packages", package = "dplyr")` 和 `vignette("programming", package = "dplyr")`。
 
-The warning about missing documentation is because the exported functions have not been properly documented.
-This is a valid concern and something you should absolutely address in a real package.
-You've already seen how to create help files with roxygen comments in @sec-whole-game-document and we cover this topic thoroughly in @sec-man.
+关于缺少文档的 warning 是因为没有正确记录导出的函数。
+这是一个合理的问题，您绝对应该在一个真正的包中解决这个问题。
+您已经在 @sec-whole-game-document 中了解了如何创建带有 roxygen 注释的帮助文件，我们将在 @sec-man 中全面介绍该主题。
+
 
 ## Foxtrot: build time vs. run time {#sec-package-within-build-time-run-time}
 
-The echo package works, which is great, but group members notice something odd about the timestamps:
+echo 包很好用，但小组成员注意到时间戳有些奇怪：
 
 ```{r, eval = FALSE}
 Sys.time()
@@ -429,11 +438,11 @@ outfile_path("INFILE.csv")
 #> [1] "2020-September-03_11-06-33_INFILE_clean.csv"
 ```
 
-The datetime in the timestamped filename doesn't reflect the time reported by the system.
-In fact, the users claim that the timestamp never seems to change at all!
-Why is this?
+带时间戳的文件名中的日期时间不反映系统报告的时间。
+事实上，用户声称时间戳似乎永远不会改变！
+为什么是这样？
 
-Recall how we form the filepath for output files:
+回想一下我们是如何形成输出文件的文件路径的：
 
 ```{r, eval = FALSE}
 now <- Sys.time()
@@ -443,25 +452,25 @@ outfile_path <- function(infile) {
 }
 ```
 
-The fact that we capture `now <- Sys.time()` outside of the definition of `outfile_path()` has probably been vexing some readers for a while.
-`now` reflects the instant in time when we execute `now <- Sys.time()`.
-In the initial approach, `now` was assigned when we `source()`d `cleaning-helpers.R`.
-That's not ideal, but it was probably a pretty harmless mistake, because the helper file would be `source()`d shortly before we wrote the output file.
+事实上，我们在 `outfile_path()` 的定义之外捕获了 `now <- Sys.time()` 可能已经让一些读者烦恼了一段时间。
+`now` 反映了我们执行 `now <- Sys.time()` 时的时间。
+在最初的方法中，现在是在我们 `source()`d `cleaning-helpers.R` 时分配的。
+这并不理想，但这可能是一个非常无害的错误，因为帮助文件将在我们编写输出文件之前不久被 `source()`d。
 
-But this approach is quite devastating in the context of a package.
-`now <- Sys.time()` is executed **when the package is built**[^package-within-4].
-And never again.
-It is very easy to assume your package code is re-evaluated when the package is attached or used.
-But it is not.
-Yes, the code *inside your functions* is absolutely run whenever they are called.
-But your functions -- and any other objects created in top-level code below `R/` -- are defined exactly once, at build time.
+但这种方法在包的上下文中是相当具有破坏性的。
+`now <- Sys.time()` 在构建包时执行[^package-within-4]。
+再也不会了。
+很容易假设您的包裹代码在附加或使用包裹时被重新评估。
+但事实并非如此。
+是的，函数中的代码在调用时绝对会运行。
+但是您的函数——以及在 `R/` 下面的顶级代码中创建的任何其他对象——在构建时只定义一次。
 
-[^package-within-4]: Here we're referring to when the package code is compiled, which could be either when the binary is made (for macOS or Windows; @sec-structure-binary) or when the package is installed from source (@sec-installed-package).
+[^package-within-4]: 这里我们指的是编译包代码的时间，可以是生成二进制文件时（for macOS or Windows; @sec-structure-binary），也可以是从源代码安装包时（@sec-installed-package）。
 
-By defining `now` with top-level code below `R/`, we've doomed our package to timestamp all of its output files with the same (wrong) time.
-The fix is to make sure the `Sys.time()` call happens at run time.
+通过在 `R/` 下使用顶级代码定义 `now`，我们注定了我们的包会用相同（错误）的时间为其所有输出文件加上时间戳。
+解决方法是确保 `Sys.time()` 调用在运行时发生。
 
-Let's look again at parts of `R/cleaning-helpers.R`:
+我们再看一下 `R/cleaning-helpers.R` 的部分内容：
 
 ```{r}
 lookup_table <- dplyr::tribble(
@@ -479,12 +488,12 @@ outfile_path <- function(infile) {
 }
 ```
 
-There are four top-level `<-` assignments in this excerpt.
-The top-level definitions of the data frame `lookup_table` and the functions `timestamp()` and `outfile_path()` are correct.
-It is appropriate that these be defined exactly once, at build time.
-The top-level definition of `now`, which is then used inside `outfile_path()`, is regrettable.
+这段摘录中有四个顶级 `<-` 赋值。
+数据框 `lookup_table` 和函数 `timestamp()` 和 `outfile_path()` 的顶级定义是正确的。
+这些在构建时只定义一次是合适的。
+`now` 的顶级定义，然后在 `outfile_path()` 内部使用，令人遗憾。
 
-Here are better versions of `outfile_path()`:
+以下是 `outfile_path()` 的更好版本：
 
 ```{r, eval = FALSE}
 # always timestamp as "now"
@@ -500,28 +509,29 @@ outfile_path <- function(infile, time = Sys.time()) {
 }
 ```
 
-This illustrates that you need to have a different mindset when defining objects inside a package.
-The vast majority of those objects should be functions and these functions should generally only use data they create or that is passed via an argument.
-There are some types of sloppiness that are fairly harmless when a function is defined immediately before its use, but that can be more costly for functions distributed as a package.
+这说明在包内定义对象时需要有不同的思维方式。
+这些对象中的绝大多数应该是函数，并且这些函数通常应该只使用它们创建的数据或通过参数传递的数据。
+有一些类型的草率在函数使用前立即定义时是相当无害的，但对于作为包分发的函数来说，这种草率的代价可能更高。
+
 
 ## Golf: side effects {#sec-package-within-side-effects}
 
-The timestamps now reflect the current time, but the group raises a new concern.
-As it stands, the timestamps reflect who has done the data cleaning and which part of the world they're in.
-The heart of the timestamp strategy is this format string[^package-within-5]:
+时间戳现在反映了当前时间，但该小组提出了一个新的问题。
+就目前而言，时间戳反映了谁完成了数据清理以及他们在世界的哪个部分。
+时间戳策略的核心是这种格式 string[^package-within-5]：
 
-[^package-within-5]: `Sys.time()` returns an object of class `POSIXct`, therefore when we call `format()` on it, we are actually using `format.POSIXct()`.
-    Read the help for [`?format.POSIXct`](https://rdrr.io/r/base/strptime.html) if you're not familiar with such format strings.
+[^package-within-5]: `Sys.time()` 返回一个 `POSIXct` 类的对象，因此当我们对其调用 `format()` 时，我们实际上使用的是 `format.POSIXct()`。
+    如果您不熟悉此类格式字符串，请阅读 [`?format.POSIXct`](https://rdrr.io/r/base/strptime.html) 的帮助。
 
 ```{r}
 format(Sys.time(), "%Y-%B-%d_%H-%M-%S")
 ```
 
-This formats `Sys.time()` in such a way that it includes the month *name* (not number) and the local time[^package-within-6].
+这会将 `Sys.time()` 格式化为包含月份名称（而非数字）和本地时间[^package-within-6]。
 
-[^package-within-6]: It would clearly be better to format according to ISO 8601, which encodes the month by number, but please humor me for the sake of making this example more obvious.
+[^package-within-6]: 显然，根据 ISO 8601 进行格式化会更好，ISO 8601 按数字对月份进行编码，但是为了使这个示例更加明显，请迁就我。
 
-@tbl-timestamps shows what happens when such a timestamp is produced by several hypothetical colleagues cleaning some data at exactly the same instant in time.
+@tbl-timestamps 显示了当这样一个时间戳是由几个假设的同事在完全相同的时间及时清理一些数据时产生的。
 
 ```{r, include = FALSE}
 library(tidyverse)
@@ -567,12 +577,12 @@ colleagues <- colleagues |>
 knitr::kable(colleagues)
 ```
 
-Note that the month names vary, as does the time, and even the date!
-The safest choice is to form timestamps with respect to a fixed locale and time zone (presumably the non-geographic choices represented by "Computer World!" above).
+请注意，月份名称会有所不同，时间也会有所不同，甚至日期也会有所不同！
+最安全的选择是根据固定的语言环境和时区形成时间戳（大概是上面 "Computer World!" 所代表的非地理选择）。
 
-You do some research and learn that you can force a certain locale via `Sys.setlocale()` and force a certain time zone by setting the TZ environment variable.
-Specifically, we set the LC_TIME component of the locale to "C" and the time zone to "UTC" (Coordinated Universal Time).
-Here's your first attempt to improve `timestamp()`:
+您进行了一些研究，了解到可以通过 `Sys.setlocale()` 强制使用特定区域设置，并通过设置 TZ 环境变量强制使用特定时区。
+具体来说，我们将语言环境的 LC_TIME 组件设置为 "C"，将时区设置为 "UTC"（协调世界时）。
+这是您改进 `timestamp()` 的第一次尝试：
 
 ```{r include = FALSE}
 lc_time <- Sys.getlocale("LC_TIME")
@@ -587,9 +597,9 @@ timestamp <- function(time = Sys.time()) {
 }
 ```
 
-But your Brazilian colleague notices that datetimes print differently, before and after she uses `outfile_path()` from your package:
+但是您的巴西同事注意到，在她使用您的包中的 `outfile_path()` 之前和之后，日期时间打印不同：
 
-Before:
+之前：
 
 ```{r eval = FALSE}
 format(Sys.time(), "%Y-%B-%d_%H-%M-%S")
@@ -599,7 +609,7 @@ format(Sys.time(), "%Y-%B-%d_%H-%M-%S")
 as_if(LC_TIME = "pt_BR.UTF-8", tz = "America/Sao_Paulo")
 ```
 
-After:
+之后：
 
 ```{r}
 outfile_path("INFILE.csv")
@@ -616,11 +626,11 @@ if (tz == "") {
 }
 ```
 
-Notice that her month name switched from Portuguese to English and the time is clearly being reported in a different time zone.
-The calls to `Sys.setlocale()` and `Sys.setenv()` inside `timestamp()` have made persistent (and very surprising) changes to her R session.
-This sort of side effect is very undesirable and is extremely difficult to track down and debug, especially in more complicated settings.
+请注意，她的月份名称从葡萄牙语切换为英语，而且时间显然是在不同的时区报告的。
+在 `timestamp()` 中对 `Sys.setlocale()` 和 `Sys.setenv()` 的调用对她的 R 会话进行了持续（并且非常令人惊讶）的更改。
+这种副作用是非常不受欢迎的，并且极难追踪和调试，尤其是在更复杂的设置中。
 
-Here are better versions of `timestamp()`:
+以下是 `timestamp()` 的更好版本：
 
 ```{r, eval = FALSE}
 # use withr::local_*() functions to keep the changes local to timestamp()
@@ -645,49 +655,52 @@ timestamp <- function(time = Sys.time()) {
 }
 ```
 
-These show various methods to limit the scope of our changes to LC_TIME and the timezone.
-A good rule of thumb is to make the scope of such changes as narrow as is possible and practical.
-The `tz` argument of `format()` is the most surgical way to deal with the timezone, but nothing similar exists for LC_TIME.
-We make the temporary locale modification using the withr package, which provides a very flexible toolkit for temporary state changes.
-This (and `base::on.exit()`) are discussed further in @sec-code-r-landscape.
-Note that if you use withr as we do above, you would need to list it in `DESCRIPTION` in `Imports` (@sec-dependencies-in-practice, @sec-dependencies-tidyverse).
+这些显示了各种方法来限制我们对 LC_TIME 和时区的更改范围。
+一个好的经验法则是尽可能缩小此类更改的范围并切实可行。
+`format()` 的 `tz` 参数是处理时区的最手术方法，但 LC_TIME 不存在类似的方法。
+我们使用 withr 包进行临时区域设置修改，它为临时状态更改提供了一个非常灵活的工具包。
+这（和 `base::on.exit()`）将在 @sec-code-r-landscape 中进一步讨论。
+请注意，如果您像我们上面那样使用 withr，则需要在 `Imports` 的 `DESCRIPTION` 中列出它（@sec-dependencies-in-practice, @sec-dependencies-tidyverse）。
 
-This underscores a point from the previous section: you need to adopt a different mindset when defining functions inside a package.
-Try to avoid making any changes to the user's overall state.
-If such changes are unavoidable, make sure to reverse them (if possible) or to document them explicitly (if related to the function's primary purpose).
+这强调了上一节的一点：在包内定义函数时需要采用不同的思维方式。
+尽量避免对用户的整体状态进行任何更改。
+如果此类更改不可避免，请确保撤销它们（如果可能）或明确记录它们（如果与功能的主要目的相关）。
+
 
 ## Concluding thoughts
 
-Finally, after several iterations, we have successfully extracted the repetitive data cleaning code for the swimming survey into an R package.
-This example concludes the first part of book and marks the transition into more detailed reference material on specific package components.
-Before we move on, let's review the lessons learned in this chapter.
+最后，经过多次迭代，我们成功将游泳调查的重复数据清理代码提取到 R 包中。
+这个例子结束了本书的第一部分，标志着过渡到关于特定包组件的更详细的参考资料。
+在我们继续之前，让我们回顾一下本章中学到的教训。
 
 ### Script vs.package
 
-When you first hear that expert R users often put their code into packages, you might wonder exactly what that means.
-Specifically, what happens to your existing R scripts, R Markdown reports, and Shiny apps?
-Does all of that code somehow get put into a package?
-The answer is "no", in most contexts.
+当您第一次听说 R 专家用户经常将他们的代码放入包中时，您可能想知道这到底是什么意思。
+具体来说，您现有的 R 脚本、R Markdown 报告和 Shiny 应用程序会发生什么变化？
+是否所有这些代码都以某种方式被放入一个包中？
+在大多数情况下，答案是否定的。
 
-Typically, you identify certain recurring operations that occur across multiple projects and this is what you extract into an R package.
-You will still have R scripts, R Markdown reports, and Shiny apps, but by moving specific pieces of code into a formal package, your data products tend to become more concise and easier to maintain.
+通常，您会识别跨多个项目发生的某些重复操作，这就是您提取到 R 包中的内容。
+你仍然会有 R 脚本、R Markdown 报告和 Shiny 应用程序，但是通过将特定的代码片段移动到一个正式的包中，你的数据产品往往会变得更加简洁和易于维护。
 
 ### Finding the package within
 
-Although the example in this chapter is rather simple, it still captures the typical process of developing an R package for personal or organizational use.
-You typically start with a collection of idiosyncratic and related R scripts, scattered across different projects.
-Over time, you begin to notice that certain needs come up over and over again.
+尽管本章中的示例相当简单，但它仍然捕获了开发供个人或组织使用的 R 包的典型过程。
+您通常从分散在不同项目中的一组特殊且相关的 R 脚本开始。
+随着时间的推移，您开始注意到某些需求一遍又一遍地出现。
 
-Each time you revisit a similar analysis, you might try to elevate your game a bit, compared to the previous iteration.
-You refactor copy/paste-style code using more robust patterns and start to encapsulate key "moves" in helper functions, which might eventually migrate into their own file.
-Once you reach this stage, you're in a great position to take the next step and create a package.
+每次重新访问类似的分析时，与上一次迭代相比，您可能会尝试提升游戏水平。
+您使用更健壮的模式重构复制/粘贴式代码，并开始将关键“移动”封装在辅助函数中，这些函数最终可能会迁移到它们自己的文件中。
+一旦你到达这个阶段，你就可以采取下一步并创建一个包。
 
 ### Package code is different
 
-Writing package code is a bit different from writing R scripts and it's natural to feel some discomfort when making this adjustment.
-Here are the most common gotchas that trip many of us up at first:
+编写包代码与编写 R 脚本有点不同，在进行这种调整时自然会感到有些不适。
+以下是一开始让我们中的许多人感到困惑的最常见陷阱：
 
--   Package code requires new ways of working with functions in other packages. The `DESCRIPTION` file is the principle way to declare dependencies; we don't do this via `library(somepackage)`.
--   If you want data or files to be persistently available, there are package-specific methods of storage and retrieval. You can't just put files in the package and hope for the best.
--   It's necessary to be explicit about which functions are user-facing and which are internal helpers. By default, functions are not exported for use by others.
--   A new level of discipline is required to ensure that code runs at the intended time (build time vs. run time) and that there are no unintended side effects.
+-   包代码需要新的方法来处理其他包中的函数。`DESCRIPTION` 文件是声明依赖关系的主要方式；我们不通过 `library(somepackage)` 来做到这一点。
+-   如果您希望数据或文件持久可用，可以使用包特定的存储和检索方法。您不能只是将文件放入包中并希望得到最好的结果。
+-   有必要明确哪些功能是面向用户的，哪些是内部助手。默认情况下，函数不会被导出供其他人使用。
+-   需要新级别的纪律来确保代码在预期时间（构建时间与运行时间）运行并且没有意外的副作用。
+
+
