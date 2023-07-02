@@ -14,7 +14,7 @@ Try to translate R Packages (the second edition) into Simplified Chinese.
 |:-----------------------------------------|:---------|:----------|
 | 1  The Whole Game                        |    ✔     | 2023.7.1  |
 | 2  System setup                          |    ✔     | 2023.7.1  |
-| 3  Package structure and state           |          |           |
+| 3  Package structure and state           |    ✔     | 2023.7.2  |
 | 4  Fundamental development workflows     |          |           |
 | 5  The package within                    |          |           |
 | 6  R code                                |          |           |
